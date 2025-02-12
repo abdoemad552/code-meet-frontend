@@ -20,12 +20,14 @@ public class UserService {
        return userRepository.findAll();
     }
 
-    public User getUserById(int id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    public User getUserById(int userId) {
+        return userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+        return userRepository.findByUsername(username)
+            .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     public User addUser(User user) {

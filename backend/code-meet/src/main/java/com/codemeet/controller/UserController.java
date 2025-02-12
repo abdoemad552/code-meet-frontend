@@ -24,47 +24,28 @@ public class UserController {
         this.userService = userService;
     }
 
-
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
          return ResponseEntity.ok(userService.getAllUsers());
     }
 
-
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable int id) {
-        return ResponseEntity.ok(userService.getUserById(id));
+    @GetMapping("/{userId}")
+    public ResponseEntity<User> getUserById(@PathVariable int userId) {
+        return ResponseEntity.ok(userService.getUserById(userId));
     }
-
-
+    
     @GetMapping("/{username}")
     public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
         return ResponseEntity.ok(userService.getUserByUsername(username));
     }
-
-
+    
     @PostMapping("/add")
     public ResponseEntity<User> addUser(@RequestBody User user) {
         return ResponseEntity.ok(userService.addUser(user));
     }
-
-
+    
     @PutMapping("/update")
     public ResponseEntity<User> updateUser(@RequestBody User user) {
         return ResponseEntity.ok(userService.updateUser(user));
     }
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
 }
