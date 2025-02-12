@@ -15,9 +15,9 @@ import jakarta.persistence.Table;
 @Table(name = "user_groups")
 public class UserGroup {
 
-    @Id
+   @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+   private Integer id;
 
     @ManyToOne
     private User user;

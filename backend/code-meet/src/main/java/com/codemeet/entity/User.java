@@ -2,7 +2,6 @@ package com.codemeet.entity;
 
 import java.time.LocalDateTime;
 
-
 import org.hibernate.annotations.ColumnDefault;
 
 import jakarta.persistence.Column;
@@ -12,7 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "users")
