@@ -1,8 +1,5 @@
 package com.codemeet.entity;
 
-
-import org.hibernate.annotations.CreationTimestamp;
-
 import java.time.Instant;
 
 import jakarta.persistence.Column;
@@ -13,8 +10,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 
 @Entity
 @Table(name = "meetings")
@@ -33,9 +28,11 @@ public class Meeting {
     @JoinColumn(nullable = false)
     private User creator;
     
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    private Instant createdAt;
+    @Column(nullable = false)
+    private Instant startsAt;
+    
+    @Column(nullable = false)
+    private MeetingState state;
     
     public Meeting() {
     }
@@ -68,7 +65,19 @@ public class Meeting {
         this.creator = creator;
     }
     
-    public Instant getCreatedAt() {
-        return createdAt;
+    public Instant getStartsAt() {
+        return startsAt;
+    }
+    
+    public void setStartsAt(Instant startsAt) {
+        this.startsAt = startsAt;
+    }
+    
+    public MeetingState getState() {
+        return state;
+    }
+    
+    public void setState(MeetingState state) {
+        this.state = state;
     }
 }

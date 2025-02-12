@@ -43,9 +43,9 @@ public class User {
     @Column(nullable = false)
     private UserRole role;
 
-   @CreationTimestamp
-   @Temporal(TemporalType.TIMESTAMP)
-   private Instant createdAt;
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Instant createdAt;
 
     @Lob // Indicates a large object (BLOB in the database)
     private byte[] profilePicture;

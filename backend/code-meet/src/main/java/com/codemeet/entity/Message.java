@@ -34,7 +34,6 @@ public abstract class Message {
     @JoinColumn(nullable = false)
     protected User sender;
     
-    @Column(nullable = false, updatable = false)
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     protected Instant sentAt;
