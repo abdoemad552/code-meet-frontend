@@ -1,8 +1,8 @@
 package com.codemeet.entity;
 
 
-import com.codemeet.entity.user.User;
 import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
 
@@ -21,10 +21,10 @@ public class Membership {
     private Room room;
     
     @Column(nullable = false, updatable = false)
+    @ColumnDefault("NOW()")
     private Instant joinedAt;
     
     public Membership() {
-        this.joinedAt = Instant.now();
     }
     
     public Integer getId() {

@@ -1,4 +1,4 @@
-package com.codemeet.entity.user;
+package com.codemeet.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -7,11 +7,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
 
 @Entity
-@Table(name = "Users")
+@Table(name = "users")
 public class User {
 
     @Id
@@ -40,13 +41,13 @@ public class User {
     private UserRole role;
     
     @Column(nullable = false, updatable = false)
+    @ColumnDefault("NOW(6)")
     private Instant createdAt;
     
     @Lob // Indicates a large object (BLOB in the database)
     private byte[] profilePicture;
     
     public User() {
-        this.createdAt = Instant.now();
     }
     
     public Integer getId() {

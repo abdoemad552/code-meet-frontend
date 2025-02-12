@@ -1,34 +1,27 @@
-package com.codemeet.entity.message;
+package com.codemeet.entity;
 
-import com.codemeet.entity.user.User;
 import jakarta.persistence.*;
 
-import java.time.Instant;
-
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "messages")
-public abstract class Message {
-    
+@Table(name = "notifications")
+public class Notification {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Integer id;
+    private int id;
     
     @Column(nullable = false)
-    protected String content;
+    private String content;
     
     @ManyToOne
     @JoinColumn(nullable = false)
-    protected User sender;
+    private User sender;
     
-    @Column(nullable = false, updatable = false)
-    protected Instant sentAt;
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private User receiver;
     
-    public Message() {
-        this.sentAt = Instant.now();
-    }
-    
-    public Integer getId() {
+    public int getId() {
         return id;
     }
     
@@ -48,7 +41,11 @@ public abstract class Message {
         this.sender = sender;
     }
     
-    public Instant getSentAt() {
-        return sentAt;
+    public User getReceiver() {
+        return receiver;
+    }
+    
+    public void setReceiver(User receiver) {
+        this.receiver = receiver;
     }
 }

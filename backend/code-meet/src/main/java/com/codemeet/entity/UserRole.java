@@ -1,4 +1,4 @@
-package com.codemeet.entity.user;
+package com.codemeet.entity;
 
 public enum UserRole {
     ADMIN, USER

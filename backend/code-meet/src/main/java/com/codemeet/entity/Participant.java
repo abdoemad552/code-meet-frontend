@@ -1,6 +1,5 @@
 package com.codemeet.entity;
 
-import com.codemeet.entity.user.User;
 import jakarta.persistence.*;
 
 @Entity
