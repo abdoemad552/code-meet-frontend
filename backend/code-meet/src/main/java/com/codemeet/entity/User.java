@@ -7,7 +7,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 
@@ -39,11 +43,11 @@ public class User {
     
     @Column(nullable = false)
     private UserRole role;
-    
-    @Column(nullable = false, updatable = false)
-    @ColumnDefault("NOW(6)")
-    private Instant createdAt;
-    
+
+   @CreationTimestamp
+   @Temporal(TemporalType.TIMESTAMP)
+   private Instant createdAt;
+
     @Lob // Indicates a large object (BLOB in the database)
     private byte[] profilePicture;
     

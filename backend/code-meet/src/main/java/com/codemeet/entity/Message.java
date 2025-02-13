@@ -1,7 +1,7 @@
 package com.codemeet.entity;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 
@@ -22,7 +22,8 @@ public abstract class Message {
     protected User sender;
     
     @Column(nullable = false, updatable = false)
-    @ColumnDefault("NOW()")
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     protected Instant sentAt;
     
     public Message() {

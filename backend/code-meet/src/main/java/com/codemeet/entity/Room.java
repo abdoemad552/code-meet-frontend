@@ -2,6 +2,7 @@ package com.codemeet.entity;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 
@@ -20,10 +21,10 @@ public class Room {
     @JoinColumn(nullable = false)
     private User creator;
     
-    @Column(nullable = false, updatable = false)
-    @ColumnDefault("NOW()")
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     private Instant createdAt;
-    
+
     public Room() {
     }
     
