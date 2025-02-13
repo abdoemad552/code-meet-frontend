@@ -14,18 +14,19 @@ import org.springframework.stereotype.Service;
 public class RoomService {
 
     private final RoomRepository roomRepository;
-    private final UserRepository userRepository;
-    public RoomService(RoomRepository roomRepository, UserRepository userRepository)
+    private final UserService userService;
+    public RoomService(RoomRepository roomRepository, UserService userService)
     {
         this.roomRepository=roomRepository;
-        this.userRepository=userRepository;
+        this.userService=userService;
     }
     @Transactional
     public RoomDTO addRoom(RoomDTO room){
 
 
         Room roomEntity=new Room();
-        User creator=userRepository.findById(room.creatorId()).orElseThrow();
+        User creator=userService.getUserById(room.creatorId());
+
         roomEntity.setName(room.name());
         roomEntity.setCreator(creator);
 

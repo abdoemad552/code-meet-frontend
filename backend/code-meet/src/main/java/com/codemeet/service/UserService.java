@@ -24,43 +24,31 @@ public class UserService {
 
     return userRepository.findAll()
             .stream()
-            .map(user -> new UserDTO(
-                    user.getId(),
-                    user.getFirstName(),
-                    user.getLastName(),
-                    user.getUsername(),
-                    user.getEmail(),
-                    user.getPhoneNumber()
-            ))
+            .map(this::convertToDTO)
             .toList();
       }
 
-    public UserDTO getUserById(int userId) {
-       User user = userRepository.findById(userId)
-            .orElseThrow(() -> new RuntimeException("User not found"));
-
-       return new UserDTO(
-               user.getId(),
-               user.getFirstName(),
-               user.getLastName(),
-               user.getUsername(),
-               user.getEmail(),
-               user.getPhoneNumber());
+    public UserDTO getUserDTOById(int userId) {
+      User user=getUserById(userId);
+       return convertToDTO(user);
+    }
+    public User getUserById(int userId)
+    {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     public UserDTO getUserByUsername(String username) {
         User user =  userRepository.findByUsername(username)
             .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return new UserDTO(
-                user.getId(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getPhoneNumber());
+        return convertToDTO(user);
     }
-
+   private UserDTO convertToDTO(User user)
+   {
+       return new UserDTO(user.getId(),user.getFirstName(),
+               user.getLastName(),user.getUsername(),user.getEmail(),user.getPhoneNumber());
+   }
     public User addUser(User user) {
         return userRepository.save(user);
     }
