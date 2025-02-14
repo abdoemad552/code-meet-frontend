@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.codemeet.entity.User;
 import com.codemeet.service.UserService;
+import com.codemeet.utils.dto.UserDTO;
 
 @RestController
 @RequestMapping("/api/user")
@@ -25,17 +26,17 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
          return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<User> getUserById(@PathVariable int userId) {
+    public ResponseEntity<UserDTO> getUserById(@PathVariable int userId) {
         return ResponseEntity.ok(userService.getUserById(userId));
     }
     
     @GetMapping("/{username}")
-    public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
+    public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username) {
         return ResponseEntity.ok(userService.getUserByUsername(username));
     }
     
