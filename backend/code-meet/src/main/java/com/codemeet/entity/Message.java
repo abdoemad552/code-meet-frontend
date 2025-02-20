@@ -25,18 +25,18 @@ public abstract class Message {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Integer id;
+    private Integer id;
     
     @Column(nullable = false)
-    protected String content;
+    private String content;
     
     @ManyToOne
     @JoinColumn(nullable = false)
-    protected User sender;
+    private User sender;
     
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    protected Instant sentAt;
+    private Instant sentAt;
     
     public Message() {
     }
