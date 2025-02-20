@@ -2,18 +2,15 @@ package com.codemeet.controller;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.codemeet.entity.User;
+import com.codemeet.utils.dto.UserLoginRequest;
+import com.codemeet.utils.dto.UserSignupRequest;
+import com.codemeet.utils.dto.UserUpdateRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import com.codemeet.service.UserService;
-import com.codemeet.utils.dto.UserDTO;
+import com.codemeet.utils.dto.UserInfoResponse;
 
 @RestController
 @RequestMapping("/api/user")
@@ -25,21 +22,48 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
-         return ResponseEntity.ok(userService.getAllUsers());
+    @GetMapping("/all")
+    public ResponseEntity<List<UserInfoResponse>> getAllUsers() {
+        return ResponseEntity.ok(
+            userService.getAllUsers().stream()
+                .map(UserInfoResponse::map)
+                .toList()
+        );
     }
-
-
-    public ResponseEntity<UserDTO> getUserById(@PathVariable int userId) {
-
-        return ResponseEntity.ok(userService.getUserDTOById(userId));
+    
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserInfoResponse> getUser(@PathVariable int userId) {
+        User user = userService.getUserById(userId);
+        return ResponseEntity.ok(UserInfoResponse.map(user));
     }
     
     @GetMapping("/{username}")
-    public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username) {
-        return ResponseEntity.ok(userService.getUserByUsername(username));
+    public ResponseEntity<UserInfoResponse> getUser(@PathVariable String username) {
+        User user = userService.getUserByUsername(username);
+        return ResponseEntity.ok(UserInfoResponse.map(user));
     }
     
-
+    @PostMapping("/signup")
+    public ResponseEntity<UserInfoResponse> signup(
+        @RequestBody UserSignupRequest signupRequest
+    ) {
+        UserInfoResponse info = userService.signup(signupRequest);
+        return ResponseEntity.ok(info);
+    }
+    
+    @PostMapping("/login")
+    public ResponseEntity<UserInfoResponse> login(
+        @RequestBody UserLoginRequest loginRequest
+    ) {
+        UserInfoResponse info = userService.login(loginRequest);
+        return ResponseEntity.ok(info);
+    }
+    
+    @PutMapping("/update")
+    public ResponseEntity<UserInfoResponse> update(
+        @RequestBody UserUpdateRequest updateRequest
+    ) {
+        UserInfoResponse info = userService.update(updateRequest);
+        return ResponseEntity.ok(info);
+    }
 }
