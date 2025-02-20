@@ -13,22 +13,14 @@ public final class RoomMessage extends Message {
     @JoinColumn(nullable = false)
     private Room room;
     
+    public RoomMessage() {
+    }
+    
     public Room getRoom() {
         return room;
     }
     
     public void setRoom(Room room) {
         this.room = room;
-    }
-    
-    @Override
-    public String toString() {
-        return "RoomMessage{" +
-            "room=" + room +
-            ", id=" + id +
-            ", content='" + content + '\'' +
-            ", sender=" + sender +
-            ", sentAt=" + sentAt +
-            '}';
     }
 }

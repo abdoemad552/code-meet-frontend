@@ -13,22 +13,14 @@ public final class P2PMessage extends Message {
     @JoinColumn(nullable = false)
     private User receiver;
     
+    public P2PMessage() {
+    }
+    
     public User getReceiver() {
         return receiver;
     }
     
     public void setReceiver(User receiver) {
         this.receiver = receiver;
-    }
-    
-    @Override
-    public String toString() {
-        return "P2PMessage{" +
-            "receivedBy=" + receiver +
-            ", id=" + id +
-            ", content='" + content + '\'' +
-            ", sentBy=" + sender +
-            ", sentAt=" + sentAt +
-            '}';
     }
 }
