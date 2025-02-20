@@ -2,14 +2,7 @@ package com.codemeet.entity;
 
 import java.time.Instant;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "meetings")
@@ -31,8 +24,9 @@ public class Meeting {
     @Column(nullable = false)
     private Instant startsAt;
     
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private MeetingState state;
+    private MeetingStatus status;
     
     public Meeting() {
     }
@@ -73,11 +67,11 @@ public class Meeting {
         this.startsAt = startsAt;
     }
     
-    public MeetingState getState() {
-        return state;
+    public MeetingStatus getStatus() {
+        return status;
     }
     
-    public void setState(MeetingState state) {
-        this.state = state;
+    public void setStatus(MeetingStatus status) {
+        this.status = status;
     }
 }

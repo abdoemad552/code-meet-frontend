@@ -1,5 +1,5 @@
 package com.codemeet.entity;
 
-public enum MeetingState {
+public enum MeetingStatus {
     SCHEDULED, RUNNING, FINISHED
 }
