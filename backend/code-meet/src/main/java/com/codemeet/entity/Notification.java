@@ -1,14 +1,10 @@
 package com.codemeet.entity;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.Instant;
 
 @Entity
 @Table(name = "notifications")
@@ -28,6 +24,13 @@ public class Notification {
     @ManyToOne
     @JoinColumn(nullable = false)
     private User receiver;
+    
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Instant sentAt;
+    
+    public Notification() {
+    }
     
     public int getId() {
         return id;
@@ -55,5 +58,9 @@ public class Notification {
     
     public void setReceiver(User receiver) {
         this.receiver = receiver;
+    }
+    
+    public Instant getSentAt() {
+        return sentAt;
     }
 }
