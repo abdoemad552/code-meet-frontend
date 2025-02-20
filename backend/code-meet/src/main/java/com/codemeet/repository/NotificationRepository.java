@@ -11,8 +11,13 @@ import java.util.List;
 
 
 public interface NotificationRepository extends JpaRepository<Notification, Integer> {
-
-
-    @Query("select new com.codemeet.utils.dto.NotificationDTO(n.content,n.sender.username) from Notification n  where n.receiver.id=:userId")
-    public List<NotificationDTO> getNotifications(Integer userId);
+    
+    @Query(
+        """
+        SELECT new com.codemeet.utils.dto.NotificationDTO(n.content, n.sender.username)
+        FROM Notification n
+        WHERE n.receiver.id = :userId
+        """
+    )
+    List<NotificationDTO> getNotifications(Integer userId);
 }
