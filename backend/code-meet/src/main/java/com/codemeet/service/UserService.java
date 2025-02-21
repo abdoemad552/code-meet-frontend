@@ -1,12 +1,15 @@
 package com.codemeet.service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import com.codemeet.entity.UserRole;
 import com.codemeet.utils.dto.UserInfoResponse;
 import com.codemeet.utils.dto.UserLoginRequest;
 import com.codemeet.utils.dto.UserSignupRequest;
 import com.codemeet.utils.dto.UserUpdateRequest;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.codemeet.entity.User;
@@ -20,24 +23,35 @@ public class UserService {
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-    
+
+
     public User getUserEntityById(int id) {
-        return userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("user not found"));
+
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        return optionalUser
+                .orElseThrow(() ->new RuntimeException("User with userid = "+id +"not found"));
     }
-    
-    public User getUserEntityByUsername(String username) {
-        return userRepository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException("user not found"));
-    }
-    
-    public User getUserEntityByEmail(String email) {
-        return userRepository.findByEmail(email)
-            .orElseThrow(() -> new RuntimeException("user not found"));
+    public UserInfoResponse getUserById(int id) {
+        User user = getUserEntityById(id);
+        return UserInfoResponse.of(user);
     }
 
-    public List<User> getAllUserEntities() {
-        return userRepository.findAll();
+    public User getUserEntityByUsername(String username) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+
+        return optionalUser
+                .orElseThrow(() -> new RuntimeException("user with username= "+username+ "is not found"));
+    }
+
+    public User getUserEntityByEmail(String email) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        return optionalUser
+                .orElseThrow(() -> new RuntimeException("user with email= "+email+ "is not found"));
+    }
+   @Async
+    public CompletableFuture<List<User>> getAllUserEntities() {
+        return CompletableFuture.completedFuture(userRepository.findAll());
     }
     
     public User addUserEntity(User user) {
@@ -64,12 +78,8 @@ public class UserService {
             throw new RuntimeException("user not found");
         }
     }
-    
-    public UserInfoResponse getUserById(int id) {
-        User user = getUserEntityById(id);
-        return UserInfoResponse.of(user);
-    }
-    
+
+
     public UserInfoResponse getUserByUsername(String username) {
         User user = getUserEntityByUsername(username);
         return UserInfoResponse.of(user);
@@ -81,32 +91,18 @@ public class UserService {
     }
     
     public List<UserInfoResponse> getAllUsers() {
-        return getAllUserEntities().stream()
+        return getAllUserEntities().join().stream()
             .map(UserInfoResponse::of)
             .toList();
     }
     
-    public UserInfoResponse signup(UserSignupRequest signupRequest) {
-        User user = userOf(signupRequest);
-        return UserInfoResponse.of(addUserEntity(user));
-    }
-    
-    public UserInfoResponse login(UserLoginRequest loginRequest) {
-        User user = getUserEntityByEmail(loginRequest.email());
-        
-        if (user.getPassword().equals(loginRequest.password())) {
-            return UserInfoResponse.of(user);
-        } else {
-            throw new RuntimeException("incorrect password");
-        }
-    }
+
     
     public UserInfoResponse update(UserUpdateRequest updateRequest) {
         User user = userOf(updateRequest);
         return UserInfoResponse.of(updateUserEntity(user));
     }
-    
-    //////////////////////////////////////////////////////////////////////
+
     
     private User userOf(UserSignupRequest signupRequest) {
         User user = new User();

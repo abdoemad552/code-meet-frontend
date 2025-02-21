@@ -5,11 +5,12 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Entity
 @Table(name = "users")
-public class User {
-
+public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

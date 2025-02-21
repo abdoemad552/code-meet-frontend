@@ -5,10 +5,12 @@ import com.codemeet.utils.dto.NotificationDTO;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jdk.dynalink.linker.LinkerServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class NotificationService {
@@ -19,11 +21,12 @@ public class NotificationService {
         this.notificationRepository=notificationRepository;
     }
 
-    public List<NotificationDTO>getNotifications(Integer userId)
+    @Async
+    public CompletableFuture<List<NotificationDTO>>getNotifications(Integer userId)
     {
     List<NotificationDTO>notifications=notificationRepository.getNotifications(userId);
 
-        return notifications;
+        return CompletableFuture.completedFuture(notifications);
     }
 
 
