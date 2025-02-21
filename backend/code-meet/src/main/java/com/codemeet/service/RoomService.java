@@ -17,11 +17,11 @@ public class RoomService {
         this.roomRepository=roomRepository;
         this.userService=userService;
     }
-    
+
     @Transactional
     public RoomDTO addRoom(RoomDTO room){
         Room roomEntity = new Room();
-        User creator = userService.getUserById(room.creatorId());
+        User creator = userService.getUserEntityById(room.creatorId());
 
         roomEntity.setName(room.name());
         roomEntity.setCreator(creator);
