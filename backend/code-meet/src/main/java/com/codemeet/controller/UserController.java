@@ -33,28 +33,9 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getUsersByFilter(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String email) {
-
-        if (name != null && email != null) {
-            return ResponseEntity.badRequest().body("Please provide only one search criterion: either name or email, not both.");
-        }
-
-        if (name == null && email == null) {
-            return ResponseEntity.badRequest().body("Please provide at least one search criterion: either name or email.");
-        }
-        UserInfoResponse user;
-
-
-        if (name != null) {
-            user = userService.getUserByUsername(name);
-        }
-
-        else {
-            user = userService.getUserByEmail(email);
-        }
-
+    public ResponseEntity<UserInfoResponse> getUsersByName(@RequestParam String name)
+    {
+        UserInfoResponse user = userService.getUserByUsername(name);
         return ResponseEntity.ok(user);
     }
 
