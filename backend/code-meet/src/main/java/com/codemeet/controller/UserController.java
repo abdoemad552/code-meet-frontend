@@ -1,6 +1,7 @@
 package com.codemeet.controller;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import com.codemeet.utils.dto.UserLoginRequest;
 import com.codemeet.utils.dto.UserSignupRequest;
@@ -25,41 +26,19 @@ public class UserController {
     public ResponseEntity<List<UserInfoResponse>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
-    
-    @GetMapping("/id/{id}")
+
+    @GetMapping("/{id}")
     public ResponseEntity<UserInfoResponse> getUserById(@PathVariable int id) {
         return ResponseEntity.ok(userService.getUserById(id));
     }
-    
-    @GetMapping("/username/{username}")
-    public ResponseEntity<UserInfoResponse> getUserByUsername(
-        @PathVariable String username
-    ) {
-        return ResponseEntity.ok(userService.getUserByUsername(username));
+
+    @GetMapping
+    public ResponseEntity<UserInfoResponse> getUsersByName(@RequestParam String name)
+    {
+        UserInfoResponse user = userService.getUserByUsername(name);
+        return ResponseEntity.ok(user);
     }
-    
-    @GetMapping("/email/{email}")
-    public ResponseEntity<UserInfoResponse> getUserByEmail(
-        @PathVariable String email
-    ) {
-        System.out.println(email);
-        return ResponseEntity.ok(userService.getUserByEmail(email));
-    }
-    
-    @PostMapping("/signup")
-    public ResponseEntity<UserInfoResponse> signup(
-        @RequestBody UserSignupRequest signupRequest
-    ) {
-        return ResponseEntity.ok(userService.signup(signupRequest));
-    }
-    
-    @PostMapping("/login")
-    public ResponseEntity<UserInfoResponse> login(
-        @RequestBody UserLoginRequest loginRequest
-    ) {
-        return ResponseEntity.ok(userService.login(loginRequest));
-    }
-    
+
     @PutMapping("/update")
     public ResponseEntity<UserInfoResponse> update(
         @RequestBody UserUpdateRequest updateRequest

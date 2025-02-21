@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/api/notification")
@@ -22,10 +23,11 @@ public class NotificationController {
         this.notificationService = notificationService;
     }
     @GetMapping("{userId}")
-    public ResponseEntity<List<NotificationDTO>>getNotifications(@PathVariable Integer userId)
+    public CompletableFuture<ResponseEntity<List<NotificationDTO>>>getNotifications(@PathVariable Integer userId)
     {
-        List<NotificationDTO>notifications=notificationService.getNotifications(userId);
-        return ResponseEntity.ok(notifications);
+        CompletableFuture<List<NotificationDTO>>notifications=notificationService.getNotifications(userId);
+
+        return notifications.thenApply(ResponseEntity::ok);
     }
 
 
