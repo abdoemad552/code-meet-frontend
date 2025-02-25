@@ -5,12 +5,10 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 
 @Entity
 @Table(name = "users")
-public class User{
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -32,9 +30,6 @@ public class User{
 
     @Column(nullable = false, length = 25)
     private String phoneNumber;
-    
-    @Column(nullable = false)
-    private UserRole role;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -100,14 +95,6 @@ public class User{
     
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-    
-    public UserRole getRole() {
-        return role;
-    }
-    
-    public void setRole(UserRole role) {
-        this.role = role;
     }
     
     public Instant getCreatedAt() {

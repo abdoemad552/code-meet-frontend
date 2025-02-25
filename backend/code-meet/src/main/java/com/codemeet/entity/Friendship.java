@@ -12,11 +12,11 @@ public class Friendship {
     
     @ManyToOne
     @JoinColumn(nullable = false)
-    private User requester;
+    private User from;
     
     @ManyToOne
     @JoinColumn(nullable = false)
-    private User requested;
+    private User to;
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -29,22 +29,22 @@ public class Friendship {
         return id;
     }
     
-    public User getRequester() {
-        return requester;
+    public User getFrom() {
+        return from;
     }
     
-    public void setRequester(User requester) {
-        this.requester = requester;
+    public void setFrom(User from) {
+        this.from = from;
     }
-    
-    public User getRequested() {
-        return requested;
+
+    public User getTo() {
+        return to;
     }
-    
-    public void setRequested(User requested) {
-        this.requested = requested;
+
+    public void setTo(User to) {
+        this.to = to;
     }
-    
+
     public FriendshipStatus getStatus() {
         return status;
     }

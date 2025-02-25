@@ -2,12 +2,19 @@ package com.codemeet.entity;
 
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 
 @Entity
-@Table(name = "memberships")
+@Table(
+    name = "memberships",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "USER_ROOM_UNIQUE",
+            columnNames = {"user_id", "room_id"}
+        )
+    }
+)
 public class Membership {
     
     @Id
@@ -20,8 +27,10 @@ public class Membership {
     @ManyToOne
     private Room room;
     
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MembershipStatus status;
+
     private Instant joinedAt;
     
     public Membership() {
@@ -47,7 +56,19 @@ public class Membership {
         this.room = room;
     }
     
+    public MembershipStatus getStatus() {
+        return status;
+    }
+    
+    public void setStatus(MembershipStatus status) {
+        this.status = status;
+    }
+    
     public Instant getJoinedAt() {
         return joinedAt;
+    }
+
+    public void setJoinedAt(Instant joinedAt) {
+        this.joinedAt = joinedAt;
     }
 }

@@ -1,10 +1,7 @@
 package com.codemeet.controller;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
-import com.codemeet.utils.dto.UserLoginRequest;
-import com.codemeet.utils.dto.UserSignupRequest;
 import com.codemeet.utils.dto.UserUpdateRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,16 +30,16 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<UserInfoResponse> getUsersByName(@RequestParam String name)
-    {
-        UserInfoResponse user = userService.getUserByUsername(name);
-        return ResponseEntity.ok(user);
+    public ResponseEntity<UserInfoResponse> getUsersByName(
+        @RequestParam String username
+    ) {
+        return ResponseEntity.ok(userService.getUserByUsername(username));
     }
 
     @PutMapping("/update")
     public ResponseEntity<UserInfoResponse> update(
         @RequestBody UserUpdateRequest updateRequest
     ) {
-        return ResponseEntity.ok(userService.update(updateRequest));
+        return ResponseEntity.ok(userService.updateUser(updateRequest));
     }
 }

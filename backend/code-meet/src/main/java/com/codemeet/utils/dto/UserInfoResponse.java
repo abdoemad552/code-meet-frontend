@@ -1,16 +1,52 @@
 package com.codemeet.utils.dto;
 
 import com.codemeet.entity.User;
-import com.codemeet.entity.UserRole;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.Length;
 
 public record UserInfoResponse(
-    Integer id,
-    String firstname,
-    String lastname,
+    @NotNull
+    Integer userId,
+    
+    @NotNull
+    @NotBlank
+    @Length(max = 25)
+    String firstName,
+    
+    @NotNull
+    @NotBlank
+    @Length(max = 25)
+    String lastName,
+    
+    @NotNull
+    @NotBlank
+    @Length(max = 20)
+    @Pattern(
+        regexp = "",
+        flags = {}
+    )
     String username,
+    
+    @NotNull
+    @NotBlank
+    @Length(max = 100) // Minimum length is determined by the pattern
+    @Pattern(
+        regexp = "",
+        flags = {}
+    )
     String email,
+    
+    @NotNull
+    @NotBlank
+    @Length(max = 25)
+    @Pattern(
+        regexp = "",
+        flags = {}
+    )
     String phoneNumber,
-    UserRole role,
+    
     byte[] profilePicture
 ) {
 
@@ -22,7 +58,6 @@ public record UserInfoResponse(
             user.getUsername(),
             user.getEmail(),
             user.getPhoneNumber(),
-            user.getRole(),
             user.getProfilePicture()
         );
     }
