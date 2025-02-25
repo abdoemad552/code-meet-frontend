@@ -1,6 +1,7 @@
 package com.codemeet.service;
 
 import com.codemeet.entity.Room;
+import com.codemeet.entity.User;
 import com.codemeet.repository.RoomRepository;
 import com.codemeet.utils.dto.MembershipRequest;
 import com.codemeet.utils.dto.RoomCreationRequest;
@@ -69,11 +70,14 @@ public class RoomService {
 
     @Transactional
     public RoomInfoResponse createRoom(RoomCreationRequest creationRequest) {
-        Room room = new Room();
-        room.setName(creationRequest.name());
-        room.setDescription(creationRequest.description());
-        room.setCreator(userService.getUserEntityById(creationRequest.creatorId()));
-        room.setRoomPicture(creationRequest.roomPicture());
+        User creator=userService.getUserEntityById(creationRequest.creatorId());
+        Room room = new Room(
+                creationRequest.name(),
+                creationRequest.description(),
+                creator,
+                creationRequest.roomPicture()
+        );
+
         addRoomEntity(room);
 
         membershipService.requestMembership(

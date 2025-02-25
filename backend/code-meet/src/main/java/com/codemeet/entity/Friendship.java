@@ -3,18 +3,20 @@ package com.codemeet.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "friendships")
+@Table(name = "friendships",uniqueConstraints = {
+        @UniqueConstraint(name = "FRIENDSHIP_UNIQUE",columnNames = {"from_id","to_id"})
+})
 public class Friendship {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private User from;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private User to;
     
@@ -22,9 +24,15 @@ public class Friendship {
     @Column(nullable = false)
     private FriendshipStatus status;
     
-    public Friendship() {
+    public Friendship(User from,User to,FriendshipStatus status) {
+        this.from=from;
+        this.to=to;
+        this.status=status;
     }
-    
+    public Friendship()
+    {
+
+    }
     public Integer getId() {
         return id;
     }

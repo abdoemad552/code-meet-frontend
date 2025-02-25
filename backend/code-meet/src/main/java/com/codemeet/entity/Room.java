@@ -30,9 +30,16 @@ public class Room {
     @Lob
     private byte[] roomPicture;
 
-    public Room() {
+    public Room(String name,String description,User creator,byte[] roomPicture) {
+        this.name=name;
+        this.description=description;
+        this.creator=creator;
+        this.roomPicture=roomPicture;
     }
-    
+    public Room()
+    {
+
+    }
     public Integer getId() {
         return id;
     }
