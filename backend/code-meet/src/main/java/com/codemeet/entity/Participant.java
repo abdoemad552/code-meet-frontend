@@ -1,31 +1,38 @@
 package com.codemeet.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "participants")
+@Table(name = "participants", uniqueConstraints = {
+        @UniqueConstraint(
+                name = "PARTICIPANT_UNIQUE",
+                columnNames = {"user_id", "meeting_id"}
+        )
+})
 public class Participant {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private User user;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Meeting meeting;
-    
+
+    public Participant(Meeting meeting,User user)
+    {
+        this.user=user;
+        this.meeting=meeting;
+    }
+    public Participant()
+    {
+
+    }
     public Integer getId() {
         return id;
     }

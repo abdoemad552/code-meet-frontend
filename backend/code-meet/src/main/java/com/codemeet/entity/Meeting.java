@@ -17,7 +17,7 @@ public class Meeting {
     
     private String description;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private User creator;
     
@@ -27,7 +27,15 @@ public class Meeting {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MeetingStatus status;
-    
+
+    public Meeting(String title,String description,User creator,Instant startsAt,MeetingStatus status)
+    {
+        this.title=title;
+        this.description=description;
+        this.creator=creator;
+        this.startsAt=startsAt;
+        this.status=status;
+    }
     public Meeting() {
     }
     
