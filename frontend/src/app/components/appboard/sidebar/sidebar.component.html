@@ -1,0 +1,23 @@
+<aside class="w-1/5 bg-white border-r border-gray-300 relative h-[88dvh]">
+  <button
+    (click)="toggleSidebarMinimization()"
+    type="button"
+    class="transition-transform cursor-pointer absolute top-1/2 -translate-y-1/2 -right-4 bg-gray-50 hover:bg-gray-100 border border-gray-300 p-2 rounded-full"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+      class="w-6 h-6 text-gray-600"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M15.75 19.5 8.25 12l7.5-7.5"
+      />
+    </svg>
+  </button>
+  <app-nav></app-nav>
+</aside>
