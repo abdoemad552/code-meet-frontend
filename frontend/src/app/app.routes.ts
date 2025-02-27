@@ -5,8 +5,12 @@ import { SignupComponent } from './components/signup/signup.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import {AppComponent} from './app.component';
 import {BoardComponent} from './components/appboard/board.component';
+import {MeetingsComponent} from './components/meetings/meetings.component';
+import {HomeComponent} from './components/home/home.component';
 
-export const routes: Routes = [
+let signedIn: boolean = true;
+
+const NotLoggedInRoutes: Routes = [
   {
     path: '',
     component: EntryComponent,
@@ -23,9 +27,19 @@ export const routes: Routes = [
     title: 'Sign up a new account'
   },
   {
-    path: 'home',
+    path: '**',
+    component: NotFoundComponent,
+    title: 'Page is not found'
+  }
+];
+
+const LoggedInRoutes: Routes = [
+  {
+    path: '',
     component: BoardComponent,
-    title: 'Home Page'
+    children: [
+      {path: 'home', component: HomeComponent},
+    ]
   },
   {
     path: '**',
@@ -33,3 +47,9 @@ export const routes: Routes = [
     title: 'Page is not found'
   }
 ];
+
+export function getRoutes(isLoggedIn: boolean) : Routes {
+  if (isLoggedIn)
+    return LoggedInRoutes;
+  return NotLoggedInRoutes;
+}

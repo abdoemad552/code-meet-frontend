@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { WebSocketService } from './services/websocket.service';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EntryComponent } from './components/entry/entry.component';
@@ -32,7 +32,7 @@ export class AppComponent implements OnInit {
 
   sendMessage() {
     this.webSocketService.sendMessage(this.message);
-   
+
   }
 
   disconnectWebSocket() {
