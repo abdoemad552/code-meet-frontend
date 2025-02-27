@@ -7,6 +7,7 @@ import {AppComponent} from './app.component';
 import {BoardComponent} from './components/appboard/board.component';
 import {MeetingsComponent} from './components/meetings/meetings.component';
 import {HomeComponent} from './components/home/home.component';
+import {FriendsComponent} from './components/friends/friends.component';
 
 let signedIn: boolean = true;
 
@@ -38,7 +39,10 @@ const LoggedInRoutes: Routes = [
     path: '',
     component: BoardComponent,
     children: [
-      {path: 'home', component: HomeComponent},
+      {path: '', redirectTo: 'home', pathMatch: 'full'},
+      {path: 'home', component: HomeComponent, title: 'Home Page'},
+      {path: 'meetings', component: MeetingsComponent, title: 'My Meetings'},
+      {path: 'friends', component: FriendsComponent, title: 'My Friends'},
     ]
   },
   {

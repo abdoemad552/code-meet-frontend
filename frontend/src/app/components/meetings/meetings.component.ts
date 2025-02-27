@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 import {MeetingsboxComponent} from './meetingsbox/meetingsbox.component';
 import {Router} from '@angular/router';
+import {MeetingsTabsComponent} from './meetingstabs/meetingstabs.component';
 
 @Component({
   selector: 'app-meetings',
   standalone: true,
   imports: [
-    MeetingsboxComponent
+    MeetingsboxComponent,
+    MeetingsTabsComponent
   ],
   templateUrl: './meetings.component.html',
   styleUrl: './meetings.component.css'
