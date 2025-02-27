@@ -3,6 +3,8 @@ import { EntryComponent } from './components/entry/entry.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import {AppComponent} from './app.component';
+import {BoardComponent} from './components/appboard/board.component';
 
 export const routes: Routes = [
   {
@@ -14,11 +16,16 @@ export const routes: Routes = [
     path: 'login',
     component: LoginComponent,
     title: 'Login to your account - Code Meet'
-  }, 
+  },
   {
     path: 'signup',
     component: SignupComponent,
     title: 'Sign up a new account'
+  },
+  {
+    path: 'home',
+    component: BoardComponent,
+    title: 'Home Page'
   },
   {
     path: '**',

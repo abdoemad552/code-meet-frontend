@@ -1,4 +1,4 @@
-import { TitleCasePipe } from '@angular/common';
+import {NgClass, TitleCasePipe} from '@angular/common';
 import { Component, Input } from '@angular/core';
 import {
   ActivatedRoute,
@@ -11,7 +11,7 @@ import {
 @Component({
   selector: 'nav-item',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, TitleCasePipe, RouterModule],
+  imports: [RouterLink, RouterLinkActive, TitleCasePipe, RouterModule, NgClass],
   templateUrl: './nav-item.component.html',
   styleUrl: './nav-item.component.css',
 })
@@ -19,4 +19,5 @@ export class NavItemComponent {
   @Input() title!: string;
   @Input() icon!: string;
   @Input() routeLink!: string;
+  @Input() isSidebarMinimized!: boolean;
 }

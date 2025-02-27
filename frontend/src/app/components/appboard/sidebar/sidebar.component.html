@@ -1,6 +1,7 @@
-<aside class="w-1/5 bg-white border-r border-gray-300 relative h-[88dvh]">
+<aside class="bg-white border-r border-gray-300 relative h-[88dvh]" [ngClass]="{'w-1/5': !isSidebarMinimized, 'w-1/12': isSidebarMinimized}">
   <button
     (click)="toggleSidebarMinimization()"
+    [ngClass]="{'rotate-180': isSidebarMinimized}"
     type="button"
     class="transition-transform cursor-pointer absolute top-1/2 -translate-y-1/2 -right-4 bg-gray-50 hover:bg-gray-100 border border-gray-300 p-2 rounded-full"
   >
@@ -19,5 +20,5 @@
       />
     </svg>
   </button>
-  <app-nav></app-nav>
+  <app-nav [isSidebarMinimized]="isSidebarMinimized"></app-nav>
 </aside>

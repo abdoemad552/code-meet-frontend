@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
 import { NavItemComponent } from './nav-item/nav-item.component';
 
 @Component({
@@ -9,6 +9,8 @@ import { NavItemComponent } from './nav-item/nav-item.component';
   styleUrl: './navigation.component.css',
 })
 export class NavigationComponent {
+  @Input() isSidebarMinimized!: boolean;
+
   links = [
     {
       title: 'home',

@@ -4,6 +4,7 @@
     @for (link of links; track link) {
     <nav-item
       class="block cursor-pointer"
+      [isSidebarMinimized] = "isSidebarMinimized"
       [title]="link.title"
       [icon]="link.icon"
       [routeLink]="link.route"

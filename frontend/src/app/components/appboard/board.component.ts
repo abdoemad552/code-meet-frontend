@@ -9,4 +9,10 @@ import { SidebarComponent } from './sidebar/sidebar.component';
   templateUrl: './board.component.html',
   styleUrl: './board.component.css',
 })
-export class BoardComponent {}
+export class BoardComponent {
+  isSidebarMinimized!: boolean;
+
+  getSidebarState(sidebarState: boolean) {
+    this.isSidebarMinimized = sidebarState;
+  }
+}

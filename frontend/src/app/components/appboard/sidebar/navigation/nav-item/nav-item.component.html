@@ -2,7 +2,8 @@
   routerLink="{{ routeLink }}"
   routerLinkActive="bg-indigo-600 text-white font-bold hover:text-white hover:bg-indigo-800"
   [routerLinkActiveOptions]="{ exact: true }"
-  class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100 text-gray-600 hover:text-gray-900 transition-colors"
+  [ngClass]="{'space-x-3': !isSidebarMinimized, 'justify-center': isSidebarMinimized}"
+  class="flex items-center p-3 rounded-lg hover:bg-gray-100 text-gray-600 hover:text-gray-900 transition-colors"
 >
   <svg
     class="w-6 h-6"
@@ -18,5 +19,5 @@
       attr.d="{{ icon }}"
     ></path>
   </svg>
-  <span class="font-medium sidebar-nav-title">{{ title | titlecase }}</span>
+  <span class="font-medium sidebar-nav-title" [ngClass]="{'hidden': isSidebarMinimized}">{{ title | titlecase }}</span>
 </a>
