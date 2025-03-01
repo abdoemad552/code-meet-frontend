@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 import {NgForOf, NgIf} from '@angular/common';
+import {MeetingCardComponent} from '../meeting-card/meeting-card.component';
 
 @Component({
   selector: 'app-meetingstabs',
   standalone: true,
   imports: [
     NgIf,
-    NgForOf
+    NgForOf,
+    MeetingCardComponent
   ],
   templateUrl: './meetingstabs.component.html',
   styleUrl: './meetingstabs.component.css'

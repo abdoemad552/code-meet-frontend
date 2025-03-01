@@ -14,12 +14,14 @@
   <div class="p-4">
     <div *ngIf="selectedTab === 'coming'">
       <!-- Coming meetings content -->
-      <p class="text-gray-600">Upcoming meetings content...</p>
+      <app-meeting-card></app-meeting-card>
+      <app-meeting-card></app-meeting-card>
+      <app-meeting-card></app-meeting-card>
     </div>
 
     <div *ngIf="selectedTab === 'previous'">
       <!-- Previous meetings content -->
-      <p class="text-gray-600">Previous meetings content...</p>
+      <app-meeting-card/>
     </div>
   </div>
 </div>
