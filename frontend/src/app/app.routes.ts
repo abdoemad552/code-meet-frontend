@@ -8,6 +8,8 @@ import {BoardComponent} from './components/appboard/board.component';
 import {MeetingsComponent} from './components/meetings/meetings.component';
 import {HomeComponent} from './components/home/home.component';
 import {FriendsComponent} from './components/friends/friends.component';
+import {ProfileComponent} from './components/profile/profile.component';
+import {ProfileEditComponent} from './components/profile/profile-edit/profile-edit.component';
 
 let signedIn: boolean = true;
 
@@ -41,6 +43,8 @@ const LoggedInRoutes: Routes = [
     children: [
       {path: '', redirectTo: 'home', pathMatch: 'full'},
       {path: 'home', component: HomeComponent, title: 'Home Page'},
+      {path: 'profile', component: ProfileComponent, title: 'My Profile'},
+      {path: 'profile/:userName', component: ProfileComponent},
       {path: 'meetings', component: MeetingsComponent, title: 'My Meetings'},
       {path: 'friends', component: FriendsComponent, title: 'My Friends'},
     ]

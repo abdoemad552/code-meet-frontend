@@ -1,4 +1,4 @@
-import {NgClass, TitleCasePipe} from '@angular/common';
+import {NgClass, NgIf, TitleCasePipe} from '@angular/common';
 import { Component, Input } from '@angular/core';
 import {
   ActivatedRoute,
@@ -11,7 +11,7 @@ import {
 @Component({
   selector: 'nav-item',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, TitleCasePipe, RouterModule, NgClass],
+  imports: [RouterLink, RouterLinkActive, TitleCasePipe, RouterModule, NgClass, NgIf],
   templateUrl: './nav-item.component.html',
   styleUrl: './nav-item.component.css',
 })
