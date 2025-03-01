@@ -1,7 +1,10 @@
 package com.codemeet.utils.dto;
 
-import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.Length;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 public record UserUpdateRequest(
     @NotNull
@@ -43,14 +46,7 @@ public record UserUpdateRequest(
     )
     String password,
     
-    @NotNull
-    @NotBlank
-    @Length(max = 25)
-    @Pattern(
-        regexp = "",
-        flags = {}
-    )
-    String phoneNumber,
+
     
     byte[] profilePicture
 ) {
