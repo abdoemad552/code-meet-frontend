@@ -65,7 +65,7 @@ public class MeetingService {
        Set<Participant> participants = new HashSet<>();
        scheduledMeetingRequest.participants().forEach((p)->{
 
-           User user=userService.getUserEntityByUsername(p.userName());
+           User user=userService.getUserEntityByUsername(p);
            participants.add(new Participant(savedMeeting,user));
        });
        participants.add(new Participant(savedMeeting,creator));

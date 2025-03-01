@@ -72,7 +72,6 @@ public class UserService {
         user.setUsername(updateRequest.username());
         user.setEmail(updateRequest.email());
         user.setPassword(updateRequest.password());
-        user.setPhoneNumber(updateRequest.phoneNumber());
         user.setProfilePicture(updateRequest.profilePicture());
         return UserInfoResponse.of(user);
     }
