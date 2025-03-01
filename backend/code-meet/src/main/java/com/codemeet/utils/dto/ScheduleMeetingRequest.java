@@ -16,7 +16,7 @@ public record ScheduleMeetingRequest
                        @NotNull
                        @FutureTime
                        Instant startTime,
-                       @NotEmpty HashSet<ParticipantDTO> participants
+                       @NotEmpty HashSet<String> participants
                )
 {
 }

@@ -96,7 +96,7 @@ public class MeetingService {
         participants.add(new Participant(savedMeeting,creator));
         participantService.addParticipants(participants);
 
-        //todo: run job to notify creator client to start the meeting now
+        //todo:  notify creator client to start the meeting now
         return new MeetingResponse(savedMeeting.getId(), savedMeeting.getTitle(),savedMeeting.getStartsAt());
     }
 
