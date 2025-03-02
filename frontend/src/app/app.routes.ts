@@ -11,6 +11,8 @@ import {FriendsComponent} from './components/friends/friends.component';
 import {ProfileComponent} from './components/profile/profile.component';
 import {ProfileEditComponent} from './components/profile/profile-edit/profile-edit.component';
 import {RoomsComponent} from './components/rooms/rooms.component';
+import {ChatsComponent} from './components/chats/chats.component';
+import {ChatboxComponent} from './components/chats/chatbox/chatbox.component';
 
 let signedIn: boolean = true;
 
@@ -50,6 +52,9 @@ const LoggedInRoutes: Routes = [
       {path: 'rooms', component: RoomsComponent, title: 'My Rooms'},
       {path: 'room/:id', component: RoomsComponent},
       {path: 'friends', component: FriendsComponent, title: 'My Friends'},
+      {path: 'chats', component: ChatsComponent, title: 'My Personal Chats', data: { isChatPage: true }, children: [
+          {path: ':id', component: ChatboxComponent}
+        ]},
     ]
   },
   {
