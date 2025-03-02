@@ -12,7 +12,7 @@ import {NgIf} from '@angular/common';
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent {
-  userId!: string | null;
+  userName!: string | null;
   isOwnProfile: boolean = false;
   areFriends : boolean = false;
 
@@ -20,8 +20,8 @@ export class ProfileComponent {
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
-      this.userId = params.get('userName'); // Get the 'id' parameter from the URL
-      this.isOwnProfile = !this.userId; // If no ID, it's the signed-in user's profile
+      this.userName = params.get('userName'); // Get the 'id' parameter from the URL
+      this.isOwnProfile = !this.userName; // If no ID, it's the signed-in user's profile
     });
   }
 
