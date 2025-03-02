@@ -16,7 +16,7 @@ public interface MeetingRepository extends JpaRepository<Meeting, Integer> {
     from Meeting m
     join Participant p on p.meeting = m
     where p.user.id = :userId 
-    and m.status = MeetingStatus.FINISHED
+    and m.status = MeetingStatus.FINISHED order by startsAt desc
 """)
     List<MeetingResponse> getPreviousMeetings(Integer userId);
 
@@ -25,7 +25,7 @@ public interface MeetingRepository extends JpaRepository<Meeting, Integer> {
     from Meeting m
     join Participant p on p.meeting = m
     where p.user.id = :userId 
-    and m.status = MeetingStatus.SCHEDULED
+    and m.status = MeetingStatus.SCHEDULED order by startsAt desc
 """)
     List<MeetingResponse> getScheduledMeetings(Integer userId);
 
