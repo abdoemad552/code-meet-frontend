@@ -3,15 +3,15 @@
   <div class="p-6 flex flex-col items-center">
     <!-- User Image -->
     <img
-      [src]="imageUrl"
+      [src]="friend.friendProfilePicture"
       alt="User profile"
       class="h-32 w-32 rounded-full object-cover p-1 border-1 border-gray-200 hover:border-indigo-200 transition-colors duration-300"
     >
 
     <!-- User Information -->
     <div class="mt-4 text-center">
-      <h2 class="text-xl font-bold text-gray-800">{{name}}</h2>
-      <p class="text-sm text-indigo-600 font-medium mt-1">{{'@' + userName}}</p>
+      <h2 class="text-xl font-bold text-gray-800">{{friend.friendUserName}}</h2>
+      <p class="text-sm text-indigo-600 font-medium mt-1">{{'@' + friend.friendUserName}}</p>
     </div>
 
     <!-- Message Button -->
