@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import {RouterLink} from '@angular/router';
+import { RoomInfoResponse } from '../../../models/room/room-info-response.dto';
 
 @Component({
   selector: 'app-roomcard',
@@ -12,4 +13,5 @@ import {RouterLink} from '@angular/router';
 })
 export class RoomcardComponent {
 
+@Input() roomInformation!:RoomInfoResponse;
 }

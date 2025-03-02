@@ -10,14 +10,14 @@
 
     <!-- User Information -->
     <div class="mt-4 text-center">
-      <h2 class="text-xl font-bold text-gray-800">{{friend.friendUserName}}</h2>
+      <h2 class="text-xl font-bold text-gray-800">{{friend.friendFirstName}} {{friend.friendLastName}}</h2>
       <p class="text-sm text-indigo-600 font-medium mt-1">{{'@' + friend.friendUserName}}</p>
     </div>
 
     <!-- Message Button -->
     <button
       type="button"
-      (click)="onMessageClick()"
+      
       class="flex gap-2 cursor-pointer text-md mt-6 px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors duration-300"
     >
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-6 h-6">

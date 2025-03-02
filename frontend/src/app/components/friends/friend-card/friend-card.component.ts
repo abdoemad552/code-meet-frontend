@@ -18,13 +18,4 @@ export class FriendCardComponent {
    @Input() friend!:FriendshipResponse;
 
 
-  @Input() imageUrl: string = 'https://placehold.co/128'; // Default placeholder
-  @Input() name: string = 'John Doe';
-  @Input() userName: string = 'johndoe123';
-  @Output() messageClicked = new EventEmitter<void>();
-
-  onMessageClick() {
-    console.log('Clicked!');
-    
-  }
 }
