@@ -10,6 +10,7 @@ import {HomeComponent} from './components/home/home.component';
 import {FriendsComponent} from './components/friends/friends.component';
 import {ProfileComponent} from './components/profile/profile.component';
 import {ProfileEditComponent} from './components/profile/profile-edit/profile-edit.component';
+import {RoomsComponent} from './components/rooms/rooms.component';
 
 let signedIn: boolean = true;
 
@@ -46,6 +47,8 @@ const LoggedInRoutes: Routes = [
       {path: 'profile', component: ProfileComponent, title: 'My Profile'},
       {path: 'profile/:userName', component: ProfileComponent},
       {path: 'meetings', component: MeetingsComponent, title: 'My Meetings'},
+      {path: 'rooms', component: RoomsComponent, title: 'My Rooms'},
+      {path: 'room/:id', component: RoomsComponent},
       {path: 'friends', component: FriendsComponent, title: 'My Friends'},
     ]
   },
