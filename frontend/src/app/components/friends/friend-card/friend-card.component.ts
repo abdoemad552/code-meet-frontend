@@ -1,6 +1,8 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {NgOptimizedImage} from '@angular/common';
 import {RouterLink} from '@angular/router';
+import { FriendshipRequest } from '../../../models/friendship/friendship-request.dto';
+import { FriendshipResponse } from '../../../models/friendship/friendship-response.dto';
 
 @Component({
   selector: 'app-friend-card',
@@ -13,6 +15,9 @@ import {RouterLink} from '@angular/router';
   styleUrl: './friend-card.component.css'
 })
 export class FriendCardComponent {
+   @Input() friend!:FriendshipResponse;
+
+
   @Input() imageUrl: string = 'https://placehold.co/128'; // Default placeholder
   @Input() name: string = 'John Doe';
   @Input() userName: string = 'johndoe123';
@@ -20,5 +25,6 @@ export class FriendCardComponent {
 
   onMessageClick() {
     console.log('Clicked!');
+    
   }
 }
