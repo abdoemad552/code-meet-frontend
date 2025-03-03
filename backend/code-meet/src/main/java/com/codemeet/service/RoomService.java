@@ -40,8 +40,8 @@ public class RoomService {
                 "Room with id '%d' not found".formatted(id)));
     }
     
-    public List<Room> getAllRoomEntities() {
-        return roomRepository.findAll();
+    public List<Room> getAllRoomEntities(Integer userId) {
+        return roomRepository.getAllByCreatorId(userId );
     }
     
     public Room addRoomEntity(Room room) {
@@ -62,8 +62,8 @@ public class RoomService {
         return RoomInfoResponse.of(room);
     }
     
-    public List<RoomInfoResponse> getAllRooms() {
-        return getAllRoomEntities().stream()
+    public List<RoomInfoResponse> getAllRoomsByCreator(Integer userId) {
+        return getAllRoomEntities(userId).stream()
             .map(RoomInfoResponse::of)
             .toList();
     }

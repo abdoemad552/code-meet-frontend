@@ -24,9 +24,9 @@ public class RoomController {
         return ResponseEntity.ok(roomService.getRoomById(roomId));
     }
     
-    @GetMapping("/all")
-    public ResponseEntity<List<RoomInfoResponse>> getAllRooms() {
-        return ResponseEntity.ok(roomService.getAllRooms());
+    @GetMapping("/all/{userId}")
+    public ResponseEntity<List<RoomInfoResponse>> getAllRoomsByCreator(@PathVariable Integer userId) {
+        return ResponseEntity.ok(roomService.getAllRoomsByCreator(userId));
     }
     
     @PostMapping("/create")

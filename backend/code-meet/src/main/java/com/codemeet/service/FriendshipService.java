@@ -70,9 +70,7 @@ public class FriendshipService {
     }
 
     public List<FriendshipResponse> getAllAcceptedFriendships(Integer userId) {
-        return getAllAcceptedFriendshipEntities(userId).stream()
-            .map(f -> FriendshipResponse.of(f, userId))
-            .toList();
+        return friendshipRepository.getAllFriends(userId);
     }
 
     public List<FriendshipResponse> getAllPendingSentFriendships(Integer userId) {

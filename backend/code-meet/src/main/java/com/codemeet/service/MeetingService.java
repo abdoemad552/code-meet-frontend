@@ -24,10 +24,10 @@ public class MeetingService {
     private final UserService userService;
 
     public MeetingService(
-        MeetingRepository meetingRepository,
-        ParticipantRepository participantRepository,
-        NotificationService notificationService,
-        UserService userService
+            MeetingRepository meetingRepository,
+            ParticipantRepository participantRepository,
+            NotificationService notificationService,
+            UserService userService
     ) {
         this.meetingRepository = meetingRepository;
         this.notificationService = notificationService;
@@ -37,8 +37,8 @@ public class MeetingService {
 
     public Meeting getMeetingEntityById(Integer meetingId) {
         return meetingRepository.findById(meetingId)
-            .orElseThrow(() -> new EntityNotFoundException(
-                "Meeting with id '%d' not found".formatted(meetingId)));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Meeting with id '%d' not found".formatted(meetingId)));
     }
 
     public List<Meeting> getAllPreviousMeetingEntities(Integer userId) {
@@ -53,17 +53,17 @@ public class MeetingService {
 
     public Participant getParticipantEntityById(Integer participantId) {
         return participantRepository.findById(participantId)
-            .orElseThrow(() -> new EntityNotFoundException(
-                "Participant with id '%d' not found".formatted(participantId)));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Participant with id '%d' not found".formatted(participantId)));
     }
 
     public Participant getParticipantEntityByUsernameAndMeetingId(
-        String username, Integer meetingId
+            String username, Integer meetingId
     ) {
         return participantRepository.findByUsernameAndMeetingId(username, meetingId)
-            .orElseThrow(() -> new EntityNotFoundException(
-                "Participant with username '%s' and meetingId '%d' not found"
-                    .formatted(username, meetingId)));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Participant with username '%s' and meetingId '%d' not found"
+                                .formatted(username, meetingId)));
     }
 
     public List<Participant> getAllParticipantEntitiesByMeetingId(Integer meetingId) {
@@ -73,14 +73,14 @@ public class MeetingService {
 
     public List<MeetingInfoResponse> getAllPreviousMeetings(Integer userId) {
         return getAllPreviousMeetingEntities(userId).stream()
-            .map(MeetingInfoResponse::of)
-            .toList();
+                .map(MeetingInfoResponse::of)
+                .toList();
     }
 
     public List<MeetingInfoResponse> getAllScheduledMeetings(Integer userId) {
         return getAllScheduledMeetingEntities(userId).stream()
-            .map(MeetingInfoResponse::of)
-            .toList();
+                .map(MeetingInfoResponse::of)
+                .toList();
     }
 
     public ParticipantInfoResponse getParticipantById(Integer participantId) {
@@ -88,42 +88,42 @@ public class MeetingService {
     }
 
     public ParticipantInfoResponse getParticipantByUsernameAndMeetingId(
-        String username, Integer meetingId
+            String username, Integer meetingId
     ) {
         return ParticipantInfoResponse.of(
-            getParticipantEntityByUsernameAndMeetingId(username, meetingId));
+                getParticipantEntityByUsernameAndMeetingId(username, meetingId));
     }
 
     public List<ParticipantInfoResponse> getAllParticipantsOfMeeting(Integer meetingId) {
         return getAllParticipantEntitiesByMeetingId(meetingId).stream()
-            .map(ParticipantInfoResponse::of)
-            .toList();
+                .map(ParticipantInfoResponse::of)
+                .toList();
     }
 
     @Transactional
     public MeetingInfoResponse scheduleMeeting(
-        ScheduleMeetingRequest scheduledMeetingRequest
+            ScheduleMeetingRequest scheduledMeetingRequest
     ) {
         // Schedule meeting
         User creator = userService.getUserEntityById(scheduledMeetingRequest.creatorId());
 
         Meeting scheduledMeeting = new Meeting(
-            scheduledMeetingRequest.title(),
-            scheduledMeetingRequest.description(),
-            creator,
-            scheduledMeetingRequest.startsAt(),
-            MeetingStatus.SCHEDULED
+                scheduledMeetingRequest.title(),
+                scheduledMeetingRequest.description(),
+                creator,
+                scheduledMeetingRequest.startsAt(),
+                MeetingStatus.SCHEDULED
         );
 
         meetingRepository.save(scheduledMeeting);
 
         // Add participants and creator to list of participants
         List<Participant> participants = new ArrayList<>(
-            scheduledMeetingRequest.participants().stream()
-                .map(username -> new Participant(
-                    userService.getUserEntityByUsername(username),
-                    scheduledMeeting
-                )).toList()
+                scheduledMeetingRequest.participants().stream()
+                        .map(username -> new Participant(
+                                userService.getUserEntityByUsername(username),
+                                scheduledMeeting
+                        )).toList()
         );
 
         participants.add(new Participant(creator, scheduledMeeting));
@@ -139,17 +139,17 @@ public class MeetingService {
 
     @Transactional
     public MeetingInfoResponse startInstantMeeting(
-        InstantMeetingRequest instantMeetingRequest
+            InstantMeetingRequest instantMeetingRequest
     ) {
         // Create instant meeting
         User creator = userService.getUserEntityById(instantMeetingRequest.creatorId());
 
         Meeting instantMeeting = new Meeting(
-            instantMeetingRequest.title(),
-            instantMeetingRequest.description(),
-            creator,
-            Instant.now(),
-            MeetingStatus.RUNNING
+                instantMeetingRequest.title(),
+                instantMeetingRequest.description(),
+                creator,
+                Instant.now(),
+                MeetingStatus.RUNNING
         );
 
         meetingRepository.save(instantMeeting);
@@ -172,7 +172,7 @@ public class MeetingService {
         //  - Adding a user to non running meeting.
 
         Participant participant = participantRepository.save(
-            new Participant(user, meeting)
+                new Participant(user, meeting)
         );
 
         return ParticipantInfoResponse.of(participant);
@@ -182,12 +182,12 @@ public class MeetingService {
     public void removeParticipantFromMeeting(ParticipantRequest participantRequest) {
         //TODO: Possible to check cache before hitting DB
         Participant participant = getParticipantEntityByUsernameAndMeetingId(
-            participantRequest.username(), participantRequest.meetingId()
+                participantRequest.username(), participantRequest.meetingId()
         );
 
         if (isMeetingCreator(participant)) {
             throw new IllegalActionException(
-                "Meeting creator can't be removed from the meeting");
+                    "Meeting creator can't be removed from the meeting");
         }
 
         participantRepository.delete(participant);
@@ -199,7 +199,7 @@ public class MeetingService {
 
         if (isMeetingCreator(participant)) {
             throw new IllegalActionException(
-                "Meeting creator can't be removed from the meeting");
+                    "Meeting creator can't be removed from the meeting");
         }
 
         participantRepository.delete(participant);
@@ -216,7 +216,7 @@ public class MeetingService {
     @Transactional
     public void closeMeeting(ParticipantRequest participantRequest) {
         Participant participant = getParticipantEntityByUsernameAndMeetingId(
-            participantRequest.username(), participantRequest.meetingId()
+                participantRequest.username(), participantRequest.meetingId()
         );
 
         //TODO: Some cases to handle:

@@ -1,6 +1,7 @@
 package com.codemeet.repository;
 
 import com.codemeet.entity.Meeting;
+import com.codemeet.utils.dto.MeetingInfoResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -8,6 +9,8 @@ import java.util.List;
 
 
 public interface MeetingRepository extends JpaRepository<Meeting, Integer> {
+
+
 
     @Query(
         """
@@ -20,6 +23,8 @@ public interface MeetingRepository extends JpaRepository<Meeting, Integer> {
         """
     )
     List<Meeting> getAllPrevious(Integer userId);
+
+
 
     @Query(
         """
