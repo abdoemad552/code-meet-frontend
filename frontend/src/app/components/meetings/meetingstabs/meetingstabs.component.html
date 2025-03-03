@@ -14,14 +14,17 @@
   <div class="p-4">
     <div *ngIf="selectedTab === 'coming'">
       <!-- Coming meetings content -->
-      <app-meeting-card></app-meeting-card>
-      <app-meeting-card></app-meeting-card>
-      <app-meeting-card></app-meeting-card>
+
+      @for (item of comingMeetings; track $index) {
+        <app-meeting-card [comingMeeting]="item"></app-meeting-card>
+      }
+
     </div>
 
     <div *ngIf="selectedTab === 'previous'">
-      <!-- Previous meetings content -->
-      <app-meeting-card/>
+      @for (item of previousMeetings; track $index) {
+        <app-meeting-card [previousMeeting]="item"></app-meeting-card>
+      }
     </div>
   </div>
 </div>

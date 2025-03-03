@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import {MeetingsboxComponent} from './meetingsbox/meetingsbox.component';
 import {Router} from '@angular/router';
 import {MeetingsTabsComponent} from './meetingstabs/meetingstabs.component';
+import { MeetingResponse } from '../../models/meeting/meeting-response.dto';
+import { MeetingService } from '../../services/meeting.service';
 
 @Component({
   selector: 'app-meetings',
@@ -16,11 +18,32 @@ import {MeetingsTabsComponent} from './meetingstabs/meetingstabs.component';
 export class MeetingsComponent {
   currentRoute: string = '';
 
-  constructor(private router: Router) {
+  comingMeetings:MeetingResponse[]=[];
+  previousMeetings:MeetingResponse[]=[];
+  constructor(private router: Router,private meetingService:MeetingService) 
+  {
+
   }
 
   ngOnInit() {
     this.getCurrentRoute();
+    this.getComingMeetings(1);
+    this.getPreviousMeetings(1);
+
+  }
+
+  getComingMeetings(userId:number):void{
+
+    this.meetingService.getScheduledMeetings(userId).subscribe((data:MeetingResponse[])=>{
+   this.comingMeetings=data;
+      console.log(data);
+    });
+  }
+  getPreviousMeetings(userId:number):void{
+    this.meetingService.getPreviousMeetings(userId).subscribe((data:MeetingResponse[])=>{
+      this.previousMeetings=data;
+         console.log(data);
+       });
   }
 
   private getCurrentRoute() {

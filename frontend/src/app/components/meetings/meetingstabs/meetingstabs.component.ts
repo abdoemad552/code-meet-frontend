@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import {NgForOf, NgIf} from '@angular/common';
 import {MeetingCardComponent} from '../meeting-card/meeting-card.component';
+import { MeetingResponse } from '../../../models/meeting/meeting-response.dto';
 
 @Component({
   selector: 'app-meetingstabs',
@@ -20,6 +21,8 @@ export class MeetingsTabsComponent {
   ];
   selectedTab = 'coming';
 
+  @Input() comingMeetings!:MeetingResponse[];
+  @Input() previousMeetings!:MeetingResponse[];
   getTabClasses(tabId: string) {
     const isActive = this.selectedTab === tabId;
     return [
