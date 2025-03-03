@@ -47,7 +47,7 @@ public record UserInfoResponse(
     )
     String phoneNumber,
     
-    byte[] profilePicture
+    String profilePictureUrl
 ) {
 
     public static UserInfoResponse of(User user) {
@@ -58,7 +58,7 @@ public record UserInfoResponse(
             user.getUsername(),
             user.getEmail(),
             user.getPhoneNumber(),
-            user.getProfilePicture()
+            user.getProfilePictureUrl()
         );
     }
 }

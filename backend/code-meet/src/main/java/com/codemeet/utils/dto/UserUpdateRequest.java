@@ -52,6 +52,6 @@ public record UserUpdateRequest(
     )
     String phoneNumber,
     
-    byte[] profilePicture
+    String profilePictureUrl
 ) {
 }

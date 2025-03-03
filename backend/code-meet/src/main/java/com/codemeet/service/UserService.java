@@ -73,7 +73,7 @@ public class UserService {
         user.setEmail(updateRequest.email());
         user.setPassword(updateRequest.password());
         user.setPhoneNumber(updateRequest.phoneNumber());
-        user.setProfilePicture(updateRequest.profilePicture());
+        user.setProfilePictureUrl(updateRequest.profilePictureUrl());
         return UserInfoResponse.of(user);
     }
 }
