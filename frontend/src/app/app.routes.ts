@@ -47,7 +47,9 @@ const LoggedInRoutes: Routes = [
     children: [
       {path: '', redirectTo: 'home', pathMatch: 'full'},
       {path: 'home', component: HomeComponent, title: 'Home Page'},
-      {path: 'profile', component: ProfileComponent, title: 'My Profile'},
+      {path: 'profile', component: ProfileComponent, title: 'My Profile', children: [
+          {path: 'edit', component: ProfileEditComponent}
+        ]},
       {path: 'profile/:userName', component: ProfileComponent},
       {path: 'meetings', component: MeetingsComponent, title: 'My Meetings'},
       {path: 'rooms', component: RoomsComponent, title: 'My Rooms'},
