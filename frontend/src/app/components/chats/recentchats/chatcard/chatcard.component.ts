@@ -13,5 +13,7 @@ import {RouterLink, RouterLinkActive} from '@angular/router';
 })
 export class ChatcardComponent {
   @Input() route: string = '';
-
+  @Input() senderName: string = '';
+  @Input() lastMessage: string = '';
+  @Input() profileImage: string = '';
 }

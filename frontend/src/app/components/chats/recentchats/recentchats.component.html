@@ -30,8 +30,8 @@
 </header>
 
 <!-- Contact List -->
-<div class="overflow-y-auto h-[76dvh] p-3">
-  <app-chatcard route="/chats/123456"></app-chatcard>
-  <app-chatcard route="/chats/1234"></app-chatcard>
-  <app-chatcard route="/chats/123498"></app-chatcard>
+<div class="overflow-y-auto h-[76dvh]">
+  @for (chat of chats; track chat) {
+    <app-chatcard [route]="'/chats/' + chat.id" [senderName]="chat.senderName" [profileImage]="chat.senderProfileImage" [lastMessage]="chat.lastMessage"></app-chatcard>
+  }
 </div>

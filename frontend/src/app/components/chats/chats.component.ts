@@ -1,7 +1,10 @@
-import {Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {RecentChatsComponent} from './recentchats/recentchats.component';
 import {ChatboxComponent} from './chatbox/chatbox.component';
 import {RouterOutlet} from '@angular/router';
+import {Chat} from '../../models/chats/chat';
+import {HttpClient} from '@angular/common/http';
+import data from '../../../../public/chats.json';
 
 @Component({
   selector: 'app-chats',
@@ -18,9 +21,14 @@ export class ChatsComponent {
   @Output() sidebarMinimizationState = new EventEmitter<boolean>();
   isSidebarMinimized: boolean = false;
 
+  chats: Chat[] = data;
+
+  constructor() {}
+
   ngOnInit() {
     this.isSidebarMinimized = true;
     this.sidebarMinimizationState.emit(this.isSidebarMinimized);
+
   }
 
 }
