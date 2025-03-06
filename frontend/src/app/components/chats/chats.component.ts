@@ -3,7 +3,6 @@ import {RecentChatsComponent} from './recentchats/recentchats.component';
 import {ChatboxComponent} from './chatbox/chatbox.component';
 import {RouterOutlet} from '@angular/router';
 import {Chat} from '../../models/chats/chat';
-import {HttpClient} from '@angular/common/http';
 import data from '../../../../public/chats.json';
 
 @Component({
@@ -28,7 +27,6 @@ export class ChatsComponent {
   ngOnInit() {
     this.isSidebarMinimized = true;
     this.sidebarMinimizationState.emit(this.isSidebarMinimized);
-
   }
 
 }

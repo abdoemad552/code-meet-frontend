@@ -16,8 +16,6 @@ import {ChatboxComponent} from './components/chats/chatbox/chatbox.component';
 import {FriendRequestsComponent} from './components/friends/friend-requests/friend-requests.component';
 import {NotificationsComponent} from './components/notifications/notifications.component';
 
-let signedIn: boolean = true;
-
 const NotLoggedInRoutes: Routes = [
   {
     path: '',

@@ -13,6 +13,7 @@
 
 <!-- Chat Messages -->
 <div class="overflow-y-auto px-4 py-12 pt-6 h-[66dvh]">
+
   @for (message of chat.chatMessages; track message; let i = $index) {
     <app-chatmessage [senderName]="message.sender" [senderProfileImage]="chat.senderProfileImage" [outgoingMessage]="message.outgoing" [isPrevSame]="isPrevSame[i]" [message]="message.message"></app-chatmessage>
   }

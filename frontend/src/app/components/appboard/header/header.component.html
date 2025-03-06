@@ -2,13 +2,22 @@
   <div class="px-8 mx-auto px-4 py-[3.5dvh] flex justify-between items-center">
     <!-- Logo Section -->
     <div class="flex items-center">
-      <a routerLink="/home" class="cursor-pointer">
-        <img
-          src="https://i.ibb.co/cKVw1MTL/logo.png"
-          alt="Logo"
-          class="h-8 w-auto"
-        />
-      </a>
+      <div class="cursor-pointer flex items-center justify-center -mt-1" routerLink="/home">
+        <!-- Logo -->
+        <div class="flex items-center">
+          <!-- Code Brackets Symbol -->
+          <div class="h-8 w-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-mono text-md mr-3 shadow-md transform rotate-12">
+            &lt;/&gt;
+          </div>
+
+          <!-- Text Part -->
+          <div class="flex flex-col">
+            <span class="text-2xl font-bold tracking-tight text-indigo-800">Code<span class="text-indigo-500">Meet</span></span>
+            <span class="text-xs text-indigo-600 tracking-widest uppercase -mt-1">Connect & Collaborate</span>
+          </div>
+        </div>
+
+      </div>
     </div>
 
     <div #overlay class="hidden before:fixed before:inset-0 before:w-full before:h-full before:bg-[rgba(0,0,0,0.0)] z-99" (click)="closeDropdown()"></div>

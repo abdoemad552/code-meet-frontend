@@ -1,4 +1,4 @@
-import { ChatMessage } from './chatMessage';
+import { ChatMessage } from './chat-message';
 
 export interface Chat {
   id: string,
