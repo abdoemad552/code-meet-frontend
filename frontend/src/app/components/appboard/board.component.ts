@@ -6,6 +6,7 @@ import {HomeComponent} from '../home/home.component';
 import {ActivatedRoute, RouterOutlet, NavigationEnd, Router} from '@angular/router';
 import {filter, Subject, takeUntil} from 'rxjs';
 import {ChatsComponent} from '../chats/chats.component';
+import {ProfileComponent} from '../profile/profile.component';
 
 @Component({
   selector: 'app-board',
@@ -16,20 +17,23 @@ import {ChatsComponent} from '../chats/chats.component';
 })
 export class BoardComponent {
   isSidebarMinimized!: boolean;
-  isChatPage : boolean = false;
+  noPadding : boolean = false;
   private chats : ChatsComponent | null = null;
 
   constructor(private router: Router) {}
 
-  onActivated(chatsPage : any) : void {
-    if (chatsPage instanceof ChatsComponent) {
-      this.chats = chatsPage;
+  onActivated(Page : any) : void {
+    if (Page instanceof ChatsComponent) {
+      this.chats = Page;
       this.chats.sidebarMinimizationState.subscribe((message: string) => {
-        this.isChatPage = true;
+        this.noPadding = true;
         this.isSidebarMinimized = true;
       })
+    } else if (Page instanceof ProfileComponent) {
+      this.noPadding = true;
+      this.isSidebarMinimized = true;
     } else {
-      this.isChatPage = false;
+      this.noPadding = false;
       this.isSidebarMinimized = false;
     }
   }
