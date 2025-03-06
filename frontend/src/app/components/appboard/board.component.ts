@@ -30,6 +30,7 @@ export class BoardComponent {
       })
     } else {
       this.isChatPage = false;
+      this.isSidebarMinimized = false;
     }
   }
 

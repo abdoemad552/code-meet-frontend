@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 import {ChatcardComponent} from './chatcard/chatcard.component';
-import {Router} from '@angular/router';
+import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 
 @Component({
   selector: 'app-recentchats',
   standalone: true,
   imports: [
-    ChatcardComponent
+    ChatcardComponent,
+    RouterLink,
+    RouterLinkActive
   ],
   templateUrl: './recentchats.component.html',
   styleUrl: './recentchats.component.css'
@@ -17,7 +19,7 @@ export class RecentChatsComponent {
 
   constructor(private router: Router) {}
 
-  toggleChatBox() {
+  openChatBox() {
     if (this.isChatBoxShown) {
       this.router.navigate(['/chats']);
     } else {

@@ -14,6 +14,7 @@ import {RoomsComponent} from './components/rooms/rooms.component';
 import {ChatsComponent} from './components/chats/chats.component';
 import {ChatboxComponent} from './components/chats/chatbox/chatbox.component';
 import {FriendRequestsComponent} from './components/friends/friend-requests/friend-requests.component';
+import {NotificationsComponent} from './components/notifications/notifications.component';
 
 let signedIn: boolean = true;
 
@@ -47,6 +48,7 @@ const LoggedInRoutes: Routes = [
     children: [
       {path: '', redirectTo: 'home', pathMatch: 'full'},
       {path: 'home', component: HomeComponent, title: 'Home Page'},
+      {path: 'notifications', component: NotificationsComponent, title: 'Your notifications'},
       {path: 'profile', component: ProfileComponent, title: 'My Profile', children: [
           {path: 'edit', component: ProfileEditComponent}
         ]},
