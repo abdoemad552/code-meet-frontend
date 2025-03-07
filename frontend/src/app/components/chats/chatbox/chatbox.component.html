@@ -12,7 +12,7 @@
 </header>
 
 <!-- Chat Messages -->
-<div class="overflow-y-auto px-4 py-12 pt-6 h-[66dvh]">
+<div class="overflow-y-auto px-4 pb-6 pt-6 h-[66dvh]" #messagesContainer>
 
   @for (message of chat.chatMessages; track message; let i = $index) {
     <app-chatmessage [senderName]="message.sender" [senderProfileImage]="chat.senderProfileImage" [outgoingMessage]="message.outgoing" [isPrevSame]="isPrevSame[i]" [message]="message.message"></app-chatmessage>
@@ -20,7 +20,7 @@
 
 </div>
 <!-- Chat Input -->
-<footer class="bg-white border-t border-gray-300 p-4 flex items-center absolute bottom-0 right-0 left-0 h-[12dvh]">
+<footer class="bg-white border-t border-gray-300 p-4 flex items-center absolute bottom-0 right-0 left-0 h-[10dvh]">
   <div class="flex items-center w-full">
     <input #messageContent (keydown.enter)="sendMessage()" type="text" placeholder="Type a message..." class="w-full p-3 border border-gray-300 focus:outline-none rounded-tl-md rounded-bl-md">
     <button (click)="sendMessage()" class="cursor-pointer bg-indigo-500 text-white px-4 py-2 rounded-tr-md rounded-br-md border border-indigo-500">

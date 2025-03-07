@@ -20,6 +20,7 @@ export class ChatboxComponent {
   chats: Chat[] = data;
   isPrevSame!: boolean[];
   @ViewChild('messageContent') messageInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('messagesContainer') private messagesBox!: ElementRef;
 
   constructor(private route: ActivatedRoute, private router: Router) {}
 
@@ -34,6 +35,10 @@ export class ChatboxComponent {
         }
       }
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.scrollToBottom();
   }
 
   sendMessage(): void {
@@ -54,7 +59,13 @@ export class ChatboxComponent {
       const prevSender = this.chat.chatMessages[index - 1].sender;
       return message.sender === prevSender;
     });
+    this.scrollToBottom();
+  }
 
-    console.log(this.isPrevSame);
+  scrollToBottom(): void {
+    setTimeout(() => {
+      const element = this.messagesBox.nativeElement;
+      element.scrollTop = element.scrollHeight;
+    }, 0)
   }
 }
