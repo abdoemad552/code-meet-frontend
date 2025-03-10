@@ -11,10 +11,10 @@ public interface NotificationRepository extends JpaRepository<Notification, Inte
     
     @Query(
         """
-        SELECT new com.codemeet.utils.dto.NotificationDTO(n.content, n.sender.username)
+        SELECT n
         FROM Notification n
         WHERE n.receiver.id = :userId
         """
     )
-    List<NotificationDTO> getNotifications(Integer userId);
+    List<Notification> getNotifications(Integer userId);
 }

@@ -2,6 +2,7 @@ package com.codemeet.service;
 
 import com.codemeet.entity.Friendship;
 import com.codemeet.entity.FriendshipStatus;
+import com.codemeet.entity.Notification;
 import com.codemeet.entity.User;
 import com.codemeet.repository.FriendshipRepository;
 import com.codemeet.utils.dto.FriendshipRequest;
@@ -12,21 +13,28 @@ import com.codemeet.utils.exception.IllegalActionException;
 import com.codemeet.utils.exception.ResourceType;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.List;
 import java.util.Optional;
 
+import static com.codemeet.entity.NotificationType.*;
+
 @Service
 public class FriendshipService {
-
+    
     private final FriendshipRepository friendshipRepository;
+    private final NotificationService notificationService;
     private final UserService userService;
 
     public FriendshipService(
         FriendshipRepository friendshipRepository,
+        NotificationService notificationService,
         UserService userService
     ) {
         this.friendshipRepository = friendshipRepository;
+        this.notificationService = notificationService;
         this.userService = userService;
     }
 
@@ -92,17 +100,17 @@ public class FriendshipService {
                 "User can't send friendship request to himself");
         }
 
-        Optional<Friendship> f = friendshipRepository.findByFromIdAndToId(
+        Optional<Friendship> of = friendshipRepository.findByFromIdAndToId(
             friendshipRequest.fromId(), friendshipRequest.toId()
         );
 
-        if (f.isPresent()) {
+        if (of.isPresent()) {
             throw new DuplicateResourceException(
                 "Friendship between user with id '%d' and user with id '%d' already exists (%s)"
                     .formatted(
-                        f.get().getFrom().getId(),
-                        f.get().getTo().getId(),
-                        f.get().getStatus()
+                        of.get().getFrom().getId(),
+                        of.get().getTo().getId(),
+                        of.get().getStatus()
                     ),
                 ResourceType.FRIENDSHIP
             );
@@ -111,11 +119,24 @@ public class FriendshipService {
         User from = userService.getUserEntityById(friendshipRequest.fromId());
         User to = userService.getUserEntityById(friendshipRequest.toId());
 
-        Friendship friendship = new Friendship(from, to, FriendshipStatus.PENDING);
-        friendshipRepository.save(friendship);
+        Friendship f = new Friendship(from, to, FriendshipStatus.PENDING);
+        friendshipRepository.save(f);
 
-        //TODO: send notification with FriendshipResponse to requested user to that this user wants to be his friend
-        return friendship.getId();
+        // Sending notification...
+        TransactionSynchronizationManager.registerSynchronization(
+            new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    Notification n = new Notification();
+                    n.setReceiver(to);
+                    n.setContent(FRIENDSHIP_REQUEST.getAbstractContent()
+                        .formatted(from.getFullName(), from.getUsername()));
+                    notificationService.sendToUser(to.getId(), n);
+                }
+            }
+        );
+        
+        return f.getId();
     }
 
     @Transactional
@@ -126,13 +147,29 @@ public class FriendshipService {
 
     @Transactional
     public void acceptFriendshipRequest(Integer friendshipId) {
-        Friendship friendship = getFriendshipEntityById(friendshipId);
+        Friendship f = getFriendshipEntityById(friendshipId);
 
-        if (friendship.getStatus().equals(FriendshipStatus.PENDING)) {
-            friendship.setStatus(FriendshipStatus.ACCEPTED);
+        if (f.getStatus() == FriendshipStatus.PENDING) {
+            f.setStatus(FriendshipStatus.ACCEPTED);
+            
+            // Sending notification...
+            TransactionSynchronizationManager.registerSynchronization(
+                new TransactionSynchronization() {
+                    @Override
+                    public void afterCommit() {
+                        Notification n = new Notification();
+                        n.setReceiver(f.getFrom());
+                        n.setContent(FRIENDSHIP_ACCEPTED.getAbstractContent()
+                            .formatted(f.getTo().getFullName(), f.getTo().getUsername()));
+                        notificationService.sendToUser(f.getFrom().getId(), n);
+                    }
+                }
+            );
+            
+            //TODO: create chat between them...
         } else {
             throw new IllegalActionException(
-                "Friendship state should be pending in order to accept it");
+                "Friendship status should be PENDING in order to be accepted");
         }
     }
 }

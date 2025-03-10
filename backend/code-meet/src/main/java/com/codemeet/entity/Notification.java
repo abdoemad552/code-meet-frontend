@@ -19,10 +19,6 @@ public class Notification {
     
     @ManyToOne
     @JoinColumn(nullable = false)
-    private User sender;
-    
-    @ManyToOne
-    @JoinColumn(nullable = false)
     private User receiver;
     
     @CreationTimestamp
@@ -42,14 +38,6 @@ public class Notification {
     
     public void setContent(String content) {
         this.content = content;
-    }
-    
-    public User getSender() {
-        return sender;
-    }
-    
-    public void setSender(User sender) {
-        this.sender = sender;
     }
     
     public User getReceiver() {
