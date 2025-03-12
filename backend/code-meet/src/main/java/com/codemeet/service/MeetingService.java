@@ -1,9 +1,6 @@
 package com.codemeet.service;
 
-import com.codemeet.entity.Meeting;
-import com.codemeet.entity.MeetingStatus;
-import com.codemeet.entity.Participant;
-import com.codemeet.entity.User;
+import com.codemeet.entity.*;
 import com.codemeet.repository.MeetingRepository;
 import com.codemeet.repository.ParticipantRepository;
 import com.codemeet.utils.dto.*;
@@ -132,15 +129,22 @@ public class MeetingService {
 
         participantRepository.saveAll(participants);
 
-        //TODO: Send notifications to participants
+        // Send notifications to participants...
         TransactionSynchronizationManager.registerSynchronization(
             new TransactionSynchronization() {
                 @Override
                 public void afterCommit() {
-                
+                    for (Participant p : participants) {
+                        Notification n = new Notification();
+                        n.setReceiver(p.getUser());
+                        n.setContent("You are invited to a new meeting (%s)"
+                            .formatted(scheduledMeeting.getStartsAt()));
+                        notificationService.sendToUser(n);
+                    }
                 }
             }
         );
+        
         //TODO: Schedule job to run at given time which notifies creator client to start the meeting now
         //TODO: and notifies all participants that there is a meeting now
 

@@ -131,7 +131,7 @@ public class FriendshipService {
                     n.setReceiver(to);
                     n.setContent(FRIENDSHIP_REQUEST.getAbstractContent()
                         .formatted(from.getFullName(), from.getUsername()));
-                    notificationService.sendToUser(to.getId(), n);
+                    notificationService.sendToUser(n);
                 }
             }
         );
@@ -161,7 +161,7 @@ public class FriendshipService {
                         n.setReceiver(f.getFrom());
                         n.setContent(FRIENDSHIP_ACCEPTED.getAbstractContent()
                             .formatted(f.getTo().getFullName(), f.getTo().getUsername()));
-                        notificationService.sendToUser(f.getFrom().getId(), n);
+                        notificationService.sendToUser(n);
                     }
                 }
             );

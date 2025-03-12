@@ -1,25 +1,12 @@
 package com.codemeet.entity;
 
 
+import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "messages")
 public abstract class Message {
     
@@ -27,12 +14,16 @@ public abstract class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     
-    @Column(nullable = false)
-    private String content;
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Chat chat;
     
     @ManyToOne
     @JoinColumn(nullable = false)
     private User sender;
+    
+    @Column(nullable = false)
+    private String content;
     
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -43,6 +34,14 @@ public abstract class Message {
     
     public Integer getId() {
         return id;
+    }
+    
+    public Chat getChat() {
+        return chat;
+    }
+    
+    public void setChat(Chat chat) {
+        this.chat = chat;
     }
     
     public String getContent() {
