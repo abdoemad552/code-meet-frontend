@@ -1,9 +1,6 @@
 package com.codemeet.service;
 
-import com.codemeet.entity.Friendship;
-import com.codemeet.entity.FriendshipStatus;
-import com.codemeet.entity.Notification;
-import com.codemeet.entity.User;
+import com.codemeet.entity.*;
 import com.codemeet.repository.FriendshipRepository;
 import com.codemeet.utils.dto.FriendshipRequest;
 import com.codemeet.utils.dto.FriendshipResponse;
@@ -18,8 +15,6 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 import java.util.List;
 import java.util.Optional;
-
-import static com.codemeet.entity.NotificationType.*;
 
 @Service
 public class FriendshipService {
@@ -123,15 +118,19 @@ public class FriendshipService {
         friendshipRepository.save(f);
 
         // Sending notification...
+        Notification notification = new Notification();
+        
+        notification.setMessage("%s (%s) sent you a friendship request"
+            .formatted(f.getFrom().getFullName(), f.getFrom().getUsername()));
+        notification.setReceiver(to);
+        
+        notificationService.save(notification);
+        
         TransactionSynchronizationManager.registerSynchronization(
             new TransactionSynchronization() {
                 @Override
                 public void afterCommit() {
-                    Notification n = new Notification();
-                    n.setReceiver(to);
-                    n.setContent(FRIENDSHIP_REQUEST.getAbstractContent()
-                        .formatted(from.getFullName(), from.getUsername()));
-                    notificationService.sendToUser(n);
+                    notificationService.sendToUser(notification);
                 }
             }
         );
@@ -153,15 +152,19 @@ public class FriendshipService {
             f.setStatus(FriendshipStatus.ACCEPTED);
             
             // Sending notification...
+            Notification notification = new Notification();
+            
+            notification.setMessage("%s (%s) accepted your friendship request"
+                .formatted(f.getTo().getFullName(), f.getTo().getUsername()));
+            notification.setReceiver(f.getFrom());
+            
+            notificationService.save(notification);
+            
             TransactionSynchronizationManager.registerSynchronization(
                 new TransactionSynchronization() {
                     @Override
                     public void afterCommit() {
-                        Notification n = new Notification();
-                        n.setReceiver(f.getFrom());
-                        n.setContent(FRIENDSHIP_ACCEPTED.getAbstractContent()
-                            .formatted(f.getTo().getFullName(), f.getTo().getUsername()));
-                        notificationService.sendToUser(n);
+                        notificationService.sendToUser(notification);
                     }
                 }
             );

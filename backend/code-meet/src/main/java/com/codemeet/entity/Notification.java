@@ -1,8 +1,6 @@
 package com.codemeet.entity;
 
-
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 
@@ -12,32 +10,34 @@ public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     
     @Column(nullable = false)
-    private String content;
+    private String message;
     
     @ManyToOne
     @JoinColumn(nullable = false)
     private User receiver;
     
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    private Instant sentAt;
+    @Column(nullable = false)
+    private Instant sentAt = Instant.now();
+    
+    @Column(nullable = false)
+    private boolean isRead = false;
     
     public Notification() {
     }
     
-    public int getId() {
+    public Integer getId() {
         return id;
     }
     
-    public String getContent() {
-        return content;
+    public String getMessage() {
+        return message;
     }
     
-    public void setContent(String content) {
-        this.content = content;
+    public void setMessage(String message) {
+        this.message = message;
     }
     
     public User getReceiver() {
@@ -50,5 +50,17 @@ public class Notification {
     
     public Instant getSentAt() {
         return sentAt;
+    }
+    
+    public void setSentAt(Instant sentAt) {
+        this.sentAt = sentAt;
+    }
+    
+    public boolean isRead() {
+        return isRead;
+    }
+    
+    public void setRead(boolean read) {
+        isRead = read;
     }
 }

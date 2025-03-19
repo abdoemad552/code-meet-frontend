@@ -130,16 +130,32 @@ public class MeetingService {
         participantRepository.saveAll(participants);
 
         // Send notifications to participants...
+        List<Notification> notifications = new ArrayList<>();
+        for (Participant p : participants) {
+            Notification notification = new Notification();
+            
+            notification.setMessage(
+                "'%s' (%s) invited you to a new meeting (%s) at %s"
+                    .formatted(
+                        scheduledMeeting.getCreator().getFullName(),
+                        scheduledMeeting.getCreator().getUsername(),
+                        scheduledMeeting.getTitle(),
+                        scheduledMeeting.getStartsAt()
+                    )
+            );
+            notification.setReceiver(p.getUser());
+            
+            notifications.add(notification);
+        }
+        
+        notificationService.saveAll(notifications);
+        
         TransactionSynchronizationManager.registerSynchronization(
             new TransactionSynchronization() {
                 @Override
                 public void afterCommit() {
-                    for (Participant p : participants) {
-                        Notification n = new Notification();
-                        n.setReceiver(p.getUser());
-                        n.setContent("You are invited to a new meeting (%s)"
-                            .formatted(scheduledMeeting.getStartsAt()));
-                        notificationService.sendToUser(n);
+                    for (Notification notification : notifications) {
+                        notificationService.sendToUser(notification);
                     }
                 }
             }
