@@ -33,7 +33,6 @@ export class AppComponent implements OnInit {
 
   sendMessage() {
     this.webSocketService.sendMessage(this.message);
-
   }
 
   disconnectWebSocket() {

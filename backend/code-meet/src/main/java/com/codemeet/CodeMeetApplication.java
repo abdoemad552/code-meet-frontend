@@ -16,4 +16,26 @@ public class CodeMeetApplication {
 		SpringApplication.run(CodeMeetApplication.class, args);
 	}
 
+	private void init(
+		UserRepository userRepository
+	) {
+		User user = new User();
+		user.setFirstName("Abdo");
+		user.setLastName("Emad");
+		user.setUsername("abdoemad123");
+		user.setPassword("123");
+		user.setEmail("abdoemad123@gmail.com");
+		user.setPhoneNumber("01102761051");
+		
+		userRepository.save(user);
+	}
+	
+	@Bean
+	public CommandLineRunner commandLineRunner(
+		UserRepository userRepository
+	) {
+		return args -> {
+			// init(userRepository);
+		};
+	}
 }

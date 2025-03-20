@@ -15,6 +15,7 @@ import {ChatsComponent} from './components/chats/chats.component';
 import {ChatboxComponent} from './components/chats/chatbox/chatbox.component';
 import {FriendRequestsComponent} from './components/friends/friend-requests/friend-requests.component';
 import {NotificationsComponent} from './components/notifications/notifications.component';
+import {AuthGuard} from './services/guards/auth.guard';
 
 const NotLoggedInRoutes: Routes = [
   {
@@ -69,8 +70,111 @@ const LoggedInRoutes: Routes = [
   }
 ];
 
-export function getRoutes(isLoggedIn: boolean) : Routes {
-  if (isLoggedIn)
-    return LoggedInRoutes;
-  return NotLoggedInRoutes;
-}
+export const routes: Routes = [
+  // Public Routes
+  {
+    path: 'entry',
+    component: EntryComponent,
+    title: 'Code Meet'
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
+    title: 'Login to your account - Code Meet'
+  },
+  {
+    path: 'signup',
+    component: SignupComponent,
+    title: 'Sign up a new account'
+  },
+
+  // Protected Routes at the root path
+  {
+    path: '',
+    component: BoardComponent,
+    canActivate: [AuthGuard],  // Only authenticated users can access these
+    children: [
+      {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full'
+      },
+      {
+        path: 'home',
+        component: HomeComponent,
+        title: 'Home Page'
+      },
+      {
+        path: 'notifications',
+        component: NotificationsComponent,
+        title: 'Your notifications'
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent,
+        title: 'My Profile',
+        children: [
+          {
+            path: 'edit',
+            component: ProfileEditComponent
+          }
+        ]
+      },
+      {
+        path: 'profile/:userName',
+        component: ProfileComponent
+      },
+      {
+        path: 'meetings',
+        component: MeetingsComponent,
+        title: 'My Meetings'
+      },
+      {
+        path: 'rooms',
+        component: RoomsComponent,
+        title: 'My Rooms'
+      },
+      {
+        path: 'room/:id',
+        component: RoomsComponent
+      },
+      {
+        path: 'friends',
+        component: FriendsComponent,
+        title: 'My Friends',
+        children: [
+          {
+            path: 'requests',
+            component: FriendRequestsComponent
+          }
+        ]
+      },
+      {
+        path: 'chats',
+        component: ChatsComponent,
+        title: 'My Personal Chats',
+        data: { isChatPage: true },
+        children: [
+          {
+            path: ':id',
+            component: ChatboxComponent
+          }
+        ]
+      }
+    ]
+  },
+
+  // Fallback route for undefined paths
+  {
+    path: '**',
+    component: NotFoundComponent,
+    title: 'Page is not found'
+  }
+];
+
+
+// export function getRoutes(isLoggedIn: boolean) : Routes {
+//   if (isLoggedIn)
+//     return LoggedInRoutes;
+//   return NotLoggedInRoutes;
+// }
