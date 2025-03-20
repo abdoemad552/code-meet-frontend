@@ -1,11 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {LoginRequest} from '../models/login/login-request.dto';
-import {BehaviorSubject, Observable, of} from 'rxjs';
-import {SignupRequest} from '../models/login/signup-request.dto';
+import {LoginRequest} from '../models/authentication/login-request.dto';
+import {Observable, of} from 'rxjs';
+import {SignupRequest} from '../models/authentication/signup-request.dto';
 import {UserInfoResponse} from '../models/user/user-info-response.dto';
 import {Router} from '@angular/router';
-import {routes} from '../app.routes';
 
 @Injectable({
   providedIn: 'root'
@@ -32,15 +31,28 @@ export class AuthenticationService {
           this.router.navigateByUrl('/home');
         },
         error => {
+          console.log(error);
           alert(error.error.error);
           this.authenticated = of(false);
         }
       );
   }
 
-  signup(signupRequest: SignupRequest): Observable<UserInfoResponse> {
+  signup(userInfo: SignupRequest){
     return this.http.post<UserInfoResponse>(
-      `${AuthenticationService.URL}/signup`, signupRequest);
+      `${AuthenticationService.URL}/signup`, userInfo).subscribe(
+      response => {
+        console.log(response);
+        sessionStorage.setItem("userInfo", JSON.stringify(response));
+        this.authenticated = of(true);
+        this.router.navigateByUrl('/home');
+      },
+      error => {
+        console.log(error);
+        alert(error.error.error);
+        this.authenticated = of(false);
+      }
+    );
   }
 
   logout(): void {

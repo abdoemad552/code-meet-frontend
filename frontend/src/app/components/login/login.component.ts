@@ -1,29 +1,22 @@
 import { Component } from '@angular/core';
-import {Router, RouterLink, RouterLinkActive} from '@angular/router';
+import {RouterLink, RouterLinkActive} from '@angular/router';
 import {AuthenticationService} from '../../services/authentication.service';
 import {FormsModule} from '@angular/forms';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-authentication',
   standalone: true,
   imports: [RouterLink, RouterLinkActive, FormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  username!: string;
-  password!: string;
+  loginRequest: any = {};
 
-  constructor(
-    private authService: AuthenticationService,
-    private router: Router
-  ) {
+  constructor(private authService: AuthenticationService) {
   }
 
-  onLogin(event: any): void {
-    this.authService.login({
-      username: this.username,
-      password: this.password
-    });
+  onLogin(): void {
+    this.authService.login(this.loginRequest);
   }
 }

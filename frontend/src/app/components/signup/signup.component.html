@@ -41,6 +41,7 @@
           <label class="text-gray-800 text-sm block mb-2">First Name</label>
           <div class="relative flex items-center">
             <input
+              [(ngModel)]="this.signupRequest.firstName"
               name="FirstName"
               type="text"
               required
@@ -54,6 +55,7 @@
           <label class="text-gray-800 text-sm block mb-2">Last Name</label>
           <div class="relative flex items-center">
             <input
+              [(ngModel)]="this.signupRequest.lastName"
               name="LastName"
               type="text"
               required
@@ -68,7 +70,8 @@
         <label class="text-gray-800 text-sm block mb-2">Email Address</label>
         <div class="relative flex items-center">
           <input
-            name="text"
+            [(ngModel)]="this.signupRequest.email"
+            name="EmailAddress"
             type="text"
             required
             class="w-full text-sm text-gray-800 border border-gray-300 focus:border-indigo-600 px-2 py-3 outline-none"
@@ -107,7 +110,8 @@
         <label class="text-gray-800 text-sm block mb-2">Username</label>
         <div class="relative flex items-center">
           <input
-            name="text"
+            [(ngModel)]="this.signupRequest.username"
+            name="Username"
             type="text"
             required
             class="w-full text-sm text-gray-800 border border-gray-300 focus:border-indigo-600 px-2 py-3 outline-none"
@@ -135,7 +139,8 @@
         <label class="text-gray-800 text-sm block mb-2">Password</label>
         <div class="relative flex items-center">
           <input
-            name="password"
+            [(ngModel)]="this.signupRequest.password"
+            name="Password"
             type="password"
             required
             class="w-full text-sm text-gray-800 border border-gray-300 focus:border-indigo-600 px-2 py-3 outline-none"
@@ -241,6 +246,8 @@
               </div>
             </div>
             <input
+              [(ngModel)]="this.signupRequest.phoneNumber"
+              name="PhoneNumber"
               type="tel"
               class="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pr-3 pl-20 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 w-full text-sm text-gray-800 border border-gray-300 focus:border-indigo-600 px-2 py-3 outline-none"
               placeholder="100-136-4845"
@@ -255,6 +262,7 @@
 
       <div class="mt-8">
         <button
+          (click)="onSignup()"
           type="submit"
           class="w-full py-2.5 px-4 text-sm tracking-wide rounded-md text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-600 cursor-pointer focus:outline-none"
         >
