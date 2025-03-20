@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Client, Message } from '@stomp/stompjs';
+import {Client, Frame, Message, messageCallbackType, StompHeaders} from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
-import { BehaviorSubject } from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -16,23 +16,30 @@ export class WebSocketService {
     this.stompClient = new Client({
       webSocketFactory: () => new SockJS('http://localhost:8080/ws'),
       reconnectDelay: 5000,
-      debug: (msg: string) => console.log(msg)
+      debug: (msg: string) => console.log(msg),
+      onConnect: (frame: Frame) => {
+        console.log('(WebSocket): connected...');
+
+        this.stompClient.subscribe('/topic/response', (message: Message) => {
+          console.log('Received:', message.body);
+          this.messageSubject.next(message.body); // Emit received message
+        });
+      },
+      onStompError: (frame) => {
+        console.error('WebSocket Error:', frame);
+      }
     });
+  }
 
-    this.stompClient.onConnect = () => {
-      console.log('Connected to WebSocket');
-
-      this.stompClient.subscribe('/topic/response', (message: Message) => {
-        console.log('Received:', message.body);
-        this.messageSubject.next(message.body); // Emit received message
-      });
-
-   
-    };
-
-    this.stompClient.onStompError = (frame) => {
-      console.error('WebSocket Error:', frame);
-    };
+  subscribe(
+    destination: string,
+    callback: messageCallbackType,
+    headers: StompHeaders = {}
+  ) {
+    if (this.stompClient.connected) {
+      return this.stompClient.subscribe(destination, callback, headers);
+    }
+    return null;
   }
 
   connect() {
@@ -52,8 +59,10 @@ export class WebSocketService {
 
   disconnect() {
     if (this.stompClient.active) {
-      this.stompClient.deactivate();
-      console.log('WebSocket disconnected');
+      this.stompClient.deactivate().then(
+        () => console.log('Deactivated successfully...'),
+        (reason) => console.log(`Error: ${reason}`)
+      );
     }
   }
 }
