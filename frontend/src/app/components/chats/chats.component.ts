@@ -20,7 +20,8 @@ export class ChatsComponent {
   @Output() sidebarMinimizationState = new EventEmitter<boolean>();
   isSidebarMinimized: boolean = false;
 
-  chats: Chat[] = data;
+  friendsChats: Chat[] = data;
+  roomChats: Chat[] = [data[0]];
 
   constructor() {}
 

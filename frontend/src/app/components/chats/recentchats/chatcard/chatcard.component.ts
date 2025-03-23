@@ -16,4 +16,5 @@ export class ChatcardComponent {
   @Input() senderName: string = '';
   @Input() lastMessage: string = '';
   @Input() profileImage: string = '';
+  @Input() isRoomChat : boolean = false;
 }
