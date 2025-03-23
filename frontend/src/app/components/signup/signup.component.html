@@ -1,7 +1,7 @@
 <div class="font-[sans-serif]">
   <div class="grid lg:grid-cols-2 md:grid-cols-2 items-center gap-4">
     <a
-      routerLink="/"
+      routerLink="/entry"
       routerLinkActive="active"
       ariaCurrentWhenActive="page"
       class="w-12 h-12 flex absolute top-8 items-center justify-center border-none outline-none bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-600"
@@ -262,7 +262,7 @@
 
       <div class="mt-8">
         <button
-          (click)="onSignup()"
+          (click)="this.onSignup()"
           type="submit"
           class="w-full py-2.5 px-4 text-sm tracking-wide rounded-md text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-600 cursor-pointer focus:outline-none"
         >
