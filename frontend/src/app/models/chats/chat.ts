@@ -1,4 +1,4 @@
-import { MessageInfo } from './message-info';
+import {ChatMessage} from './chat-message';
 
 export interface Chat {
   id: string,
@@ -6,5 +6,5 @@ export interface Chat {
   senderUsername: string,
   senderProfileImage: string,
   lastMessage: string,
-  chatMessages: MessageInfo[],
+  chatMessages: ChatMessage[],
 }

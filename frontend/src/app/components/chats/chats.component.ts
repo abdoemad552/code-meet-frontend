@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {RecentChatsComponent} from './recentchats/recentchats.component';
-import {ChatboxComponent} from './chatbox/chatbox.component';
 import {RouterOutlet} from '@angular/router';
 import {Chat} from '../../models/chats/chat';
 import data from '../../../../public/chats.json';
