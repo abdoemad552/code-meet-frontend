@@ -1,15 +1,26 @@
 import {Component, Input} from '@angular/core';
 import { NavItemComponent } from './nav-item/nav-item.component';
+import {BoardDataService} from '../../../../services/board-data.service';
+import {NgClass} from '@angular/common';
 
 @Component({
   selector: 'app-nav',
   standalone: true,
-  imports: [NavItemComponent],
+  imports: [NavItemComponent, NgClass],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.css',
 })
 export class NavigationComponent {
-  @Input() isSidebarMinimized!: boolean;
+  isSidebarMinimized!: boolean;
+
+  constructor(private dataService: BoardDataService) {
+  }
+
+  ngOnInit() {
+    this.dataService.isSidebarMinimized$.subscribe(isSidebarMinimized => {
+      this.isSidebarMinimized = isSidebarMinimized;
+    })
+  }
 
   links = [
     {

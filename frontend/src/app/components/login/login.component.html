@@ -70,6 +70,7 @@
         <div class="relative flex items-center">
           <input
             [(ngModel)]="this.loginRequest.password"
+            (keydown.enter)="this.onLogin()"
             name="password"
             type="password"
             required
@@ -108,7 +109,6 @@
       <div class="mt-12">
         <button
           (click)="this.onLogin()"
-          (keyup.enter)="this.onLogin()"
           type="button"
           class="w-full py-2.5 px-4 text-sm tracking-wide rounded-md text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-600 cursor-pointer focus:outline-none"
         >

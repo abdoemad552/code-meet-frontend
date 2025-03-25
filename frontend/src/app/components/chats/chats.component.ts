@@ -4,6 +4,7 @@ import {ChatboxComponent} from './chatbox/chatbox.component';
 import {RouterOutlet} from '@angular/router';
 import {Chat} from '../../models/chats/chat';
 import data from '../../../../public/chats.json';
+import {BoardDataService} from '../../services/board-data.service';
 
 @Component({
   selector: 'app-chats',
@@ -22,11 +23,16 @@ export class ChatsComponent {
   friendsChats: Chat[] = data;
   roomChats: Chat[] = [data[0]];
 
-  constructor() {}
+  constructor(private dataService: BoardDataService) {}
 
   ngOnInit() {
-    this.isSidebarMinimized = true;
-    this.sidebarMinimizationState.emit(this.isSidebarMinimized);
+    this.dataService.minimizeSidebar();
+    this.dataService.removeMainContentPadding();
+  }
+
+  ngOnDestroy() {
+    this.dataService.maximizeSidebar();
+    this.dataService.addMainContentPadding();
   }
 
 }

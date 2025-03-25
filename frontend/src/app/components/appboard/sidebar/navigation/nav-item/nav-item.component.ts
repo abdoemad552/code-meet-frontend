@@ -7,6 +7,7 @@ import {
   RouterLinkActive,
   RouterModule,
 } from '@angular/router';
+import {BoardDataService} from '../../../../../services/board-data.service';
 
 @Component({
   selector: 'nav-item',
@@ -19,5 +20,14 @@ export class NavItemComponent {
   @Input() title!: string;
   @Input() icon!: string;
   @Input() routeLink!: string;
-  @Input() isSidebarMinimized!: boolean;
+  isSidebarMinimized!: boolean;
+
+  constructor(private dataService: BoardDataService) {
+  }
+
+  ngOnInit() {
+    this.dataService.isSidebarMinimized$.subscribe(isSidebarMinimized => {
+      this.isSidebarMinimized = isSidebarMinimized;
+    })
+  }
 }

@@ -1,10 +1,9 @@
-<nav class="p-6">
+<nav [ngClass]="{'p-6': !isSidebarMinimized, 'pt-6': isSidebarMinimized}">
   <div class="space-y-2">
     <!-- Navigation Items -->
     @for (link of links; track link) {
     <nav-item
       class="block cursor-pointer"
-      [isSidebarMinimized] = "isSidebarMinimized"
       [title]="link.title"
       [icon]="link.icon"
       [routeLink]="link.route"

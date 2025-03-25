@@ -1,12 +1,10 @@
-import {Component, OnInit, OnDestroy, ViewChild, ElementRef} from '@angular/core';
+import {Component} from '@angular/core';
 import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import {NgClass} from '@angular/common';
 import {HomeComponent} from '../home/home.component';
-import {ActivatedRoute, RouterOutlet, NavigationEnd, Router} from '@angular/router';
-import {filter, Subject, takeUntil} from 'rxjs';
-import {ChatsComponent} from '../chats/chats.component';
-import {ProfileComponent} from '../profile/profile.component';
+import {RouterOutlet, Router} from '@angular/router';
+import {BoardDataService} from '../../services/board-data.service';
 
 @Component({
   selector: 'app-board',
@@ -16,29 +14,16 @@ import {ProfileComponent} from '../profile/profile.component';
   styleUrl: './board.component.css',
 })
 export class BoardComponent {
-  isSidebarMinimized!: boolean;
-  noPadding : boolean = false;
-  private chats : ChatsComponent | null = null;
+  isSidebarMinimized: boolean = false;
+  Padding : boolean = true;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private dataService: BoardDataService) {}
 
-  onActivated(Page : any) : void {
-    if (Page instanceof ChatsComponent) {
-      this.chats = Page;
-      this.chats.sidebarMinimizationState.subscribe((message: string) => {
-        this.noPadding = true;
-        this.isSidebarMinimized = true;
-      })
-    } else if (Page instanceof ProfileComponent) {
-      this.noPadding = true;
-      this.isSidebarMinimized = true;
-    } else {
-      this.noPadding = false;
-      this.isSidebarMinimized = false;
-    }
-  }
+  ngOnInit() {
+    this.dataService.isSidebarMinimized$.subscribe(isSidebarMinimized => {
+      this.isSidebarMinimized = isSidebarMinimized;
+    });
 
-  getSidebarState(sidebarState: boolean) {
-    this.isSidebarMinimized = sidebarState;
+    this.dataService.isPadding$.subscribe((isPadding: boolean) => this.Padding = isPadding);
   }
 }

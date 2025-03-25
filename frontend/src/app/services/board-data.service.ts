@@ -4,25 +4,32 @@ import {BehaviorSubject, Observable} from 'rxjs';
 @Injectable({
   providedIn:'root'
 })
-export class DataService {
+export class BoardDataService {
+  /////////////////////////////////////////////////////
+  // Subjects
+  /////////////////////////////////////////////////////
+
   private isSidebarMinimized = new BehaviorSubject<boolean>(false);
-  private isPadding = new BehaviorSubject<boolean>(false);
+  private isPadding = new BehaviorSubject<boolean>(true);
+
+
+  /////////////////////////////////////////////////////
+  // Observables
+  // ///////////////////////////////////////////////////
+
   isSidebarMinimized$: Observable<boolean> = this.isSidebarMinimized.asObservable();
-  isPadding$ = this.isPadding.asObservable();
+  isPadding$: Observable<boolean> = this.isPadding.asObservable();
 
-  minimizeSidebar() {
-    this.isSidebarMinimized.next(true);
-  }
 
-  maximizeSidebar() {
-    this.isSidebarMinimized.next(false);
-  }
+  /////////////////////////////////////////////////////
+  //  Methods
+  ////////////////////////////////////////////////////
 
-  addMainContentPadding() {
-    this.isPadding.next(true);
-  }
+  // Sidebar Minimization State
+  minimizeSidebar() {this.isSidebarMinimized.next(true);}
+  maximizeSidebar() {this.isSidebarMinimized.next(false);}
 
-  removeMainContentPadding() {
-    this.isPadding.next(false);
-  }
+  // Main Content Padding State
+  addMainContentPadding() {this.isPadding.next(true);}
+  removeMainContentPadding() {this.isPadding.next(false);}
 }

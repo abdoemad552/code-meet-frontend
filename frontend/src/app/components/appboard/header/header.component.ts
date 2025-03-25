@@ -1,6 +1,6 @@
 import { NgClass } from '@angular/common';
 import {Component, ElementRef, ViewChild} from '@angular/core';
-import {Router, RouterLink} from '@angular/router';
+import {RouterLink} from '@angular/router';
 import {AuthenticationService} from '../../../services/authentication.service';
 
 @Component({
@@ -15,10 +15,7 @@ export class HeaderComponent {
   isNotificationsDropdownOpen: boolean = false;
   @ViewChild('overlay') dropdownOverlay!: ElementRef<HTMLDivElement>;
 
-  constructor(
-    private router: Router,
-    private authService: AuthenticationService
-  ) {
+  constructor(private authService: AuthenticationService) {
   }
 
   toggleProfileDropdown () : void {
@@ -41,6 +38,5 @@ export class HeaderComponent {
 
   logout(): void {
     this.authService.logout();
-    this.router.navigateByUrl('/entry');
   }
 }

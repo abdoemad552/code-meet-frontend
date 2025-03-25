@@ -6,6 +6,7 @@ import {RoomviewComponent} from './roomview/roomview.component';
 import {NgIf} from '@angular/common';
 import { RoomInfoResponse } from '../../models/room/room-info-response.dto';
 import { RoomService } from '../../services/room.service';
+import {AddRoomComponent} from './add-room/add-room.component';
 
 @Component({
   selector: 'app-rooms',
@@ -14,16 +15,17 @@ import { RoomService } from '../../services/room.service';
     FriendCardComponent,
     RoomcardComponent,
     RoomviewComponent,
-    NgIf
+    NgIf,
+    AddRoomComponent
   ],
   templateUrl: './rooms.component.html',
   styleUrl: './rooms.component.css'
 })
 export class RoomsComponent {
   roomsInformation:RoomInfoResponse[]=[];
-  
-  
-  
+
+  addRoom : boolean = false;
+
   roomId!: string | null;
   isRoomView: boolean = false;
 
@@ -36,7 +38,7 @@ export class RoomsComponent {
       this.isRoomView = !(!this.roomId); // If no ID, it's the signed-in user's profile
     });
 
-this.getAllRoomsByCreator(2);
+    this.getAllRoomsByCreator(1);
   }
 
 getAllRoomsByCreator(creatorId:number):void{
@@ -44,6 +46,10 @@ getAllRoomsByCreator(creatorId:number):void{
        this.roomsInformation=data;
        console.log(data);
   });
+}
+
+openAddRoom() {
+    this.addRoom = true;
 }
 
 }
