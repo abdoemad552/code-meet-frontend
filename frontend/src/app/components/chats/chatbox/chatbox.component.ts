@@ -3,7 +3,7 @@ import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {ChatmessageComponent} from './chatmessage/chatmessage.component';
 import data from '../../../../../public/chats.json';
 import {Chat} from '../../../models/chats/chat';
-import {ChatMessage} from '../../../models/chats/chat-message';
+import {MessageInfo} from '../../../models/chats/message-info';
 
 @Component({
   selector: 'app-chatbox',

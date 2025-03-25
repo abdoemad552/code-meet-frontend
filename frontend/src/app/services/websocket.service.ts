@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Client, Frame, Message, messageCallbackType, StompHeaders} from '@stomp/stompjs';
+import {Client, Frame, Message, messageCallbackType, StompHeaders, StompSubscription} from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import {BehaviorSubject} from 'rxjs';
 
@@ -35,11 +35,8 @@ export class WebSocketService {
     destination: string,
     callback: messageCallbackType,
     headers: StompHeaders = {}
-  ) {
-    if (this.stompClient.connected) {
-      return this.stompClient.subscribe(destination, callback, headers);
-    }
-    return null;
+  ): StompSubscription {
+    return this.stompClient.subscribe(destination, callback, headers);
   }
 
   connect() {
@@ -59,10 +56,8 @@ export class WebSocketService {
 
   disconnect() {
     if (this.stompClient.active) {
-      this.stompClient.deactivate().then(
-        () => console.log('Deactivated successfully...'),
-        (reason) => console.log(`Error: ${reason}`)
-      );
+      this.stompClient.deactivate()
+        .catch(reason => console.log(reason));
     }
   }
 }

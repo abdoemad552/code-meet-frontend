@@ -4,6 +4,7 @@ import {LoginRequest} from '../models/authentication/login-request.dto';
 import {Observable, of} from 'rxjs';
 import {SignupRequest} from '../models/authentication/signup-request.dto';
 import {UserInfoResponse} from '../models/user/user-info-response.dto';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,10 @@ export class AuthenticationService {
 
   authenticated: Observable<boolean> = of(false);
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private router: Router,
+    private http: HttpClient
+  ) {
   }
 
   login(credentials: LoginRequest): Observable<UserInfoResponse> {
@@ -27,5 +31,12 @@ export class AuthenticationService {
   logout(): void {
     this.authenticated = of(false);
     sessionStorage.removeItem('userInfo');
+  }
+
+  initUser(userInfo: UserInfoResponse): void {
+    sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
+    this.authenticated = of(true);
+    this.router.navigateByUrl('/home')
+      .catch(reason => console.log(reason));
   }
 }

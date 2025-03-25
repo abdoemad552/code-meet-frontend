@@ -10,7 +10,6 @@ import data from '../../../../public/chats.json';
   standalone: true,
   imports: [
     RecentChatsComponent,
-    ChatboxComponent,
     RouterOutlet
   ],
   templateUrl: './chats.component.html',
