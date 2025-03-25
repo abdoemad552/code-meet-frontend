@@ -11,8 +11,6 @@ import {MeetingsboxComponent} from '../meetings/meetingsbox/meetingsbox.componen
   imports: [
     ContactusComponent,
     DateTimeComponent,
-    FAQComponent,
-    NgClass,
     MeetingsboxComponent
   ],
   templateUrl: './home.component.html',

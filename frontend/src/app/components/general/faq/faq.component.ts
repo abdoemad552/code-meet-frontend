@@ -11,8 +11,6 @@ interface AccordionItem {
   selector: 'app-faq',
   standalone: true,
   imports: [
-    NgClass,
-    NgIf,
     NgForOf
   ],
   templateUrl: './faq.component.html',

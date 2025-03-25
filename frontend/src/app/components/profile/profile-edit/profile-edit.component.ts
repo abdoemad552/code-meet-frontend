@@ -9,7 +9,6 @@ import {UserInfoResponse} from '../../../models/user/user-info-response.dto';
   selector: 'app-profile-edit',
   standalone: true,
   imports: [
-    NgIf,
     RouterLink,
     FormsModule,
   ],

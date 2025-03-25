@@ -9,8 +9,6 @@ import {NgClass} from '@angular/common';
   standalone: true,
   imports: [
     ChatcardComponent,
-    RouterLink,
-    RouterLinkActive,
     NgClass
   ],
   templateUrl: './recentchats.component.html',

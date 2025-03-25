@@ -5,7 +5,7 @@ import {Router, RouterLink, RouterLinkActive, RouterOutlet} from '@angular/route
 @Component({
   standalone: true,
   selector: 'app-entry',
-  imports: [RouterLink, RouterLinkActive, RouterOutlet, NgClass],
+  imports: [RouterLink, RouterLinkActive, NgClass],
   templateUrl: './entry.component.html',
   styleUrl: './entry.component.css'
 })

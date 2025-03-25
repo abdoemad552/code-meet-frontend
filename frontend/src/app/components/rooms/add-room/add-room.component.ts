@@ -4,6 +4,7 @@ import {NgIf} from "@angular/common";
 import {RoomCreationRequest} from '../../../models/room/room-creation-request.dto';
 import {UserService} from '../../../services/user.service';
 import {RoomService} from '../../../services/room.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-add-room',
@@ -26,7 +27,7 @@ export class AddRoomComponent {
 
   userId!: number;
 
-  constructor(private userService: UserService, private roomService: RoomService) {
+  constructor(private userService: UserService, private roomService: RoomService, private router: Router) {
     this.userId = this.userService.userInfo.userId;
   }
 
@@ -40,14 +41,17 @@ export class AddRoomComponent {
   }
 
   onSubmit() {
-    // Handle form submission here
     this.roomData = {
       name: this.roomName,
       description: this.roomDescription,
       creatorId: this.userId,
       roomPicture: ''
-    }
-    console.log(this.roomService.createRoom(this.roomData));
+    };
+
+    this.roomService.createRoom(this.roomData).subscribe(roomInfo => {
+      this.router.navigateByUrl(`/room/${roomInfo.roomId}`);
+    });
+
     this.closeModal();
   }
 

@@ -8,7 +8,6 @@ import { FriendshipResponse } from '../../../models/friendship/friendship-respon
   selector: 'app-friend-card',
   standalone: true,
   imports: [
-    NgOptimizedImage,
     RouterLink,
     NgIf,
     NgClass

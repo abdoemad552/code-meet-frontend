@@ -11,21 +11,20 @@ import { RoomUpdateRequest } from "../models/room/room-update-request.dto";
 export class RoomService{
 
     private RoomsUrl='http://localhost:8080/api/room';
-    constructor(private httpClient:HttpClient)
-    {
-
-    }
+    constructor(private httpClient:HttpClient){}
 
     getRoomById(roomId:number):Observable<RoomInfoResponse>{
         return this.httpClient.get<RoomInfoResponse>(`${this.RoomsUrl}/${roomId}`);
     }
-    getAllRoomsByCreator(creatorId:number):Observable<RoomInfoResponse[]>{
 
+    getAllRoomsByCreator(creatorId:number):Observable<RoomInfoResponse[]>{
         return this.httpClient.get<RoomInfoResponse[]>(`${this.RoomsUrl}/all/${creatorId}`);
     }
-    createRoom(roomCreationRequest: RoomCreationRequest):Observable<RoomInfoResponse>{
+
+    createRoom(roomCreationRequest: RoomCreationRequest): Observable<RoomInfoResponse>{
         return this.httpClient.post<RoomInfoResponse>(`${this.RoomsUrl}/create`,roomCreationRequest);
     }
+
     updateRoom(roomUpdateRequest:RoomUpdateRequest):Observable<RoomInfoResponse>{
         return this.httpClient.put<RoomInfoResponse>(`${this.RoomsUrl}/update`,roomUpdateRequest);
     }

@@ -12,7 +12,6 @@ import {AddRoomComponent} from './add-room/add-room.component';
   selector: 'app-rooms',
   standalone: true,
   imports: [
-    FriendCardComponent,
     RoomcardComponent,
     RoomviewComponent,
     NgIf,

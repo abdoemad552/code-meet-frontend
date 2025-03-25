@@ -8,8 +8,7 @@ import {Router} from '@angular/router';
   selector: 'app-friend-requests',
   standalone: true,
   imports: [
-    FriendCardComponent,
-    NgClass
+    FriendCardComponent
   ],
   templateUrl: './friend-requests.component.html',
   styleUrl: './friend-requests.component.css'

@@ -9,7 +9,7 @@ import {BoardDataService} from '../../services/board-data.service';
 @Component({
   selector: 'app-board',
   standalone: true,
-  imports: [HeaderComponent, SidebarComponent, NgClass, HomeComponent, RouterOutlet],
+  imports: [HeaderComponent, SidebarComponent, NgClass, RouterOutlet],
   templateUrl: './board.component.html',
   styleUrl: './board.component.css',
 })
