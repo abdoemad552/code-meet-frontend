@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import { NavigationComponent } from './navigation/navigation.component';
 import {NgClass} from '@angular/common';
+import {BoardDataService} from '../../../services/board-data.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,11 +11,22 @@ import {NgClass} from '@angular/common';
   styleUrl: './sidebar.component.css',
 })
 export class SidebarComponent {
-  @Output() sidebarState = new EventEmitter<boolean>();
-  @Input() isSidebarMinimized = false;
+  isSidebarMinimized = false;
+
+  constructor(private dataService: BoardDataService) {
+  }
+
+  ngOnInit() {
+    this.dataService.isSidebarMinimized$.subscribe(isSidebarMinimized => {
+      this.isSidebarMinimized = isSidebarMinimized;
+    });
+  }
 
   toggleSidebarMinimization() {
-    this.isSidebarMinimized = !this.isSidebarMinimized;
-    this.sidebarState.emit(this.isSidebarMinimized);
+    if (!this.isSidebarMinimized) {
+      this.dataService.minimizeSidebar();
+    } else {
+      this.dataService.maximizeSidebar();
+    }
   }
 }

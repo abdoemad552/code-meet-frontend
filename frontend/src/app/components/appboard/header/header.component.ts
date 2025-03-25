@@ -2,6 +2,8 @@ import { NgClass } from '@angular/common';
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {RouterLink} from '@angular/router';
 import {AuthenticationService} from '../../../services/authentication.service';
+import {UserService} from '../../../services/user.service';
+import {UserInfoResponse} from '../../../models/user/user-info-response.dto';
 
 @Component({
   selector: 'app-header',
@@ -11,11 +13,13 @@ import {AuthenticationService} from '../../../services/authentication.service';
   styleUrl: './header.component.css',
 })
 export class HeaderComponent {
+  userInfo!: UserInfoResponse;
   isProfileDropdownOpen: boolean = false;
   isNotificationsDropdownOpen: boolean = false;
   @ViewChild('overlay') dropdownOverlay!: ElementRef<HTMLDivElement>;
 
-  constructor(private authService: AuthenticationService) {
+  constructor(private authService: AuthenticationService, private userService: UserService) {
+    this.userInfo = this.userService.userInfo;
   }
 
   toggleProfileDropdown () : void {
