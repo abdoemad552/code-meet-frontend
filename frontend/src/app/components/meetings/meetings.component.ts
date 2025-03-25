@@ -16,34 +16,38 @@ import { MeetingService } from '../../services/meeting.service';
   styleUrl: './meetings.component.css'
 })
 export class MeetingsComponent {
+
   currentRoute: string = '';
 
   comingMeetings:MeetingResponse[]=[];
   previousMeetings:MeetingResponse[]=[];
-  constructor(private router: Router,private meetingService:MeetingService) 
-  {
 
+  constructor(
+    private router: Router,
+    private meetingService: MeetingService
+  ) {
   }
 
   ngOnInit() {
     this.getCurrentRoute();
     this.getComingMeetings(1);
     this.getPreviousMeetings(1);
-
   }
 
-  getComingMeetings(userId:number):void{
-
-    this.meetingService.getScheduledMeetings(userId).subscribe((data:MeetingResponse[])=>{
-   this.comingMeetings=data;
-      console.log(data);
-    });
+  getComingMeetings(userId: number): void {
+    this.meetingService.getScheduledMeetings(userId)
+      .subscribe((data: MeetingResponse[]) => {
+        this.comingMeetings = data;
+        console.log(data);
+      });
   }
-  getPreviousMeetings(userId:number):void{
-    this.meetingService.getPreviousMeetings(userId).subscribe((data:MeetingResponse[])=>{
-      this.previousMeetings=data;
-         console.log(data);
-       });
+
+  getPreviousMeetings(userId: number): void {
+    this.meetingService.getPreviousMeetings(userId)
+      .subscribe((data: MeetingResponse[]) => {
+        this.previousMeetings = data;
+        console.log(data);
+      });
   }
 
   private getCurrentRoute() {

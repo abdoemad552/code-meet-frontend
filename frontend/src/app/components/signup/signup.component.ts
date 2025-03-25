@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {AuthenticationService} from '../../services/authentication.service';
-import {SignupRequest} from '../../models/authentication/signup-request.dto';
+import { UserInfoResponse } from '../../models/user/user-info-response.dto';
 import {FormsModule} from '@angular/forms';
+import {of} from 'rxjs';
 
 @Component({
   selector: 'app-signup',
@@ -14,11 +15,23 @@ import {FormsModule} from '@angular/forms';
 export class SignupComponent {
   signupRequest: any = {};
 
-  constructor(private authService: AuthenticationService) {
+  constructor(
+    private router: Router,
+    private authService: AuthenticationService
+  ) {
   }
 
   onSignup(): void {
     console.log(this.signupRequest);
-    this.authService.signup(this.signupRequest);
+    this.authService.signup(this.signupRequest)
+      .subscribe((response: UserInfoResponse) => {
+          console.log(response);
+          sessionStorage.setItem("userInfo", JSON.stringify(response));
+          this.authService.authenticated = of(true);
+          this.router.navigateByUrl('/home').catch(err => {
+            console.error('Navigation error:', err);
+          });
+        }
+      );
   }
 }

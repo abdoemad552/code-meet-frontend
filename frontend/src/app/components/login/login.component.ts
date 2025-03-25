@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import {RouterLink, RouterLinkActive} from '@angular/router';
+import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {AuthenticationService} from '../../services/authentication.service';
 import {FormsModule} from '@angular/forms';
+import {Observable, of} from 'rxjs';
+import {UserInfoResponse} from '../../models/user/user-info-response.dto';
 
 @Component({
   selector: 'app-authentication',
@@ -13,10 +15,20 @@ import {FormsModule} from '@angular/forms';
 export class LoginComponent {
   loginRequest: any = {};
 
-  constructor(private authService: AuthenticationService) {
+  constructor(
+    private router: Router,
+    private authService: AuthenticationService
+  ) {
   }
 
   onLogin(): void {
-    this.authService.login(this.loginRequest);
+    this.authService.login(this.loginRequest)
+      .subscribe((response: UserInfoResponse) => {
+          console.log(response);
+          sessionStorage.setItem("userInfo", JSON.stringify(response));
+          this.authService.authenticated = of(true);
+          this.router.navigateByUrl('/home');
+        }
+      );
   }
 }

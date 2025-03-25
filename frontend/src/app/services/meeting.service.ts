@@ -7,41 +7,42 @@ import { InstantMeetingRequest } from "../models/meeting/instant-meeting-request
 import { ParticipantRequest } from "../models/meeting/participant-request.dto";
 
 @Injectable({
-    providedIn:'root'
+  providedIn:'root'
 })
-export class MeetingService{
+export class MeetingService {
 
-    private MeetingsUrl='http://localhost:8080/api/meeting';
-    constructor(private httpClient:HttpClient)
-    {
-        this.httpClient=httpClient;
-    }
-    getPreviousMeetings(userId:number):Observable<MeetingResponse[]>
-    {
-      return this.httpClient.get<MeetingResponse[]>(`${this.MeetingsUrl}/previous/${userId}`);
-    }
+  private MeetingsUrl = 'http://localhost:8080/api/meeting';
 
-    getScheduledMeetings(userId:number):Observable<MeetingResponse[]>
-    {
-      return this.httpClient.get<MeetingResponse[]>(`${this.MeetingsUrl}/scheduled/${userId}`);
-    }
+  constructor(private httpClient: HttpClient) {
+    this.httpClient = httpClient;
+  }
 
-    scheduleMeeting(scheduleMeetingRequest:ScheduledMeeting):Observable<MeetingResponse>
-    {
-     return this.httpClient.post<MeetingResponse>(`${this.MeetingsUrl}/schedule`,scheduleMeetingRequest);
-    }
+  getPreviousMeetings(userId: number): Observable<MeetingResponse[]> {
+    return this.httpClient.get<MeetingResponse[]>(
+      `${this.MeetingsUrl}/previous/${userId}`);
+  }
 
-    createInstantMeeting(instantMeetingRequest:InstantMeetingRequest):Observable<MeetingResponse>
-    {
-     return this.httpClient.post<MeetingResponse>(`${this.MeetingsUrl}/instant`,instantMeetingRequest);
-    }
+  getScheduledMeetings(userId: number): Observable<MeetingResponse[]> {
+    return this.httpClient.get<MeetingResponse[]>(
+      `${this.MeetingsUrl}/scheduled/${userId}`);
+  }
 
+  scheduleMeeting(scheduleMeetingRequest: ScheduledMeeting): Observable<MeetingResponse> {
+    return this.httpClient.post<MeetingResponse>(
+      `${this.MeetingsUrl}/schedule`,scheduleMeetingRequest);
+  }
 
-    addParticipantToMeeting(participantRequest:ParticipantRequest):Observable<MeetingResponse>{
-        return this.httpClient.post<MeetingResponse>(`${this.MeetingsUrl}/participant`,participantRequest)
-    }
-    removeParticipantFromMeeting(participantRequest:ParticipantRequest):Observable<any>{
-        return this.httpClient.delete(`${this.MeetingsUrl}/participant`,{body:participantRequest})
-    }
-  
+  createInstantMeeting(instantMeetingRequest: InstantMeetingRequest): Observable<MeetingResponse> {
+    return this.httpClient.post<MeetingResponse>(
+      `${this.MeetingsUrl}/instant`,instantMeetingRequest);
+  }
+
+  addParticipantToMeeting(participantRequest: ParticipantRequest): Observable<MeetingResponse> {
+    return this.httpClient.post<MeetingResponse>(
+      `${this.MeetingsUrl}/participant`,participantRequest);
+  }
+
+  removeParticipantFromMeeting(participantRequest: ParticipantRequest): Observable<any> {
+    return this.httpClient.delete(`${this.MeetingsUrl}/participant`,{body:participantRequest})
+  }
 }
