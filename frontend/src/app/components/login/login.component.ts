@@ -18,6 +18,7 @@ export class LoginComponent {
   }
 
   onLogin(): void {
+    console.log(this.loginRequest);
     this.authService.login(this.loginRequest)
       .subscribe({
         next: (userInfo: UserInfoResponse) => {

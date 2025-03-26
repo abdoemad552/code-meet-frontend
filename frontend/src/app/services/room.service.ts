@@ -10,23 +10,26 @@ import { RoomUpdateRequest } from "../models/room/room-update-request.dto";
 })
 export class RoomService{
 
-    private RoomsUrl='http://localhost:8080/api/room';
-    constructor(private httpClient:HttpClient){}
+  private url = 'http://localhost:8080/api/room';
 
-    getRoomById(roomId:number):Observable<RoomInfoResponse>{
-        return this.httpClient.get<RoomInfoResponse>(`${this.RoomsUrl}/${roomId}`);
-    }
+  constructor(private http: HttpClient) {
+  }
 
-    getAllRoomsByCreator(creatorId:number):Observable<RoomInfoResponse[]>{
-        return this.httpClient.get<RoomInfoResponse[]>(`${this.RoomsUrl}/all/${creatorId}`);
-    }
+  getRoomById(roomId: number): Observable<RoomInfoResponse> {
+    return this.http.get<RoomInfoResponse>(`${this.url}/${roomId}`);
+  }
 
-    createRoom(roomCreationRequest: RoomCreationRequest): Observable<RoomInfoResponse>{
-        return this.httpClient.post<RoomInfoResponse>(`${this.RoomsUrl}/create`,roomCreationRequest);
-    }
+  getAllRoomsByCreator(creatorId: number): Observable<RoomInfoResponse[]> {
+    return this.http.get<RoomInfoResponse[]>(`${this.url}/all/${creatorId}`);
+  }
 
-    updateRoom(roomUpdateRequest:RoomUpdateRequest):Observable<RoomInfoResponse>{
-        return this.httpClient.put<RoomInfoResponse>(`${this.RoomsUrl}/update`,roomUpdateRequest);
-    }
+  createRoom(roomCreationRequest: RoomCreationRequest): Observable<RoomInfoResponse>{
+    return this.http.post<RoomInfoResponse>(
+      `${this.url}/create`, roomCreationRequest);
+  }
 
+  updateRoom(roomUpdateRequest: RoomUpdateRequest): Observable<RoomInfoResponse>{
+    return this.http.put<RoomInfoResponse>(
+      `${this.url}/update`, roomUpdateRequest);
+  }
 }

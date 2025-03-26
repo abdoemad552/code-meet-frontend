@@ -1,3 +1,3 @@
 export enum MembershipStatus{
-ACCEPTED,PENDING,ADMIN
+  ACCEPTED, PENDING, ADMIN
 }

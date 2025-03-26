@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import {FriendCardComponent} from "../friends/friend-card/friend-card.component";
 import {RoomcardComponent} from './roomcard/roomcard.component';
 import {ActivatedRoute} from '@angular/router';
 import {RoomviewComponent} from './roomview/roomview.component';
@@ -21,15 +20,18 @@ import {AddRoomComponent} from './add-room/add-room.component';
   styleUrl: './rooms.component.css'
 })
 export class RoomsComponent {
-  roomsInformation:RoomInfoResponse[]=[];
+  roomsInformation: RoomInfoResponse[] = [];
 
   addRoom : boolean = false;
 
   roomId!: string | null;
   isRoomView: boolean = false;
 
-
-  constructor(private route: ActivatedRoute,private roomService:RoomService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private roomService: RoomService
+  ) {
+  }
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
@@ -40,15 +42,18 @@ export class RoomsComponent {
     this.getAllRoomsByCreator(1);
   }
 
-getAllRoomsByCreator(creatorId:number):void{
-  this.roomService.getAllRoomsByCreator(creatorId).subscribe((data:RoomInfoResponse[])=>{
-       this.roomsInformation=data;
-       console.log(data);
-  });
-}
+  getAllRoomsByCreator(creatorId: number): void {
+    this.roomService.getAllRoomsByCreator(creatorId)
+      .subscribe({
+        next: (data: RoomInfoResponse[]) => {
+          this.roomsInformation = data;
+          console.log(data);
+        },
+        error: err => console.log(err)
+      });
+  }
 
-openAddRoom() {
-    this.addRoom = true;
-}
-
+  openAddRoom() {
+      this.addRoom = true;
+  }
 }

@@ -13,7 +13,7 @@ import {UserService} from '../../../services/user.service';
   styleUrl: './header.component.css',
 })
 export class HeaderComponent {
-  userInfo: UserInfoResponse;
+  userInfo!: UserInfoResponse;
   isProfileDropdownOpen: boolean = false;
   isNotificationsDropdownOpen: boolean = false;
   @ViewChild('overlay') dropdownOverlay!: ElementRef<HTMLDivElement>;

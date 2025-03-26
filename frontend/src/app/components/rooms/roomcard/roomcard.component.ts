@@ -12,6 +12,5 @@ import { RoomInfoResponse } from '../../../models/room/room-info-response.dto';
   styleUrl: './roomcard.component.css'
 })
 export class RoomcardComponent {
-
-@Input() roomInformation!:RoomInfoResponse;
+  @Input() roomInformation!:RoomInfoResponse;
 }

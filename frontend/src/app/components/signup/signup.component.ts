@@ -20,9 +20,12 @@ export class SignupComponent {
   onSignup(): void {
     console.log(this.signupRequest);
     this.authService.signup(this.signupRequest)
-      .subscribe((userInfo: UserInfoResponse) => {
-        console.log(userInfo);
-        this.authService.initUser(userInfo);
+      .subscribe({
+        next: (userInfo: UserInfoResponse) => {
+          console.log(userInfo);
+          this.authService.initUser(userInfo);
+        },
+        error: err => { console.log(err); }
       });
   }
 }

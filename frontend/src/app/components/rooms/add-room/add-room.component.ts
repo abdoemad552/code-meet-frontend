@@ -5,6 +5,7 @@ import {RoomCreationRequest} from '../../../models/room/room-creation-request.dt
 import {UserService} from '../../../services/user.service';
 import {RoomService} from '../../../services/room.service';
 import {Router} from '@angular/router';
+import {RoomInfoResponse} from '../../../models/room/room-info-response.dto';
 
 @Component({
   selector: 'app-add-room',
@@ -27,7 +28,11 @@ export class AddRoomComponent {
 
   userId!: number;
 
-  constructor(private userService: UserService, private roomService: RoomService, private router: Router) {
+  constructor(
+    private router: Router,
+    private userService: UserService,
+    private roomService: RoomService
+  ) {
     this.userId = this.userService.userInfo.userId;
   }
 
@@ -48,9 +53,14 @@ export class AddRoomComponent {
       roomPicture: ''
     };
 
-    this.roomService.createRoom(this.roomData).subscribe(roomInfo => {
-      this.router.navigateByUrl(`/room/${roomInfo.roomId}`);
-    });
+    this.roomService.createRoom(this.roomData)
+      .subscribe({
+        next: (roomInfo: RoomInfoResponse) => {
+          this.router.navigateByUrl(`/room/${roomInfo.roomId}`)
+            .catch(reason => console.log(reason));
+        },
+        error: err => console.log(err)
+      });
 
     this.closeModal();
   }
@@ -61,6 +71,5 @@ export class AddRoomComponent {
       description: '',
       creatorId: this.userId,
     };
-
   }
 }

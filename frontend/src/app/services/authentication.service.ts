@@ -31,6 +31,8 @@ export class AuthenticationService {
   logout(): void {
     this.authenticated = of(false);
     sessionStorage.removeItem('userInfo');
+    this.router.navigateByUrl('/entry')
+      .catch(reason => console.log(reason));
   }
 
   initUser(userInfo: UserInfoResponse): void {
