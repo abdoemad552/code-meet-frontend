@@ -1,51 +1,55 @@
 import { Injectable } from '@angular/core';
-import {Client, Frame, Message, messageCallbackType, StompHeaders, StompSubscription} from '@stomp/stompjs';
+import {Client, StompHeaders, StompSubscription} from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
-import {BehaviorSubject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebSocketService {
-  private stompClient: Client;
-  private messageSubject = new BehaviorSubject<string>(''); // Holds the latest message
+  private readonly stomp: Client;
 
-  message$ = this.messageSubject.asObservable(); // Observable for components to subscribe to
+  private topicStompSubscription: { [topic: string]: StompSubscription } = {};
+  private topicSubject: { [topic: string]: Subject<any> } = {}
 
   constructor() {
-    this.stompClient = new Client({
+    this.stomp = new Client({
       webSocketFactory: () => new SockJS('http://localhost:8080/ws'),
       reconnectDelay: 5000,
-      debug: (msg: string) => console.log(msg),
-      onConnect: (frame: Frame) => {
-        console.log('(WebSocket): connected...');
-
-        this.stompClient.subscribe('/topic/response', (message: Message) => {
-          console.log('Received:', message.body);
-          this.messageSubject.next(message.body); // Emit received message
-        });
-      },
-      onStompError: (frame) => {
-        console.error('WebSocket Error:', frame);
-      }
+      debug: msg => console.log(msg),
+      onConnect: () => console.log('WebSocket connected'),
+      onStompError: frame => console.error('WebSocket error: ', frame)
     });
   }
 
-  subscribe(
-    destination: string,
-    callback: messageCallbackType,
-    headers: StompHeaders = {}
-  ): StompSubscription {
-    return this.stompClient.subscribe(destination, callback, headers);
+  connect() {
+    this.stomp.activate();
   }
 
-  connect() {
-    this.stompClient.activate();
+  subscribe(topic: string, headers: StompHeaders = {}): Observable<any> {
+    if (!this.topicSubject[topic]) {
+      this.topicSubject[topic] = new Subject();
+      if (this.stomp.connected) {
+        this.topicStompSubscription[topic] = this.stomp.subscribe(topic, message => {
+          this.topicSubject[topic].next(message);
+        }, headers);
+      } else {
+        throw new Error('WebSocket is not connected');
+      }
+    }
+
+    return this.topicSubject[topic].asObservable();
+  }
+
+  unsubscribe(topic: string, headers: StompHeaders = {}): void {
+    if (this.topicStompSubscription[topic]) {
+      this.topicStompSubscription[topic].unsubscribe(headers);
+    }
   }
 
   sendMessage(message: string) {
-    if (this.stompClient.connected) {
-      this.stompClient.publish({
+    if (this.stomp && this.stomp.connected) {
+      this.stomp.publish({
         destination: '/app/message',
         body: message
       });
@@ -55,8 +59,8 @@ export class WebSocketService {
   }
 
   disconnect() {
-    if (this.stompClient.active) {
-      this.stompClient.deactivate()
+    if (this.stomp.connected) {
+      this.stomp.deactivate()
         .catch(reason => console.log(reason));
     }
   }
