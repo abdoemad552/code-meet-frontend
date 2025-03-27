@@ -6,6 +6,7 @@ import {SignupRequest} from '../models/authentication/signup-request.dto';
 import {UserInfoResponse} from '../models/user/user-info-response.dto';
 import {Router} from '@angular/router';
 import {WebSocketService} from './websocket.service';
+import {NotificationsService} from './notifications.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,8 @@ export class AuthenticationService {
   constructor(
     private router: Router,
     private http: HttpClient,
-    private wsService: WebSocketService
+    private wsService: WebSocketService,
+    private notificationService: NotificationsService
   ) {
   }
 
@@ -43,9 +45,11 @@ export class AuthenticationService {
 
   initUser(userInfo: UserInfoResponse): void {
     this.authenticated = of(true);
+
     sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
     this.router.navigateByUrl('/home')
       .catch(reason => console.log(reason));
     this.wsService.connect();
+    this.notificationService.subscribeToNotifications();
   }
 }
