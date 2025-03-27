@@ -45,11 +45,11 @@ export class AuthenticationService {
 
   initUser(userInfo: UserInfoResponse): void {
     this.authenticated = of(true);
-
     sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
     this.router.navigateByUrl('/home')
       .catch(reason => console.log(reason));
     this.wsService.connect();
+    this.notificationService.setUserId(userInfo.userId);
     this.notificationService.subscribeToNotifications();
   }
 }

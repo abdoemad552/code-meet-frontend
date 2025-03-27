@@ -12,7 +12,9 @@ import {UserInfoResponse} from '../../models/user/user-info-response.dto';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  loginRequest: any = {};
+  loginRequest!: any;
+
+
 
   constructor(private authService: AuthenticationService) {
   }

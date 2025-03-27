@@ -8,14 +8,18 @@ import {UserInfoResponse} from '../models/user/user-info-response.dto';
   providedIn:'root'
 })
 export class NotificationsService {
-  userInfo! : UserInfoResponse;
+  userId!: number;
 
-  constructor(private wsService: WebSocketService, private userService: UserService) {
-    this.userInfo = this.userService.userInfo;
+  constructor(private wsService: WebSocketService) {
+
+  }
+
+  setUserId(id: number) {
+    this.userId = id;
   }
 
   subscribeToNotifications() {
-    this.wsService.subscribe(`/user/${this.userInfo.userId}/notifications`)
+    this.wsService.subscribe(`/user/${this.userId}/notifications`)
       .subscribe({
         next: message => {
           const notification: NotificationInfo = message.body;
@@ -27,6 +31,6 @@ export class NotificationsService {
   }
 
   unSubscribeFromNotifications() {
-    this.wsService.unsubscribe(`/user/${this.userInfo.userId}/notifications`);
+    this.wsService.unsubscribe(`/user/${this.userId}/notifications`);
   }
 }
