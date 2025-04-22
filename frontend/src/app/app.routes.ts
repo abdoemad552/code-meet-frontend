@@ -111,7 +111,11 @@ export const routes: Routes = [
     ]
   },
   {path: 'meeting/:id', component: MeetingRoomComponent},
-
+  {
+    path: 'meeting',
+    redirectTo: '404',
+    pathMatch: 'full'
+  },
   // Fallback route for undefined paths
   {
     path: '**',
