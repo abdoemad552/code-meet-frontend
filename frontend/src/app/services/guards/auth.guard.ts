@@ -10,11 +10,15 @@ export class AuthGuard implements CanActivate {
   }
 
   canActivate(): boolean {
-    if (!!sessionStorage.getItem("userInfo")) {
-      return true;
-    }
-    this.router.navigateByUrl("/login")
-      .catch(reason => console.log(reason));
-    return false;
+    // Note: You need to uncomment the following lines to use authentication again
+    //       and remove "return true;" statement.
+
+    // if (!!sessionStorage.getItem("userInfo")) {
+    //   return true;
+    // }
+    // this.router.navigateByUrl("/login")
+    //   .catch(reason => console.log(reason));
+    // return false;
+    return true;
   }
 }
