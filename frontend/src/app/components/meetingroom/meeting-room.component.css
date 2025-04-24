@@ -1,0 +1,6 @@
+.header-gradient {
+  background: linear-gradient(to right, #6366f1, #a855f7); /* Indigo gradient */
+}
+.button-hover-gradient {
+  background: linear-gradient(to right, #4f46e5, #9333ea); /* Lighter indigo gradient */
+}

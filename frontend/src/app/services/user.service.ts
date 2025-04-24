@@ -9,6 +9,6 @@ export class UserService {
   userInfo! : UserInfoResponse;
 
   constructor() {
-    this.userInfo = JSON.parse(sessionStorage.getItem('userInfo') || '');
+    this.userInfo = JSON.parse(sessionStorage.getItem('userInfo') || '{}');
   }
 }
