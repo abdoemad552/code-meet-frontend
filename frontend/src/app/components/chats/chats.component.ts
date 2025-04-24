@@ -3,7 +3,7 @@ import {RecentChatsComponent} from './recentchats/recentchats.component';
 import {RouterOutlet} from '@angular/router';
 import {Chat} from '../../models/chats/chat';
 import data from '../../../../public/chats.json';
-import {BoardDataService} from '../../services/board-data.service';
+import {BoardDataService} from '../../services/states/board-data.service';
 
 @Component({
   selector: 'app-chats',

@@ -7,7 +7,7 @@ import {
   RouterLinkActive,
   RouterModule,
 } from '@angular/router';
-import {BoardDataService} from '../../../../../services/board-data.service';
+import {BoardDataService} from '../../../../../services/states/board-data.service';
 
 @Component({
   selector: 'nav-item',

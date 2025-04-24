@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {NgIf, TitleCasePipe} from '@angular/common';
 import {ProfileEditComponent} from './profile-edit/profile-edit.component';
-import {BoardDataService} from '../../services/board-data.service';
+import {BoardDataService} from '../../services/states/board-data.service';
 import {UserInfoResponse} from '../../models/user/user-info-response.dto';
 import {UserService} from '../../services/user.service';
 

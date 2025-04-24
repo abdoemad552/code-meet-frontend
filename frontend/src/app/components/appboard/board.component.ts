@@ -3,7 +3,7 @@ import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import {NgClass} from '@angular/common';
 import {RouterOutlet, Router} from '@angular/router';
-import {BoardDataService} from '../../services/board-data.service';
+import {BoardDataService} from '../../services/states/board-data.service';
 import {NotificationsService} from '../../services/notifications.service';
 
 @Component({
