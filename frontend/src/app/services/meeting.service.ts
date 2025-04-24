@@ -11,7 +11,7 @@ import { ParticipantRequest } from "../models/meeting/participant-request.dto";
 })
 export class MeetingService {
 
-  private MeetingsUrl = 'http://localhost:8080/api/meeting';
+  private readonly url = 'http://localhost:8080/api/meeting';
 
   constructor(private httpClient: HttpClient) {
     this.httpClient = httpClient;
@@ -19,30 +19,31 @@ export class MeetingService {
 
   getPreviousMeetings(userId: number): Observable<MeetingResponse[]> {
     return this.httpClient.get<MeetingResponse[]>(
-      `${this.MeetingsUrl}/previous/${userId}`);
+      `${this.url}/previous/${userId}`);
   }
 
   getScheduledMeetings(userId: number): Observable<MeetingResponse[]> {
     return this.httpClient.get<MeetingResponse[]>(
-      `${this.MeetingsUrl}/scheduled/${userId}`);
+      `${this.url}/scheduled/${userId}`);
   }
 
   scheduleMeeting(scheduleMeetingRequest: ScheduledMeeting): Observable<MeetingResponse> {
     return this.httpClient.post<MeetingResponse>(
-      `${this.MeetingsUrl}/schedule`,scheduleMeetingRequest);
+      `${this.url}/schedule`,scheduleMeetingRequest);
   }
 
   createInstantMeeting(instantMeetingRequest: InstantMeetingRequest): Observable<MeetingResponse> {
     return this.httpClient.post<MeetingResponse>(
-      `${this.MeetingsUrl}/instant`,instantMeetingRequest);
+      `${this.url}/instant`,instantMeetingRequest);
   }
 
   addParticipantToMeeting(participantRequest: ParticipantRequest): Observable<MeetingResponse> {
     return this.httpClient.post<MeetingResponse>(
-      `${this.MeetingsUrl}/participant`,participantRequest);
+      `${this.url}/participant`, participantRequest);
   }
 
   removeParticipantFromMeeting(participantRequest: ParticipantRequest): Observable<any> {
-    return this.httpClient.delete(`${this.MeetingsUrl}/participant`,{body:participantRequest})
+    return this.httpClient.delete(
+      `${this.url}/participant`, { body: participantRequest });
   }
 }

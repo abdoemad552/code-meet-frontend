@@ -5,6 +5,7 @@ import { FriendshipInfoResponse } from '../../models/friendship/friendship-info-
 import {RouterLink} from '@angular/router';
 import {FriendRequestsComponent} from './friend-requests/friend-requests.component';
 import {NgIf} from '@angular/common';
+import {UserInfoResponse} from '../../models/user/user-info-response.dto';
 
 @Component({
   selector: 'app-friends',
@@ -27,7 +28,9 @@ export class FriendsComponent {
   }
 
   ngOnInit(): void {
-    this.getFriends(4);
+    const userInfo: UserInfoResponse =
+      JSON.parse(sessionStorage.getItem("userInfo")!);
+    this.getFriends(userInfo.userId);
     this.requestsExists = true; // will be true if there are friend requests.
   }
 
