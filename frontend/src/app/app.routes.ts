@@ -15,7 +15,7 @@ import {ChatboxComponent} from './components/chats/chatbox/chatbox.component';
 import {FriendRequestsComponent} from './components/friends/friend-requests/friend-requests.component';
 import {NotificationsComponent} from './components/notifications/notifications.component';
 import {AuthGuard} from './services/guards/auth.guard';
-import {MeetingRoomComponent} from './components/meetingroom/meeting-room.component';
+import {MeetingRoomComponent} from './components/meeting-room/meeting-room.component';
 
 export const routes: Routes = [
   // Public Routes

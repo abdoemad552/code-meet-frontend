@@ -3,7 +3,7 @@ import {HeaderComponent} from './header/header.component';
 import {ContentComponent} from './content/content.component';
 
 @Component({
-  selector: 'app-meetingroom',
+  selector: 'app-meeting-room',
   imports: [ContentComponent, HeaderComponent],
   templateUrl: './meeting-room.component.html',
   standalone: true,
