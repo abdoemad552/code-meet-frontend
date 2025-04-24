@@ -2,9 +2,9 @@ import {Component} from '@angular/core';
 import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import {NgClass} from '@angular/common';
-import {HomeComponent} from '../home/home.component';
 import {RouterOutlet, Router} from '@angular/router';
 import {BoardDataService} from '../../services/board-data.service';
+import {NotificationsService} from '../../services/notifications.service';
 
 @Component({
   selector: 'app-board',
@@ -17,7 +17,11 @@ export class BoardComponent {
   isSidebarMinimized: boolean = false;
   Padding : boolean = true;
 
-  constructor(private router: Router, private dataService: BoardDataService) {}
+  constructor(
+    private router: Router,
+    private dataService: BoardDataService,
+    private notificationService: NotificationsService
+  ) {}
 
   ngOnInit() {
     this.dataService.isSidebarMinimized$.subscribe(isSidebarMinimized => {

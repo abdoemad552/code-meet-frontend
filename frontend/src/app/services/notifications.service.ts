@@ -2,35 +2,35 @@ import {Injectable} from '@angular/core';
 import {WebSocketService} from './websocket.service';
 import {NotificationInfo} from '../models/notification/notification-info.dto';
 import {UserService} from './user.service';
-import {UserInfoResponse} from '../models/user/user-info-response.dto';
 
 @Injectable({
   providedIn:'root'
 })
 export class NotificationsService {
-  userId!: number;
+  notifications: NotificationInfo[] = [];
 
-  constructor(private wsService: WebSocketService) {
-
-  }
-
-  setUserId(id: number) {
-    this.userId = id;
-  }
-
-  subscribeToNotifications() {
-    this.wsService.subscribe(`/user/${this.userId}/notifications`)
-      .subscribe({
-        next: message => {
-          const notification: NotificationInfo = message.body;
-          // Handle displaying notifications...
-          console.log(notification);
-        },
-        error: err => console.log(err)
-      });
-  }
-
-  unSubscribeFromNotifications() {
-    this.wsService.unsubscribe(`/user/${this.userId}/notifications`);
+  constructor(
+    private wsService: WebSocketService,
+    private userService: UserService
+  ) {
+    this.wsService.connection$.subscribe({
+      next: isConnected => {
+        if (isConnected) {
+          const topic = `/user/${this.userService.userInfo.userId}/notifications`;
+          wsService.subscribe(topic)
+            .subscribe({
+              next: message => {
+                const notification: NotificationInfo = message.body;
+                this.notifications.push(notification);
+                alert(`Notification received: ${notification}`);
+              },
+              error: error => console.log(error)
+            });
+        } else {
+          wsService.unsubscribe(`/user/${userService.userInfo.userId}/notifications`);
+        }
+      },
+      error: error => console.log(error)
+    });
   }
 }

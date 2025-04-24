@@ -1,40 +1,44 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { FriendshipRequest } from "../models/friendship/friendship-request.dto";
-import { Observable } from "rxjs";
-import { FriendshipResponse } from "../models/friendship/friendship-response.dto";
+import {HttpClient} from "@angular/common/http";
+import {Injectable} from "@angular/core";
+import {FriendshipRequest} from "../models/friendship/friendship-request.dto";
+import {Observable} from "rxjs";
+import {FriendshipInfoResponse} from "../models/friendship/friendship-info-response.dto";
 
 @Injectable({
-    providedIn:'root'
+  providedIn: 'root'
 })
-export class FriendshipService{
+export class FriendshipService {
 
-     private FriendshipsUrl='http://localhost:8080/api/friendship';
-        constructor(private httpClient:HttpClient)
-        {
-            this.httpClient=httpClient;
-        }
-           
-        askFriendshipRequest(friendshipRequest:FriendshipRequest):Observable<number>{
-            return this.httpClient.post<number>(`${this.FriendshipsUrl}/request`,friendshipRequest);
-        }
-        cancelFriendship(friendshipId:number):Observable<boolean>{
-            return this.httpClient.delete<boolean>(`${this.FriendshipsUrl}/cancel/${friendshipId}`)
-        }
-        acceptFriendshipRequest(friendshipId:number):Observable<boolean>{
-            return this.httpClient.post<boolean>(`${this.FriendshipsUrl}/accept`,[]);
-        }
+  private url = 'http://localhost:8080/api/friendship';
 
+  constructor(private http: HttpClient) {
+  }
 
-        getAllFriends(userId:number):Observable<FriendshipResponse[]>{
+  getAllFriendships(userId: number): Observable<FriendshipInfoResponse[]> {
+    return this.http.get<FriendshipInfoResponse[]>(`${this.url}/${userId}`)
+  }
 
-            return this.httpClient.get<FriendshipResponse[]>(`${this.FriendshipsUrl}/${userId}`)
-        }
+  getAllAcceptedFriendships(userId: number): Observable<FriendshipInfoResponse[]> {
+    return this.http.get<FriendshipInfoResponse[]>(`${this.url}/accepted/${userId}`)
+  }
 
-        getAllPendingFriendships(userId:number):Observable<FriendshipResponse[]>{
+  getAllPendingSendFriendships(userId: number): Observable<FriendshipInfoResponse[]> {
+    return this.http.get<FriendshipInfoResponse[]>(`${this.url}/pending/${userId}/sent`)
+  }
 
-            return this.httpClient.get<FriendshipResponse[]>(`${this.FriendshipsUrl}/pending/${userId}`)
-        }
+  getAllPendingReceivedFriendships(userId: number): Observable<FriendshipInfoResponse[]> {
+    return this.http.get<FriendshipInfoResponse[]>(`${this.url}/pending/${userId}/received`)
+  }
 
+  askFriendshipRequest(friendshipRequest: FriendshipRequest): Observable<number> {
+    return this.http.post<number>(`${this.url}/request`, friendshipRequest);
+  }
 
+  cancelFriendship(friendshipId: number): Observable<boolean> {
+    return this.http.delete<boolean>(`${this.http}/cancel/${friendshipId}`)
+  }
+
+  acceptFriendshipRequest(friendshipId: number): Observable<boolean> {
+    return this.http.patch<boolean>(`${this.url}/accept/${friendshipId}`, null);
+  }
 }

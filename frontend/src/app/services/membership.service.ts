@@ -16,12 +16,12 @@ export class MembershipService {
   constructor(private http: HttpClient) {
   }
 
-  getAllUsersOfRoom(roomId: number): Observable<UserInfoResponse> {
-    return this.http.get<UserInfoResponse>(`${this.url}/room/${roomId}/user/all`);
+  getAllUsersOfRoom(roomId: number): Observable<UserInfoResponse[]> {
+    return this.http.get<UserInfoResponse[]>(`${this.url}/room/${roomId}/user/all`);
   }
 
-  getAllRoomsOfUser(userId: number): Observable<RoomInfoResponse> {
-    return this.http.get<RoomInfoResponse>(`${this.url}/user/${userId}/room/all`);
+  getAllRoomsOfUser(userId: number): Observable<RoomInfoResponse[]> {
+    return this.http.get<RoomInfoResponse[]>(`${this.url}/user/${userId}/room/all`);
   }
 
   requestMembership(membershipRequest: MembershipRequest): Observable<MembershipInfoResponse> {

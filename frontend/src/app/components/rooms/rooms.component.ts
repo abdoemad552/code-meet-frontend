@@ -6,6 +6,8 @@ import {NgIf} from '@angular/common';
 import { RoomInfoResponse } from '../../models/room/room-info-response.dto';
 import { RoomService } from '../../services/room.service';
 import {AddRoomComponent} from './add-room/add-room.component';
+import {UserService} from '../../services/user.service';
+import {MembershipService} from '../../services/membership.service';
 
 @Component({
   selector: 'app-rooms',
@@ -20,7 +22,7 @@ import {AddRoomComponent} from './add-room/add-room.component';
   styleUrl: './rooms.component.css'
 })
 export class RoomsComponent {
-  roomsInformation: RoomInfoResponse[] = [];
+  rooms: RoomInfoResponse[] = [];
 
   addRoom : boolean = false;
 
@@ -28,6 +30,8 @@ export class RoomsComponent {
   isRoomView: boolean = false;
 
   constructor(
+    private userService: UserService,
+    private membershipService: MembershipService,
     private route: ActivatedRoute,
     private roomService: RoomService
   ) {
@@ -39,21 +43,21 @@ export class RoomsComponent {
       this.isRoomView = !(!this.roomId); // If no ID, it's the signed-in user's profile
     });
 
-    this.getAllRoomsByCreator(1);
+    this.getAllRoomsOfUser(this.userService.userInfo.userId);
   }
 
-  getAllRoomsByCreator(creatorId: number): void {
-    this.roomService.getAllRoomsByCreator(creatorId)
+  getAllRoomsOfUser(userId: number): void {
+    this.membershipService.getAllRoomsOfUser(userId)
       .subscribe({
-        next: (data: RoomInfoResponse[]) => {
-          this.roomsInformation = data;
-          console.log(data);
+        next: rooms => {
+          this.rooms = rooms;
+          console.log(rooms);
         },
         error: err => console.log(err)
       });
   }
 
   openAddRoom() {
-      this.addRoom = true;
+    this.addRoom = true;
   }
 }

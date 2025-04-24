@@ -1,8 +1,7 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {NgClass, NgIf, NgOptimizedImage} from '@angular/common';
+import {Component, Input} from '@angular/core';
+import {NgClass, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
-import { FriendshipRequest } from '../../../models/friendship/friendship-request.dto';
-import { FriendshipResponse } from '../../../models/friendship/friendship-response.dto';
+import { FriendshipInfoResponse } from '../../../models/friendship/friendship-info-response.dto';
 
 @Component({
   selector: 'app-friend-card',
@@ -16,6 +15,6 @@ import { FriendshipResponse } from '../../../models/friendship/friendship-respon
   styleUrl: './friend-card.component.css'
 })
 export class FriendCardComponent {
-  @Input() friend!:FriendshipResponse;
-  @Input() isFriendRequest! : boolean;
+  @Input() friend!: FriendshipInfoResponse;
+  @Input() isFriendRequest!: boolean;
 }

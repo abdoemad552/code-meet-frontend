@@ -1,7 +1,6 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {FriendCardComponent} from '../friend-card/friend-card.component';
-import {FriendshipResponse} from '../../../models/friendship/friendship-response.dto';
-import {NgClass} from '@angular/common';
+import {FriendshipInfoResponse} from '../../../models/friendship/friendship-info-response.dto';
 import {Router} from '@angular/router';
 
 @Component({
@@ -18,19 +17,20 @@ export class FriendRequestsComponent {
 
   @Output() requestsState = new EventEmitter<boolean>();
 
-  testFriend: FriendshipResponse = {
+  testFriend: FriendshipInfoResponse = {
     friendshipId: 1,
     friendFirstName: 'Ahmed',
     friendLastName: 'Mohamed',
-    friendProfilePicture: 'https://placehold.co/65',
-    friendUserName: 'ahMo214'
+    friendUserName: 'ahMo214',
+    friendProfilePictureUrl: 'https://placehold.co/65'
   };
 
   constructor(private router : Router) {
   }
 
   hideRequests() {
-    this.router.navigateByUrl('/friends');
+    this.router.navigateByUrl('/friends')
+      .catch(reason => console.log(reason));
     this.requests = false;
     this.requestsState.emit(this.requests);
   }

@@ -1,5 +1,4 @@
-export interface FriendshipRequest{
-
-    requesterId:number,
-    responserId:number
+export interface FriendshipRequest {
+  fromId: number,
+  toId: number
 }

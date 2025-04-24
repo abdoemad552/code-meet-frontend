@@ -1,12 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {LoginRequest} from '../models/authentication/login-request.dto';
-import {Observable, of} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {SignupRequest} from '../models/authentication/signup-request.dto';
 import {UserInfoResponse} from '../models/user/user-info-response.dto';
 import {Router} from '@angular/router';
 import {WebSocketService} from './websocket.service';
-import {NotificationsService} from './notifications.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,13 +14,13 @@ export class AuthenticationService {
 
   private url = 'http://localhost:8080/api/auth';
 
-  authenticated: Observable<boolean> = of(false);
+  private authenticated = new BehaviorSubject<boolean>(false);
+  authenticated$ = this.authenticated.asObservable();
 
   constructor(
     private router: Router,
     private http: HttpClient,
     private wsService: WebSocketService,
-    private notificationService: NotificationsService
   ) {
   }
 
@@ -35,21 +34,19 @@ export class AuthenticationService {
 
   logout(): void {
     if (sessionStorage.getItem('userInfo')) {
-      this.authenticated = of(false);
+      this.authenticated.next(false);
       sessionStorage.removeItem('userInfo');
+      this.wsService.disconnect();
       this.router.navigateByUrl('/entry')
         .catch(reason => console.log(reason));
-      this.wsService.disconnect();
     }
   }
 
   initUser(userInfo: UserInfoResponse): void {
-    this.authenticated = of(true);
+    this.authenticated.next(true);
     sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
+    this.wsService.connect();
     this.router.navigateByUrl('/home')
       .catch(reason => console.log(reason));
-    this.wsService.connect();
-    this.notificationService.setUserId(userInfo.userId);
-    this.notificationService.subscribeToNotifications();
   }
 }
