@@ -1,16 +1,25 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-header',
-  imports: [],
+  imports: [
+    NgIf
+  ],
   templateUrl: './meeting-header.component.html',
   standalone: true,
   styleUrl: './meeting-header.component.css'
 })
 export class MeetingHeaderComponent {
-  @Output() leaveClicked = new EventEmitter<boolean>();
+  @Input() isMuted: boolean = true;
+  @Output() leaveClicked = new EventEmitter<void>();
+  @Output() toggleMuted = new EventEmitter<void>();
 
   onLeave() {
-    this.leaveClicked.emit(true);
+    this.leaveClicked.emit();
+  }
+
+  onToggleMuted() {
+    this.toggleMuted.emit();
   }
 }

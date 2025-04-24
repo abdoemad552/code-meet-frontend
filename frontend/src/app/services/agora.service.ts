@@ -6,7 +6,7 @@ import AgoraRTC, {
   IRemoteAudioTrack,
   UID
 } from 'agora-rtc-sdk-ng';
-import {BehaviorSubject, Subject} from 'rxjs';
+import {Subject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class AgoraService {
   remoteUsers: { [uid: UID]: IAgoraRTCRemoteUser } = {};
   remoteAudioTracks: { [uid: UID]: [IRemoteAudioTrack | undefined] } = {};
   channel: string | undefined;
-  muted: boolean = false;
+  isMuted: boolean = true;
 
   private remoteUsersSubject = new Subject<{uid: number, state: 'joined' | 'left'}>();
   remoteUsersSubject$ = this.remoteUsersSubject.asObservable();
@@ -66,7 +66,7 @@ export class AgoraService {
     await this.client.join(this.appId, channel, this.token, uid);
 
     this.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
-    await this.localAudioTrack.setMuted(this.muted);
+    await this.localAudioTrack.setMuted(this.isMuted);
 
     await this.client.publish(this.localAudioTrack);
   }
@@ -81,12 +81,17 @@ export class AgoraService {
 
     await this.client.leave();
 
-    console.log(`Left ${this.channel}`);
-
     this.localAudioTrack = undefined;
     this.remoteUsers = {};
     this.remoteAudioTracks = {};
     this.channel = undefined;
-    this.muted = false;
+    this.isMuted = true;
+  }
+
+  async toggleMuted() {
+    this.isMuted = !this.isMuted;
+    if (this.localAudioTrack) {
+      await this.localAudioTrack.setMuted(this.isMuted);
+    }
   }
 }

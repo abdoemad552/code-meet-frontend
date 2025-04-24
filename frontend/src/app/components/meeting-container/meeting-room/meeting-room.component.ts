@@ -10,12 +10,17 @@ import {MeetingContentComponent} from './content/meeting-content.component';
   styleUrl: './meeting-room.component.css'
 })
 export class MeetingRoomComponent {
-  @Input() meetingId: string | null = null;
-  @Output() leaveClicked = new EventEmitter<boolean>();
+  @Input() isMuted: boolean = true;
+  @Output() leaveClicked = new EventEmitter<void>();
+  @Output() toggleMuted = new EventEmitter<void>();
 
   constructor() {}
 
   onLeave() {
-    this.leaveClicked.emit(true);
+    this.leaveClicked.emit();
+  }
+
+  onToggleMuted() {
+    this.toggleMuted.emit();
   }
 }

@@ -4,7 +4,7 @@
 <div class="p-8 w-full max-w-[80%] text-center my-auto">
   <header class="mb-16 -mt-10 relative">
     <button
-      (click)="onMeetingEntranceLeave()"
+      (click)="onBack()"
       class="absolute left-0 top-1/2 transform cursor-pointer -translate-y-1/2 p-2 rounded-full hover:bg-gray-300 transition duration-200 ease-in-out focus-visible:outline-indigo-600"
     >
       <svg
@@ -27,7 +27,7 @@
       <h1 class="text-xl font-semibold text-gray-500">
         Choose your audio and video settings for
       </h1>
-      <p class="text-2xl font-bold text-gray-800 mt-1">Meeting Title</p>
+      <p class="text-2xl font-bold text-gray-800 mt-1">Meeting Title - {{meetingId}}</p>
     </div>
   </header>
   <div class="flex flex-row-reverse w-full items-center gap-16">

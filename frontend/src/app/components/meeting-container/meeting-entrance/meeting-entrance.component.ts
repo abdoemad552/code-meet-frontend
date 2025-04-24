@@ -10,15 +10,20 @@ import {Router} from '@angular/router';
 })
 export class MeetingEntranceComponent {
   @Input() meetingId: string | null = null;
-  @Output() joinClicked = new EventEmitter<void>();
+  @Output() joinClicked = new EventEmitter<string>();
+  @Output() backClicked = new EventEmitter<void>();
 
-  constructor(private router: Router) {}
+  constructor() {}
 
   onJoin(): void {
-    this.joinClicked.emit();
+    if (this.meetingId) {
+      this.joinClicked.emit(this.meetingId);
+    } else {
+      // Show
+    }
   }
 
-  onMeetingEntranceLeave() {
-    this.router.navigateByUrl('/meetings');
+  onBack() {
+    this.backClicked.emit();
   }
 }

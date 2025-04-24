@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import {MeetingStateService} from '../../services/states/meeting-state.service';
-import { Subscription } from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
 import {NgIf} from '@angular/common';
 import {MeetingEntranceComponent} from './meeting-entrance/meeting-entrance.component';
 import {MeetingRoomComponent} from './meeting-room/meeting-room.component';
+import {AgoraService} from '../../services/agora.service';
+import {UserInfoResponse} from '../../models/user/user-info-response.dto';
 
 @Component({
   selector: 'app-meeting-container',
@@ -17,42 +17,56 @@ import {MeetingRoomComponent} from './meeting-room/meeting-room.component';
 export class MeetingContainerComponent implements OnInit, OnDestroy {
   meetingId: string | null = null;
   currentView: 'entrance' | 'room' = 'entrance';
-  private stateSubscription: Subscription | null = null;
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
-    private meetingStateService: MeetingStateService
+    protected agoraService: AgoraService
   ) {}
 
   ngOnInit(): void {
     // getting the meeting ID
-    this.route.paramMap.subscribe(params => {
-      this.meetingId = params.get('id');
-      // further update is to: load meeting data here based on ID
-    });
-
-    // subscription to the state service to update the local view
-    this.stateSubscription = this.meetingStateService.currentViewState$.subscribe(state => {
-      this.currentView = state;
+    this.route.paramMap.subscribe({
+      next: params => {
+        this.meetingId = params.get('id');
+        // A further update is to load meeting data here based on ID.
+      }
     });
   }
 
   // called by the MeetingEntranceComponent when 'Join' is clicked
-  onJoinClicked(): void {
-    this.meetingStateService.joinMeeting();
+  async onEntranceJoinClicked(meetingId: string) {
+    const userInfo: UserInfoResponse =
+      JSON.parse(sessionStorage.getItem("userInfo")!);
+
+    this.meetingId = meetingId;
+    await this.agoraService.join(this.meetingId, userInfo.userId)
+      .then(() => this.currentView = 'room')
+      .catch(reason => console.log(reason));
   }
 
-  onLeaveClicked(): void {
-    this.meetingStateService.resetState();
+  onEntranceBackClicked() {
+    this.router.navigateByUrl('/home')
+      .catch(reason => console.log(reason));
   }
 
-  ngOnDestroy(): void {
+  async onMeetingRoomLeaveClicked() {
+    this.meetingId = null;
+    await this.agoraService.leave()
+      .then(() => {
+        this.router.navigateByUrl('/meetings')
+          .catch(reason => console.log(reason));
+        this.currentView = 'entrance';
+      })
+      .catch(reason => console.log(reason));
+  }
+
+  async onToggleMuted() {
+    await this.agoraService.toggleMuted();
+  }
+
+  async ngOnDestroy() {
     // cleaning up the subscription to prevent memory leaks
-    if (this.stateSubscription) {
-      this.stateSubscription.unsubscribe();
-    }
-
-    // reset the service state when leaving the route
-    this.meetingStateService.resetState();
+    await this.onMeetingRoomLeaveClicked();
   }
 }

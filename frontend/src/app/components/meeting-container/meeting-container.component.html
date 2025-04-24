@@ -1,10 +1,15 @@
 <ng-container *ngIf="currentView === 'entrance'">
   <app-meeting-entrance
     [meetingId]="meetingId"
-    (joinClicked)="onJoinClicked()"
-  ></app-meeting-entrance>
+    (joinClicked)="onEntranceJoinClicked($event)"
+    (backClicked)="onEntranceBackClicked()">
+  </app-meeting-entrance>
 </ng-container>
 
 <ng-container *ngIf="currentView === 'room'">
-  <app-meeting-room [meetingId]="meetingId" (leaveClicked)="onLeaveClicked()"></app-meeting-room>
+  <app-meeting-room
+    [isMuted]="this.agoraService.isMuted"
+    (leaveClicked)="onMeetingRoomLeaveClicked()"
+    (toggleMuted)="onToggleMuted()">
+  </app-meeting-room>
 </ng-container>
