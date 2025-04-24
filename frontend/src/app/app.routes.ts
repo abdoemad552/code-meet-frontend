@@ -15,7 +15,7 @@ import {ChatboxComponent} from './components/chats/chatbox/chatbox.component';
 import {FriendRequestsComponent} from './components/friends/friend-requests/friend-requests.component';
 import {NotificationsComponent} from './components/notifications/notifications.component';
 import {AuthGuard} from './services/guards/auth.guard';
-import {MeetingRoomComponent} from './components/meeting-room/meeting-room.component';
+import {MeetingContainerComponent} from './components/meeting-container/meeting-container.component';
 
 export const routes: Routes = [
   // Public Routes
@@ -110,7 +110,8 @@ export const routes: Routes = [
       },
     ]
   },
-  {path: 'meeting/:id', component: MeetingRoomComponent},
+  {path: 'meeting/:id', component: MeetingContainerComponent},
+
   {
     path: 'meeting',
     redirectTo: '404',

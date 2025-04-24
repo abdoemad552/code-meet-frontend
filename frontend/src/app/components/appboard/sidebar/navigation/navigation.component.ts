@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import { NavItemComponent } from './nav-item/nav-item.component';
-import {BoardDataService} from '../../../../services/board-data.service';
+import {BoardDataService} from '../../../../services/states/board-data.service';
 import {NgClass} from '@angular/common';
 
 @Component({

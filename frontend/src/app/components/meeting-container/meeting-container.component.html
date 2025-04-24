@@ -1,0 +1,10 @@
+<ng-container *ngIf="currentView === 'entrance'">
+  <app-meeting-entrance
+    [meetingId]="meetingId"
+    (joinClicked)="onJoinClicked()"
+  ></app-meeting-entrance>
+</ng-container>
+
+<ng-container *ngIf="currentView === 'room'">
+  <app-meeting-room [meetingId]="meetingId" (leaveClicked)="onLeaveClicked()"></app-meeting-room>
+</ng-container>
