@@ -12,7 +12,7 @@ import {Subject} from 'rxjs';
   providedIn: 'root'
 })
 export class AgoraService {
-  private readonly appId = '84f3b81e1dd0484ebd825ddf0ada1197';
+  private readonly appId = 'c0b890b72f994661bdecd75416e2e795';
   private token = null;
 
   client: IAgoraRTCClient;
