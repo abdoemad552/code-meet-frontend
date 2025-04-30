@@ -10,7 +10,8 @@ import {MeetingContentComponent} from './content/meeting-content.component';
   styleUrl: './meeting-room.component.css'
 })
 export class MeetingRoomComponent {
-  @Input() isMuted: boolean = true;
+  @Input() isMuted: boolean;
+  @Input() isMicObtained: boolean;
   @Output() leaveClicked = new EventEmitter<void>();
   @Output() toggleMuted = new EventEmitter<void>();
 

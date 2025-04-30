@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import AgoraRTC, {IAgoraRTCClient, IAgoraRTCRemoteUser, ILocalAudioTrack, UID} from 'agora-rtc-sdk-ng';
+import AgoraRTC, {
+  IAgoraRTCClient,
+  IAgoraRTCRemoteUser,
+  ILocalAudioTrack
+} from 'agora-rtc-sdk-ng';
 import {Subject} from 'rxjs';
 import {AGORA_APP_ID} from '../environment';
 
@@ -9,22 +13,20 @@ import {AGORA_APP_ID} from '../environment';
 export class AgoraRtcService {
 
   private client: IAgoraRTCClient;
-  private localAudioTrack: ILocalAudioTrack;
   private remoteUsers: { [uid: number]: IAgoraRTCRemoteUser } = {};
+  localAudioTrack: ILocalAudioTrack;
   isMuted: boolean = true;
 
   ///////////////////////////////////////////
-  private volumeIndicator = new Subject<{ level: number, uid: UID }[]>();
-  ///////////////////////////////////////////
-  volumeIndicator$ = this.volumeIndicator.asObservable();
+  volumeIndicator$ = new Subject<{ level: number, uid: any }[]>();
   ///////////////////////////////////////////
 
   constructor() {
     this.client = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp9' });
-    this.initEventListeners();
   }
 
   async join(channelName: string, token: string) {
+    this.initEventListeners();
     const uid = JSON.parse(sessionStorage.getItem("userInfo")).userId;
     await this.client.join(AGORA_APP_ID, channelName, token, uid);
 
@@ -33,8 +35,8 @@ export class AgoraRtcService {
       await this.localAudioTrack.setMuted(this.isMuted);
       await this.client.publish([this.localAudioTrack]);
     } catch(error) {
-      alert('RTC: Failed to obtain the microphone');
       console.log('RTC: Failed to obtain the microphone');
+      // Handle this...
     }
   }
 
@@ -46,8 +48,9 @@ export class AgoraRtcService {
       this.localAudioTrack = null;
       console.log('RTC: Unpublished audio track');
     }
-    await this.client.leave()
+    await this.client.leave();
     console.log('Left the channel');
+    this.client.removeAllListeners();
     this.remoteUsers = {};
     this.isMuted = true;
   }
@@ -92,8 +95,10 @@ export class AgoraRtcService {
       delete this.remoteUsers[user.uid];
     });
 
+    (AgoraRTC as any).setParameter('AUDIO_VOLUME_INDICATION_INTERVAL', 200);
+    this.client.enableAudioVolumeIndicator();
     this.client.on('volume-indicator', async volumes => {
-      this.volumeIndicator.next(volumes);
+      this.volumeIndicator$.next(volumes);
     });
   }
 }

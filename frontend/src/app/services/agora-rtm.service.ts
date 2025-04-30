@@ -12,25 +12,20 @@ export class AgoraRtmService {
   private channel: RtmChannel;
 
   //////////////////////////////////////////////////////////
-  private tokenExpired = new Subject<void>();
-  private privilegeTokenWillExpire = new Subject<void>();
-  private channelMessage = new Subject<{ content: string, memberId: string, ts: number }>();
-  private memberJoined = new Subject<string>();
-  private memberLeft = new Subject<string>();
-  //////////////////////////////////////////////////////////
-  tokenExpired$ = this.tokenExpired.asObservable();
-  privilegeTokenWillExpire$ = this.privilegeTokenWillExpire.asObservable();
-  memberJoined$ = this.memberJoined.asObservable();
-  memberLeft$ = this.memberLeft.asObservable();
-  channelMessage$ = this.channelMessage.asObservable();
+  tokenExpired$ = new Subject<void>();
+  privilegeTokenWillExpire$ = new Subject<void>();
+  channelMessage$ = new Subject<{ content: string, memberId: string, ts: number }>();
+  memberJoined$ = new Subject<string>();
+  memberLeft$ = new Subject<string>();
   //////////////////////////////////////////////////////////
 
   constructor() {
     this.client = AgoraRTM.createInstance(AGORA_APP_ID);
-    this.initClientEventListeners();
   }
 
   async join(channelName: string, token: string) {
+    this.initClientEventListeners();
+
     const uid = JSON.parse(sessionStorage.getItem("userInfo")).userId;
     await this.client.login({ uid: uid.toString(), token: token });
 
@@ -45,6 +40,8 @@ export class AgoraRtmService {
     await this.channel.leave();
     await this.client.logout();
     console.log('RTM: You left channel');
+    this.channel.removeAllListeners();
+    this.client.removeAllListeners();
     this.channel = null;
   }
 
@@ -55,25 +52,25 @@ export class AgoraRtmService {
 
   initClientEventListeners() {
     this.client.on('TokenExpired', async () => {
-      this.tokenExpired.next();
+      this.tokenExpired$.next();
     });
 
     this.client.on('TokenPrivilegeWillExpire', async () => {
-      this.privilegeTokenWillExpire.next();
+      this.privilegeTokenWillExpire$.next();
     });
   }
 
   initChannelEventListeners() {
     this.channel.on('ChannelMessage', async (message, memberId, props) => {
-      this.channelMessage.next({ content: message.text, memberId: memberId, ts: props.serverReceivedTs });
+      this.channelMessage$.next({ content: message.text, memberId: memberId, ts: props.serverReceivedTs });
     });
 
     this.channel.on('MemberJoined', async memberId => {
-      this.memberJoined.next(memberId);
+      this.memberJoined$.next(memberId);
     });
 
     this.channel.on('MemberLeft', async memberId => {
-      this.memberLeft.next(memberId);
+      this.memberLeft$.next(memberId);
     });
   }
 }

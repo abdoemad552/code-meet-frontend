@@ -9,6 +9,7 @@
 <ng-container *ngIf="currentView === 'room'">
   <app-meeting-room
     [isMuted]="this.rtcService.isMuted"
+    [isMicObtained]="!!this.rtcService.localAudioTrack"
     (leaveClicked)="onMeetingRoomLeaveClicked()"
     (toggleMuted)="onToggleMuted()">
   </app-meeting-room>

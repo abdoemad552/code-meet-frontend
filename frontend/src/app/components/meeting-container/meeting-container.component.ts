@@ -56,9 +56,9 @@ export class MeetingContainerComponent implements OnInit, OnDestroy {
         // Renew the token...
       }),
       this.rtcService.volumeIndicator$.subscribe(volumes => {
-        // volumes: { level: number, uid: UID }[]
-        volumes.forEach(volume => {
-          console.log(`RTC: Level: ${volume.level}, UID: ${volume.uid}`);
+        // volumes: { level: number, uid: number }[]
+        volumes.forEach((volume: { level: number, uid: number }) => {
+          console.log(`RTC: Volume level: ${volume.level}, UID: ${volume.uid}`);
         });
       })
     );

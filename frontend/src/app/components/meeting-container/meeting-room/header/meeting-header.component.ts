@@ -11,7 +11,8 @@ import {NgIf} from '@angular/common';
   styleUrl: './meeting-header.component.css'
 })
 export class MeetingHeaderComponent {
-  @Input() isMuted: boolean = true;
+  @Input() isMuted: boolean;
+  @Input() isMicObtained: boolean;
   @Output() leaveClicked = new EventEmitter<void>();
   @Output() toggleMuted = new EventEmitter<void>();
 
