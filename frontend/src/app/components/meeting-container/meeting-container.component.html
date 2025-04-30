@@ -8,7 +8,7 @@
 
 <ng-container *ngIf="currentView === 'room'">
   <app-meeting-room
-    [isMuted]="this.agoraService.isMuted"
+    [isMuted]="this.rtcService.isMuted"
     (leaveClicked)="onMeetingRoomLeaveClicked()"
     (toggleMuted)="onToggleMuted()">
   </app-meeting-room>
