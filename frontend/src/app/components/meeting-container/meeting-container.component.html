@@ -1,16 +1,17 @@
-<ng-container *ngIf="currentView === 'entrance'">
-  <app-meeting-entrance
-    [meetingId]="meetingId"
-    (joinClicked)="onEntranceJoinClicked($event)"
-    (backClicked)="onEntranceBackClicked()">
-  </app-meeting-entrance>
+<ng-container *ngIf="currentView === 'MEETING_ENTRANCE'">
+  <div [@fadeInOut]>
+    <app-meeting-entrance
+      (joinClicked)="onEntranceJoinClicked($event)"
+      (backClicked)="onEntranceBackClicked()">
+    </app-meeting-entrance>
+  </div>
 </ng-container>
 
-<ng-container *ngIf="currentView === 'room'">
-  <app-meeting-room
-    [isMuted]="this.rtcService.isMuted"
-    [isMicObtained]="!!this.rtcService.localAudioTrack"
-    (leaveClicked)="onMeetingRoomLeaveClicked()"
-    (toggleMuted)="onToggleMuted()">
-  </app-meeting-room>
+<ng-container *ngIf="currentView === 'MEETING_ROOM'">
+  <div [@fadeInOut]>
+    <app-meeting-room
+      [meetingId]="meetingId"
+      (meetingLeaveClicked)="onMeetingLeaveClicked()">
+    </app-meeting-room>
+  </div>
 </ng-container>

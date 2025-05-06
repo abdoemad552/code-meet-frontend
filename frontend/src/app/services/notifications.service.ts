@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {WebSocketService} from './websocket.service';
 import {NotificationInfo} from '../models/notification/notification-info.dto';
-import {UserService} from './user.service';
 
 @Injectable({
   providedIn:'root'
@@ -10,13 +9,13 @@ export class NotificationsService {
   notifications: NotificationInfo[] = [];
 
   constructor(
-    private wsService: WebSocketService,
-    private userService: UserService
+    private wsService: WebSocketService
   ) {
     this.wsService.connection$.subscribe({
       next: isConnected => {
+        const userId = JSON.parse(sessionStorage.getItem("userInfo")).userId;
         if (isConnected) {
-          const topic = `/user/${this.userService.userInfo.userId}/notifications`;
+          const topic = `/user/${userId}/notifications`;
           wsService.subscribe(topic)
             .subscribe({
               next: message => {
@@ -27,7 +26,7 @@ export class NotificationsService {
               error: error => console.log(error)
             });
         } else {
-          wsService.unsubscribe(`/user/${userService.userInfo.userId}/notifications`);
+          wsService.unsubscribe(`/user/${userId}/notifications`);
         }
       },
       error: error => console.log(error)

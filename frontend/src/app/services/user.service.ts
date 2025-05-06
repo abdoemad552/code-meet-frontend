@@ -23,9 +23,7 @@ export class UserService {
     return this.http.get<UserInfoResponse>(`${this.url}/${userId}`);
   }
 
-  getUsersByUsername(username: string): Observable<UserInfoResponse> {
-    return this.http.get<UserInfoResponse>(`${this.url}`, {
-      headers: {'username': username}
-    });
+  getUserByUsername(username: string): Observable<UserInfoResponse> {
+    return this.http.get<UserInfoResponse>(`${this.url}?username=${username}`);
   }
 }

@@ -45,6 +45,14 @@ export class AgoraRtmService {
     this.channel = null;
   }
 
+  async getChannelMembers() {
+    return await this.channel.getMembers();
+  }
+
+  sendMessage(message: string) {
+    this.channel.sendMessage({ text: message });
+  }
+
   async renewToken(token: string) {
     await this.client.renewToken(token);
     console.log('RTM: RTM token renewed');

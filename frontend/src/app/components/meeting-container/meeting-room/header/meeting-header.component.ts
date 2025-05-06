@@ -11,16 +11,33 @@ import {NgIf} from '@angular/common';
   styleUrl: './meeting-header.component.css'
 })
 export class MeetingHeaderComponent {
-  @Input() isMuted: boolean;
+  @Input() isMicMuted: boolean;
+  @Input() isCamEnabled: boolean;
   @Input() isMicObtained: boolean;
-  @Output() leaveClicked = new EventEmitter<void>();
-  @Output() toggleMuted = new EventEmitter<void>();
+  @Input() isCamObtained: boolean;
+  @Output() toggleMicMuted = new EventEmitter<void>();
+  @Output() toggleCamEnabled = new EventEmitter<void>();
+  @Output() meetingLeaveClicked = new EventEmitter<void>();
+  @Output() toggleChatSidebar = new EventEmitter<void>();
+  @Output() toggleParticipantsSidebar = new EventEmitter<void>();
 
-  onLeave() {
-    this.leaveClicked.emit();
+  onToggleMicMuted() {
+    this.toggleMicMuted.emit();
   }
 
-  onToggleMuted() {
-    this.toggleMuted.emit();
+  onToggleCamEnabled() {
+    this.toggleCamEnabled.emit();
+  }
+
+  onMeetingLeaveClicked() {
+    this.meetingLeaveClicked.emit();
+  }
+
+  onToggleChatSidebar() {
+    this.toggleChatSidebar.emit();
+  }
+
+  onToggleParticipantsSidebar() {
+    this.toggleParticipantsSidebar.emit();
   }
 }

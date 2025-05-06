@@ -1,4 +1,4 @@
 export interface ParticipantRequest{
-   participantId:number,
-    meetingId:number
+  username: string,
+  meetingId: number
 }

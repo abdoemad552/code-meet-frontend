@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Router} from '@angular/router';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-meeting-entrance',
@@ -8,19 +8,23 @@ import {Router} from '@angular/router';
   standalone: true,
   styleUrl: './meeting-entrance.component.css'
 })
-export class MeetingEntranceComponent {
-  @Input() meetingId: string | null = null;
+export class MeetingEntranceComponent implements OnInit {
+  meetingId: string = null; // Will be replaced by the content of meetingId input...
   @Output() joinClicked = new EventEmitter<string>();
   @Output() backClicked = new EventEmitter<void>();
 
-  constructor() {}
+  constructor(
+    private route: ActivatedRoute
+  ) {}
+
+  ngOnInit() {
+    this.route.paramMap.subscribe(params => {
+      this.meetingId = params.get('id');
+    });
+  }
 
   onJoin(): void {
-    if (this.meetingId) {
-      this.joinClicked.emit(this.meetingId);
-    } else {
-      // Show
-    }
+    this.joinClicked.emit(this.meetingId);
   }
 
   onBack() {

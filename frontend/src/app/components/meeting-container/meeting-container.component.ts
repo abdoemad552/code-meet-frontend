@@ -1,101 +1,74 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component, OnDestroy } from '@angular/core';
+import {Router} from '@angular/router';
 import {NgIf} from '@angular/common';
 import {MeetingEntranceComponent} from './meeting-entrance/meeting-entrance.component';
 import {MeetingRoomComponent} from './meeting-room/meeting-room.component';
 import {AgoraRtcService} from '../../services/agora-rtc.service';
 import {AgoraRtmService} from '../../services/agora-rtm.service';
 import {AgoraTokenService} from '../../services/agora-token.service';
-import {Subscription} from 'rxjs';
+import {animate, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-meeting-container',
+  animations: [
+    trigger('fadeInOut', [
+      transition(':enter', [   // when element appears
+        style({ opacity: 0 }),
+        animate('300ms ease-in', style({ opacity: 1 }))
+      ]),
+      transition(':leave', [   // when element disappears
+        animate('300ms ease-out', style({ opacity: 0 }))
+      ])
+    ])
+  ],
   imports: [NgIf, MeetingEntranceComponent, MeetingRoomComponent],
   templateUrl: './meeting-container.component.html',
   standalone: true,
   styleUrl: './meeting-container.component.css'
 })
 
-export class MeetingContainerComponent implements OnInit, OnDestroy {
-  meetingId: string | null = null;
-  currentView: 'entrance' | 'room' = 'entrance';
-
-  subscriptions: Subscription[] = [];
+export class MeetingContainerComponent implements OnDestroy {
+  meetingId: string = null;
+  currentView: 'MEETING_ENTRANCE' | 'MEETING_ROOM' = 'MEETING_ENTRANCE';
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
     private tokenService: AgoraTokenService,
     protected rtcService: AgoraRtcService,
     protected rtmService: AgoraRtmService
   ) {}
 
-  ngOnInit(): void {
-    // getting the meeting ID
-    this.subscriptions.push(
-      this.route.paramMap.subscribe(params => {
-        this.meetingId = params.get('id');
-        // A further update is to load meeting data here based on ID.
-      }),
-      this.rtmService.memberJoined$.subscribe(memberId => {
-        console.log(`RTM: ${memberId} joined the channel`);
-      }),
-      this.rtmService.memberLeft$.subscribe(memberId => {
-        console.log(`RTM: ${memberId} left the channel`);
-      }),
-      this.rtmService.channelMessage$.subscribe(message => {
-        // message: { content: string, memberId: string, ts: number }
-        console.log(`RTM: A new message ${message.content} from ${message.memberId} at ${message.ts}`);
-      }),
-      this.rtmService.tokenExpired$.subscribe(() => {
-        console.warn('RTM: RTM token expired');
-        // Renew the token...
-      }),
-      this.rtmService.privilegeTokenWillExpire$.subscribe(() => {
-        console.warn('RTM: RTM privilege token will expire');
-        // Renew the token...
-      }),
-      this.rtcService.volumeIndicator$.subscribe(volumes => {
-        // volumes: { level: number, uid: number }[]
-        volumes.forEach((volume: { level: number, uid: number }) => {
-          console.log(`RTC: Volume level: ${volume.level}, UID: ${volume.uid}`);
-        });
-      })
-    );
-  }
-
-  // called by the MeetingEntranceComponent when 'Join' is clicked
+  // Called by the MeetingEntranceComponent when 'Join' is clicked
   async onEntranceJoinClicked(meetingId: string) {
     this.meetingId = meetingId;
 
-    // Generate RTC token...
+    // Generating RTC token..
     const { rtcToken } = await this.tokenService.getRtcToken(meetingId);
-    // Generate RTM token...
+    // Generating RTM token...
     const { rtmToken } = await this.tokenService.getRtmToken(meetingId);
 
     await this.rtcService.join(this.meetingId, rtcToken);
     await this.rtmService.join(this.meetingId, rtmToken);
-    this.currentView = 'room';
+
+    this.currentView = 'MEETING_ROOM';
   }
 
-  async onEntranceBackClicked() {
-    await this.router.navigateByUrl('/home');
+  onEntranceBackClicked() {
+    this.router.navigateByUrl('/home');
   }
 
-  async onMeetingRoomLeaveClicked() {
-    await this.rtcService.leave();
-    await this.rtmService.leave();
-    this.currentView = 'entrance';
-    this.meetingId = null;
-    await this.router.navigateByUrl('/meetings');
+  onMeetingLeaveClicked() {
+    this.router.navigateByUrl('/meetings');
   }
 
-  async onToggleMuted() {
-    await this.rtcService.toggleMuted();
+  clean() {
+    if (this.meetingId) {
+      this.rtcService.leave();
+      this.rtmService.leave();
+    }
   }
 
-  async ngOnDestroy() {
-    // cleaning up the subscription to prevent memory leaks
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+  ngOnDestroy() {
+    this.clean();
   }
 }
