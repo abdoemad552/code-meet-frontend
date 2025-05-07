@@ -8,7 +8,7 @@
         <div
           class="avatar"
           [id]="`video-wrapper-${participant.userId}`">
-          <ng-container *ngIf="!isCamEnabled">
+          <ng-container *ngIf="!rtcService.isCamEnabled">
             <!-- SVG Placeholder -->
             <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -24,14 +24,14 @@
   </div>
 
   <!-- Sidebar -->
-  <aside *ngIf="sidebarContent !== 'hidden'" class="sidebar">
+  <aside *ngIf="sidebarContent !== 'HIDDEN'" class="sidebar">
     <div class="sidebar-header">
-      <h3>{{ sidebarContent === 'chat' ? 'Chat' : 'Participants' }}</h3>
+      <h3>{{ sidebarContent === 'CHAT' ? 'Chat' : 'Participants' }}</h3>
       <button class="close-sidebar-button" (click)="onHideSidebar()">✕</button>
     </div>
 
     <!-- Messages View -->
-    <ng-container *ngIf="sidebarContent === 'chat'">
+    <ng-container *ngIf="sidebarContent === 'CHAT'">
       <div class="sidebar-content">
         <div class="message-scroll-container">
           <div *ngFor="let msg of messages" class="message">
@@ -48,7 +48,7 @@
     </ng-container>
 
     <!-- Participants View -->
-    <ng-container *ngIf="sidebarContent === 'participants'">
+    <ng-container *ngIf="sidebarContent === 'PARTICIPANTS'">
       <div class="sidebar-content">
         <div *ngFor="let participant of sortedParticipants; let last = last" class="participants-items-container">
           <div class="participant-item">

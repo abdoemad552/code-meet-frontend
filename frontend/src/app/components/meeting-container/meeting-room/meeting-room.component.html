@@ -1,25 +1,14 @@
 <div class="bg-gray-100 h-screen flex flex-col">
   <app-header
-    [isMicMuted]="rtcService.isMicMuted"
-    [isCamEnabled]="rtcService.isCamEnabled"
-    [isMicObtained]="rtcService.isMicObtained()"
-    [isCamObtained]="rtcService.isCamObtained()"
-    (toggleMicMuted)="onToggleMicMuted()"
-    (toggleCamEnabled)="onToggleCamEnabled()"
-    (toggleParticipantsSidebar)="onSidebarChanged('participants')"
-    (toggleChatSidebar)="onSidebarChanged('chat')"
-    (meetingLeaveClicked)="onMeetingLeaveClicked()"
+    (toggleParticipantsSidebar)="onSidebarChanged('PARTICIPANTS')"
+    (toggleChatSidebar)="onSidebarChanged('CHAT')"
+    (leave)="onLeave()"
     class="header-gradient text-white px-5 py-7 flex items-center justify-between shadow-md">
   </app-header>
 
   <app-content
-    [messages]="messages"
-    [participants]="participants"
-    [volumeLevels]="volumeLevels"
     [sidebarContent]="sidebarContent"
-    [isCamEnabled]="this.rtcService.isCamEnabled"
     (hideSidebar)="onHideSidebar()"
-    (messageSent)="onMessageSent($event)"
     class="flex-1 flex flex-row">
   </app-content>
 </div>

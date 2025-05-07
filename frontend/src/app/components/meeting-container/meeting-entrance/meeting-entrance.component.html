@@ -1,141 +1,55 @@
-<div
-  class="meeting-entrance bg-gray-100 text-gray-900 flex items-center justify-center p-4 overflow-hidden w-full h-dvh"
->
-<div class="p-8 w-full max-w-[80%] text-center my-auto">
-  <header class="mb-16 -mt-10 relative">
-    <button
-      (click)="onBack()"
-      class="absolute left-0 top-1/2 transform cursor-pointer -translate-y-1/2 p-2 rounded-full hover:bg-gray-300 transition duration-200 ease-in-out focus-visible:outline-indigo-600"
-    >
-      <svg
-        class="w-6 h-6 text-gray-600"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M10 19l-7-7m0 0l7-7m-7 7h18"
-        ></path>
-      </svg>
-      <span class="sr-only">Go back</span>
-    </button>
-    <div class="text-center">
-      <h1 class="text-xl font-semibold text-gray-500">
-        Choose your audio and video settings for
-      </h1>
-      <p class="text-2xl font-bold text-gray-800 mt-1">Meeting Title - {{meetingId}}</p>
-    </div>
-  </header>
-  <div class="flex flex-row-reverse w-full items-center gap-16">
-    <main class="w-1/2 w-fit">
-      <section
-        class="relative bg-gray-800 rounded-lg overflow-hidden shadow-lg aspect-video flex items-center justify-center mb-6 w-[600px] h-[338px] border border-gray-200"
-      >
-        <!-- <img
-          src="https://placehold.co/600x338/1f2937/d1d5db?text=Video+Feed+Placeholder"
-          alt="Video Placeholder"
-          class="w-full h-auto object-cover opacity-70"
-        /> -->
-
-        <div
-          class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center text-gray-700 text-lg font-bold border-4 border-white"
-        >
-          BG
-        </div>
-      </section>
-
-      <div class="flex items-center justify-center space-x-6">
-        <div class="flex items-center space-x-2">
-          <svg
-            class="w-6 h-6 text-gray-600"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-            ></path>
-          </svg>
-          <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" value="" class="sr-only peer" checked />
-            <div
-              class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"
-            ></div>
-            <span class="sr-only">Toggle Camera</span>
-          </label>
-        </div>
-
-        <div class="flex items-center space-x-2">
-          <svg
-            class="w-6 h-6 text-gray-600"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
-            ></path>
-          </svg>
-          <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" value="" class="sr-only peer" checked />
-            <div
-              class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"
-            ></div>
-            <span class="sr-only">Toggle Microphone</span>
-          </label>
-        </div>
-
-        <div class="flex items-center space-x-2">
-          <svg
-            class="w-6 h-6 text-gray-600"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707A1 1 0 0113 7v10a1 1 0 01-1.707.707L5.586 15z"
-            ></path>
-          </svg>
-          <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" value="" class="sr-only peer" checked />
-            <div
-              class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"
-            ></div>
-            <span class="sr-only">Toggle Audio</span>
-          </label>
-        </div>
+<div class="meeting-entrance bg-gray-100 text-gray-900 flex items-center justify-center p-4 overflow-hidden w-full h-dvh">
+  <div class="p-8 w-full max-w-[80%] text-center my-auto">
+    <header class="mb-12 relative">
+      <div class="text-center mt-4">
+        <h1 class="text-lg sm:text-xl font-semibold text-gray-500">
+          Choose your audio and video settings for
+        </h1>
+        <p class="text-xl sm:text-2xl font-bold text-gray-800 mt-1">Meeting Title - {{meetingId}}</p>
       </div>
-    </main>
-    <section
-      class="w-1/2 flex flex-col items-center justify-center bg-gray-50 p-8 -mt-10 rounded-lg shadow-md"
-    >
-      <h3 class="text-2xl text-gray-800 mb-8">Ready to join?</h3>
-      <button
-        (click)="onJoin()"
-        class="w-full cursor-pointer max-w-xs mx-auto px-16 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-200 ease-in-out shadow-md text-lg font-semibold mb-6 focus-visible:outline-indigo-600"
-      >
-        Join now
-      </button>
-      <p class="text-sm text-gray-600">
-        <span class="font-bold">6</span> people have joined
-      </p>
-    </section>
+    </header>
+    <div class="flex flex-col items-center w-full gap-8 lg:gap-12">
+      <main class="w-full lg:w-2/3">
+        <section class="relative bg-gray-800 rounded-lg overflow-hidden shadow-lg aspect-video flex items-center justify-center mb-6 w-full max-w-[700px] mx-auto border border-gray-200">
+          <video #videoTrackWrapper class="w-full h-full object-cover" autoplay playsinline></video>
+        </section>
+
+        <div class="flex items-center justify-center gap-6 mb-8">
+          <!-- Camera Toggle -->
+          <button
+            [disabled]="!rtcService.isCamObtained()"
+            (click)="onToggleCamEnabled()"
+            [class]="camButtonClasses"
+            class="flex items-center gap-2 px-6 py-3 rounded-full border border-gray-300 shadow-md transition font-medium text-base sm:text-lg">
+            <svg [class]="camIconClass" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              <line *ngIf="!rtcService.isCamEnabled" x1="4" y1="4" x2="20" y2="20" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+<!--            <span>Camera</span>-->
+          </button>
+
+          <!-- Microphone Toggle -->
+          <button
+            [disabled]="!rtcService.isMicObtained()"
+            (click)="onToggleMicEnabled( )"
+            [class]="micButtonClasses"
+            class="flex items-center gap-2 px-6 py-3 rounded-full border border-gray-300 shadow-md transition font-medium text-base sm:text-lg">
+            <svg class="w-6 h-6" [class]="micIconClass" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+              <line *ngIf="rtcService.isMicMuted" x1="4" y1="4" x2="20" y2="20" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+<!--            <span>Microphone</span>-->
+          </button>
+        </div>
+
+        <div class="w-full flex justify-center">
+          <button
+            (click)="onJoin()"
+            class="cursor-pointer px-10 py-3 sm:py-4 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition duration-200 ease-in-out shadow-md text-lg sm:text-xl font-semibold focus-visible:outline-indigo-600">
+            Join now
+          </button>
+        </div>
+      </main>
+    </div>
   </div>
-</div>
 </div>

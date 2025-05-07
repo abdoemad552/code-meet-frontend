@@ -1,5 +1,5 @@
-import { Component, OnDestroy } from '@angular/core';
-import {Router} from '@angular/router';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {NgIf} from '@angular/common';
 import {MeetingEntranceComponent} from './meeting-entrance/meeting-entrance.component';
 import {MeetingRoomComponent} from './meeting-room/meeting-room.component';
@@ -7,6 +7,8 @@ import {AgoraRtcService} from '../../services/agora-rtc.service';
 import {AgoraRtmService} from '../../services/agora-rtm.service';
 import {AgoraTokenService} from '../../services/agora-token.service';
 import {animate, style, transition, trigger} from '@angular/animations';
+import {MeetingExitComponent} from './meeting-exit/meeting-exit.component';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-meeting-container',
@@ -21,7 +23,7 @@ import {animate, style, transition, trigger} from '@angular/animations';
       ])
     ])
   ],
-  imports: [NgIf, MeetingEntranceComponent, MeetingRoomComponent],
+  imports: [NgIf, MeetingEntranceComponent, MeetingRoomComponent, MeetingExitComponent],
   templateUrl: './meeting-container.component.html',
   standalone: true,
   styleUrl: './meeting-container.component.css'
@@ -29,36 +31,48 @@ import {animate, style, transition, trigger} from '@angular/animations';
 
 export class MeetingContainerComponent implements OnDestroy {
   meetingId: string = null;
-  currentView: 'MEETING_ENTRANCE' | 'MEETING_ROOM' = 'MEETING_ENTRANCE';
+  subscriptions: Subscription[] = [];
+  currentView: 'MEETING_ENTRANCE' | 'MEETING_ROOM' | 'MEETING_EXIT' = 'MEETING_ENTRANCE';
 
   constructor(
-    private router: Router,
     private tokenService: AgoraTokenService,
     protected rtcService: AgoraRtcService,
     protected rtmService: AgoraRtmService
-  ) {}
+  ) {
+  }
 
-  // Called by the MeetingEntranceComponent when 'Join' is clicked
-  async onEntranceJoinClicked(meetingId: string) {
+  async onEntranceJoin(meetingId: string) {
     this.meetingId = meetingId;
 
     // Generating RTC token..
-    const { rtcToken } = await this.tokenService.getRtcToken(meetingId);
+    const { rtcToken } = await this.tokenService.getRtcToken(this.meetingId);
     // Generating RTM token...
-    const { rtmToken } = await this.tokenService.getRtmToken(meetingId);
+    const { rtmToken } = await this.tokenService.getRtmToken(this.meetingId);
 
     await this.rtcService.join(this.meetingId, rtcToken);
     await this.rtmService.join(this.meetingId, rtmToken);
 
+    this.subscriptions.push(
+      this.rtmService.tokenExpired$.subscribe(async () => {
+        console.warn('RTM: RTM token expired');
+        // Renew the token...
+      }),
+      this.rtmService.privilegeTokenWillExpire$.subscribe(async () => {
+        console.warn('RTM: RTM privilege token will expire');
+        // Renew the token...
+      })
+    );
+
     this.currentView = 'MEETING_ROOM';
   }
 
-  onEntranceBackClicked() {
-    this.router.navigateByUrl('/home');
+  onMeetingLeave() {
+    this.clean();
+    this.currentView = 'MEETING_EXIT';
   }
 
-  onMeetingLeaveClicked() {
-    this.router.navigateByUrl('/meetings');
+  onExitRejoin() {
+    this.currentView = 'MEETING_ENTRANCE';
   }
 
   clean() {
@@ -66,6 +80,8 @@ export class MeetingContainerComponent implements OnDestroy {
       this.rtcService.leave();
       this.rtmService.leave();
     }
+    this.meetingId = null;
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   ngOnDestroy() {

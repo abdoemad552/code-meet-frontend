@@ -4,7 +4,7 @@ import AgoraRTC, {
   IAgoraRTCRemoteUser,
   ILocalAudioTrack, ILocalVideoTrack
 } from 'agora-rtc-sdk-ng';
-import {Subject} from 'rxjs';
+import {BehaviorSubject, Subject} from 'rxjs';
 import {AGORA_APP_ID} from '../environment';
 
 @Injectable({
@@ -14,8 +14,8 @@ export class AgoraRtcService {
 
   private client: IAgoraRTCClient;
   private remoteUsers: { [uid: number]: IAgoraRTCRemoteUser } = {};
-  localAudioTrack: ILocalAudioTrack;
-  localVideoTrack: ILocalVideoTrack;
+  private localAudioTrack: ILocalAudioTrack;
+  private localVideoTrack: ILocalVideoTrack;
   isMicMuted: boolean = true;
   isCamEnabled: boolean = false;
 
@@ -23,28 +23,50 @@ export class AgoraRtcService {
   volumeIndicator$ = new Subject<{ level: number, uid: any }[]>();
   userPublished$ = new Subject<{ user: IAgoraRTCRemoteUser, mediaType: any }>();
   userUnpublished$ = new Subject<{ user: IAgoraRTCRemoteUser, mediaType: any }>();
+  camObtained$ = new BehaviorSubject<boolean>(false);
   ///////////////////////////////////////////
 
   constructor() {
     this.client = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp9' });
   }
 
+  get audioTrack() {
+    return this.localAudioTrack;
+  }
+
+  get videoTrack() {
+    return this.localVideoTrack;
+  }
+
   async join(channelName: string, token: string) {
-    this.initEventListeners();
     const uid = JSON.parse(sessionStorage.getItem("userInfo")).userId;
     await this.client.join(AGORA_APP_ID, channelName, token, uid);
 
+    if (this.localAudioTrack) {
+      await this.client.publish([this.localAudioTrack]);
+    }
+    if (this.localVideoTrack) {
+      try {
+        await this.client.publish([this.localVideoTrack]);
+      } catch (error) {
+        if (error.code !== 'TRACK_IS_DISABLED') {
+          console.log(error);
+        }
+      }
+    }
+  }
+
+  async createMicrophoneAndVideoTracks() {
     try {
       this.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
       await this.localAudioTrack.setMuted(this.isMicMuted);
-      await this.client.publish([this.localAudioTrack]);
     } catch(error) {
       console.log('RTC: Failed to obtain the microphone');
     }
 
     try {
       this.localVideoTrack = await AgoraRTC.createCameraVideoTrack();
-      await this.client.publish([this.localVideoTrack]);
+      this.camObtained$.next(true);
       await this.localVideoTrack.setEnabled(this.isCamEnabled);
     } catch(error) {
       console.log('RTC: Failed to obtain the camera');
@@ -96,9 +118,13 @@ export class AgoraRtcService {
     return !!this.localVideoTrack;
   }
 
-  private initEventListeners() {
+  initEventListeners() {
     this.client.on('user-joined', async (user) => {
       this.remoteUsers[user.uid] = user;
+    });
+
+    this.client.on('user-left', async (user) => {
+      delete this.remoteUsers[user.uid];
     });
 
     this.client.on('user-published', async (user, mediaType) => {
@@ -129,10 +155,6 @@ export class AgoraRtcService {
       }
 
       this.volumeIndicator$.next([{ level: 0, uid: user.uid }]);
-    });
-
-    this.client.on('user-left', async (user) => {
-      delete this.remoteUsers[user.uid];
     });
 
     (AgoraRTC as any).setParameter('AUDIO_VOLUME_INDICATION_INTERVAL', 200);

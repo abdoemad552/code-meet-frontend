@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {NgIf} from '@angular/common';
+import {NgClass, NgIf} from '@angular/common';
+import {AgoraRtcService} from '../../../../services/agora-rtc.service';
 
 @Component({
   selector: 'app-header',
@@ -11,26 +12,17 @@ import {NgIf} from '@angular/common';
   styleUrl: './meeting-header.component.css'
 })
 export class MeetingHeaderComponent {
-  @Input() isMicMuted: boolean;
-  @Input() isCamEnabled: boolean;
-  @Input() isMicObtained: boolean;
-  @Input() isCamObtained: boolean;
-  @Output() toggleMicMuted = new EventEmitter<void>();
-  @Output() toggleCamEnabled = new EventEmitter<void>();
-  @Output() meetingLeaveClicked = new EventEmitter<void>();
+  @Output() leave = new EventEmitter<void>();
   @Output() toggleChatSidebar = new EventEmitter<void>();
   @Output() toggleParticipantsSidebar = new EventEmitter<void>();
 
-  onToggleMicMuted() {
-    this.toggleMicMuted.emit();
+  constructor(
+    protected rtc: AgoraRtcService
+  ) {
   }
 
-  onToggleCamEnabled() {
-    this.toggleCamEnabled.emit();
-  }
-
-  onMeetingLeaveClicked() {
-    this.meetingLeaveClicked.emit();
+  onLeave() {
+    this.leave.emit();
   }
 
   onToggleChatSidebar() {

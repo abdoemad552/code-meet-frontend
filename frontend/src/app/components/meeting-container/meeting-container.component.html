@@ -1,8 +1,8 @@
 <ng-container *ngIf="currentView === 'MEETING_ENTRANCE'">
   <div [@fadeInOut]>
     <app-meeting-entrance
-      (joinClicked)="onEntranceJoinClicked($event)"
-      (backClicked)="onEntranceBackClicked()">
+      [meetingId]="this.meetingId"
+      (join)="onEntranceJoin($event)">
     </app-meeting-entrance>
   </div>
 </ng-container>
@@ -10,8 +10,16 @@
 <ng-container *ngIf="currentView === 'MEETING_ROOM'">
   <div [@fadeInOut]>
     <app-meeting-room
-      [meetingId]="meetingId"
-      (meetingLeaveClicked)="onMeetingLeaveClicked()">
+      [meetingId]="this.meetingId"
+      (leave)="onMeetingLeave()">
     </app-meeting-room>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="currentView === 'MEETING_EXIT'">
+  <div [@fadeInOut]>
+    <app-meeting-exit
+      (rejoin)="onExitRejoin()">
+    </app-meeting-exit>
   </div>
 </ng-container>
