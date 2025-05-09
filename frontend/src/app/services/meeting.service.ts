@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { MeetingResponse } from "../models/meeting/meeting-response.dto";
-import { ScheduledMeeting } from "../models/meeting/scheduled-meeting.dto";
+import { ScheduleMeetingRequest } from "../models/meeting/schedule-meeting-request.dto";
 import { InstantMeetingRequest } from "../models/meeting/instant-meeting-request.dto";
 import { ParticipantRequest } from "../models/meeting/participant-request.dto";
 import {ParticipantInfo} from '../models/meeting/participant-info.dto';
@@ -21,7 +21,7 @@ export class MeetingService {
     return this.http.post<ParticipantInfo>(`${this.url}/join`, participantRequest);
   }
 
-  scheduleMeeting(scheduleMeetingRequest: ScheduledMeeting): Observable<MeetingResponse> {
+  scheduleMeeting(scheduleMeetingRequest: ScheduleMeetingRequest): Observable<MeetingResponse> {
     return this.http.post<MeetingResponse>(
       `${this.url}/schedule`, scheduleMeetingRequest);
   }

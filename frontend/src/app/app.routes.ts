@@ -16,6 +16,7 @@ import {FriendRequestsComponent} from './components/friends/friend-requests/frie
 import {NotificationsComponent} from './components/notifications/notifications.component';
 import {AuthGuard} from './services/guards/auth.guard';
 import {MeetingContainerComponent} from './components/meeting-container/meeting-container.component';
+import {MeetingCreationComponent} from './components/meeting-container/meeting-creation/meeting-creation.component';
 
 export const routes: Routes = [
   // Public Routes
@@ -110,12 +111,13 @@ export const routes: Routes = [
       },
     ]
   },
-  {path: 'meeting/:id', component: MeetingContainerComponent},
-
+  {
+    path: 'meeting/:id',
+    component: MeetingContainerComponent
+  },
   {
     path: 'meeting',
-    redirectTo: '404',
-    pathMatch: 'full'
+    component: MeetingCreationComponent
   },
   // Fallback route for undefined paths
   {
