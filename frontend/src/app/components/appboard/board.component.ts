@@ -4,7 +4,6 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import {NgClass} from '@angular/common';
 import {RouterOutlet, Router} from '@angular/router';
 import {BoardDataService} from '../../services/states/board-data.service';
-import {NotificationsService} from '../../services/notifications.service';
 
 @Component({
   selector: 'app-board',
@@ -19,8 +18,7 @@ export class BoardComponent {
 
   constructor(
     private router: Router,
-    private dataService: BoardDataService,
-    private notificationService: NotificationsService
+    private dataService: BoardDataService
   ) {}
 
   ngOnInit() {

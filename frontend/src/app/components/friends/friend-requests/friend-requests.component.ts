@@ -2,36 +2,83 @@ import {Component, EventEmitter, Output} from '@angular/core';
 import {FriendCardComponent} from '../friend-card/friend-card.component';
 import {FriendshipInfoResponse} from '../../../models/friendship/friendship-info-response.dto';
 import {Router} from '@angular/router';
+import {FriendshipService} from '../../../services/friendship.service';
+import {UserInfoResponse} from '../../../models/user/user-info-response.dto';
+import {NgForOf, NgIf} from '@angular/common';
+import {HttpStatusCode} from '@angular/common/http';
 
 @Component({
   selector: 'app-friend-requests',
   standalone: true,
   imports: [
-    FriendCardComponent
+    FriendCardComponent,
+    NgForOf,
+    NgIf
   ],
   templateUrl: './friend-requests.component.html',
   styleUrl: './friend-requests.component.css'
 })
 export class FriendRequestsComponent {
-  requests! : boolean;
+  requests: FriendshipInfoResponse[] = [];
 
-  @Output() requestsState = new EventEmitter<boolean>();
+  @Output() hideRequests = new EventEmitter<void>();
+  @Output() friendshipAccepted = new EventEmitter<void>();
 
-  testFriend: FriendshipInfoResponse = {
-    friendshipId: 1,
-    friendFirstName: 'Ahmed',
-    friendLastName: 'Mohamed',
-    friendUserName: 'ahMo214',
-    friendProfilePictureUrl: 'https://placehold.co/65'
-  };
-
-  constructor(private router : Router) {
+  constructor(
+    private router: Router,
+    private friendshipService: FriendshipService
+  ) {
   }
 
-  hideRequests() {
+  ngOnInit(): void {
+    const userInfo: UserInfoResponse =
+      JSON.parse(sessionStorage.getItem("userInfo"));
+    this.getRequests(userInfo.userId);
+  }
+
+  getRequests(userId: number) {
+    this.friendshipService.getAllPendingReceivedFriendships(userId)
+      .subscribe({
+        next: requests => {
+          this.requests = requests;
+          console.log(requests);
+        },
+        error: err => console.log(err)
+      });
+  }
+
+  onHideRequests() {
     this.router.navigateByUrl('/friends')
+      .then(() => this.hideRequests.emit())
       .catch(reason => console.log(reason));
-    this.requests = false;
-    this.requestsState.emit(this.requests);
+  }
+
+  onFriendshipAccepted(friendshipId: number) {
+    this.friendshipService.acceptFriendship(friendshipId)
+      .subscribe({
+        next: (response) => {
+          if (response.status == HttpStatusCode.NoContent) {
+            this.requests =
+              this.requests.filter(r => r.friendshipId != friendshipId);
+            this.friendshipAccepted.emit();
+          }
+        }
+      });
+  }
+
+  onFriendshipCanceled(friendshipId: number) {
+    this.friendshipService.cancelFriendship(friendshipId)
+      .subscribe({
+        next: response => {
+          console.log(response);
+          if (response.status == HttpStatusCode.NoContent) {
+            this.requests =
+              this.requests.filter(r => r.friendshipId != friendshipId);
+          }
+        },
+        error: response => {
+          console.log(response);
+        }
+      });
   }
 }

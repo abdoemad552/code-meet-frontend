@@ -1,0 +1,3 @@
+<div class="notification-box" *ngIf="notification" [class.visible]="visible" (click)="handleClick()">
+  You have a new notification: {{ notification.type }}
+</div>

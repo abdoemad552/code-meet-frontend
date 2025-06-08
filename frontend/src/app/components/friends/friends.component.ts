@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import {FriendCardComponent} from './friend-card/friend-card.component';
 import { FriendshipService } from '../../services/friendship.service';
 import { FriendshipInfoResponse } from '../../models/friendship/friendship-info-response.dto';
-import {RouterLink} from '@angular/router';
+import {Router} from '@angular/router';
 import {FriendRequestsComponent} from './friend-requests/friend-requests.component';
-import {NgIf} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
 import {UserInfoResponse} from '../../models/user/user-info-response.dto';
 
 @Component({
@@ -12,44 +12,58 @@ import {UserInfoResponse} from '../../models/user/user-info-response.dto';
   standalone: true,
   imports: [
     FriendCardComponent,
-    RouterLink,
     FriendRequestsComponent,
-    NgIf
+    NgIf,
+    NgForOf
   ],
   templateUrl: './friends.component.html',
   styleUrl: './friends.component.css'
 })
 export class FriendsComponent {
-  friends: FriendshipInfoResponse[] = [];
-  RequestsShown!: boolean;
-  requestsExists!: boolean;
+  friendships: FriendshipInfoResponse[] = [];
+  requestsShown: boolean;
 
-  constructor(private friendshipService: FriendshipService) {
+  constructor(
+    private router: Router,
+    private friendshipService: FriendshipService
+  ) {
   }
 
   ngOnInit(): void {
-    const userInfo: UserInfoResponse =
-      JSON.parse(sessionStorage.getItem("userInfo")!);
-    this.getFriends(userInfo.userId);
-    this.requestsExists = true; // will be true if there are friend requests.
+    this.getFriends();
   }
 
-  getFriends(userId: number): void {
-    this.friendshipService.getAllFriendships(userId)
+  getFriends() {
+    const userInfo: UserInfoResponse =
+      JSON.parse(sessionStorage.getItem("userInfo"));
+    this.friendshipService.getAllAcceptedFriendships(userInfo.userId)
       .subscribe({
-        next: friends => {
-          this.friends = friends;
-          console.log(friends);
+        next: friendships => {
+          this.friendships = friendships;
+          console.log(friendships);
         },
         error: err => console.log(err)
       });
   }
 
   showRequests() : void {
-    this.RequestsShown = true;
+    this.requestsShown = true;
+    this.router.navigateByUrl('/friends/requests');
   }
 
   hideRequests() : void {
-    this.RequestsShown = false;
+    this.requestsShown = false;
+  }
+
+  onUnfriend(friendshipId: number) {
+    this.friendshipService.cancelFriendship(friendshipId)
+      .subscribe({
+        next: response => {
+          this.friendships = this.friendships.filter(f => f.friendshipId != friendshipId);
+        },
+        error: response => {
+          // Handle the error...
+        }
+      });
   }
 }

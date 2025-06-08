@@ -1,4 +1,4 @@
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpResponse} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {FriendshipRequest} from "../models/friendship/friendship-request.dto";
 import {Observable} from "rxjs";
@@ -30,15 +30,15 @@ export class FriendshipService {
     return this.http.get<FriendshipInfoResponse[]>(`${this.url}/pending/${userId}/received`)
   }
 
-  askFriendshipRequest(friendshipRequest: FriendshipRequest): Observable<number> {
+  requestFriendship(friendshipRequest: FriendshipRequest): Observable<number> {
     return this.http.post<number>(`${this.url}/request`, friendshipRequest);
   }
 
-  cancelFriendship(friendshipId: number): Observable<boolean> {
-    return this.http.delete<boolean>(`${this.http}/cancel/${friendshipId}`)
+  cancelFriendship(friendshipId: number): Observable<HttpResponse<void>> {
+    return this.http.delete<void>(`${this.url}/cancel/${friendshipId}`, { observe: 'response' });
   }
 
-  acceptFriendshipRequest(friendshipId: number): Observable<boolean> {
-    return this.http.patch<boolean>(`${this.url}/accept/${friendshipId}`, null);
+  acceptFriendship(friendshipId: number): Observable<HttpResponse<void>> {
+    return this.http.patch<void>(`${this.url}/accept/${friendshipId}`, null, { observe: 'response' });
   }
 }

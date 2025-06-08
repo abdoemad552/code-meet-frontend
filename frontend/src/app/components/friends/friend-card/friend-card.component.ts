@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {NgClass, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import { FriendshipInfoResponse } from '../../../models/friendship/friendship-info-response.dto';
@@ -7,14 +7,22 @@ import { FriendshipInfoResponse } from '../../../models/friendship/friendship-in
   selector: 'app-friend-card',
   standalone: true,
   imports: [
-    RouterLink,
-    NgIf,
-    NgClass
+    NgIf
   ],
   templateUrl: './friend-card.component.html',
   styleUrl: './friend-card.component.css'
 })
 export class FriendCardComponent {
-  @Input() friend!: FriendshipInfoResponse;
-  @Input() isFriendRequest!: boolean;
+  @Input() friendship: FriendshipInfoResponse;
+  @Input() isFriendRequest: boolean;
+  @Output() friendshipAccepted = new EventEmitter<number>();
+  @Output() friendshipCanceled = new EventEmitter<number>();
+
+  onFriendshipAccepted() {
+    this.friendshipAccepted.emit(this.friendship.friendshipId);
+  }
+
+  onFriendshipCanceled() {
+    this.friendshipCanceled.emit(this.friendship.friendshipId);
+  }
 }
