@@ -1,3 +1,56 @@
-<div class="notification-box" *ngIf="notification" [class.visible]="visible" (click)="handleClick()">
-  You have a new notification: {{ notification.type }}
+<!-- Fixed container for all toasts -->
+<div class="fixed bottom-4 right-4 z-50 flex flex-col w-96">
+  <div *ngIf="notifications.length > 0" class="flex justify-end mb-2">
+    <button
+      (click)="clearAll()"
+      class="text-blue-600 bg-white hover:bg-gray-100 border-2 border-blue-600 text-sm cursor-pointer font-medium px-3 py-1 rounded-full shadow-sm flex items-center">
+      Clear All
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="flex flex-col space-y-4 max-h-[80vh] overflow-y-auto">
+    <div
+      *ngFor="let notification of notifications; let i = index"
+      class="bg-blue-600 text-white p-4 rounded-lg shadow-md flex items-start cursor-pointer group"
+      (click)="onClick(notification)">
+
+      <!-- Bell Icon (aligned with first line) -->
+      <div class="flex-shrink-0 h-5 mt-0.5 mr-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"/>
+        </svg>
+      </div>
+
+      <!-- Main Content -->
+      <div class="flex-1 min-w-0">
+        <!-- Top Row (header and time) -->
+        <div class="flex items-baseline justify-between">
+          <p class="font-semibold text-white text-base leading-tight">
+            {{ getNotificationHeader(notification) }}
+          </p>
+          <div class="flex items-center">
+          <span class="text-xs text-white/70 whitespace-nowrap ml-2">
+            {{ notification.sentAt }}
+          </span>
+            <!-- Close Button (aligned with top row) -->
+            <button
+              (click)="$event.stopPropagation(); removeNotification(i)"
+              class="text-white hover:bg-blue-800 ml-2 cursor-pointer rounded-full px-1 py-1">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Notification Text -->
+        <p class="text-sm text-white mt-1 group-hover:whitespace-normal group-hover:overflow-visible">
+          {{ getNotificationText(notification) }}
+        </p>
+      </div>
+    </div>
+  </div>
 </div>

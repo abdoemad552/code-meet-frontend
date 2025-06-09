@@ -6,4 +6,5 @@ export interface NotificationInfo {
   };
   receiverId: number;
   type: NotificationType;
+  sentAt?: string;
 }

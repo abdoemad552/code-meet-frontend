@@ -21,10 +21,7 @@ export class NotificationService {
           const topic = `/user/${userId}/notifications`;
           wsService.subscribe(topic)
             .subscribe({
-              next: message => {
-                const notification: NotificationInfo = message.body;
-                this.notification.next(notification);
-              },
+              next: message => this.notification.next(JSON.parse(message.body)),
               error: error => console.log(error)
             });
         } else {
