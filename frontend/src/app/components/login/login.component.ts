@@ -3,16 +3,19 @@ import {RouterLink, RouterLinkActive} from '@angular/router';
 import {AuthenticationService} from '../../services/authentication.service';
 import {FormsModule} from '@angular/forms';
 import {UserInfoResponse} from '../../models/user/user-info-response.dto';
+import {LoginRequest} from '../../models/authentication/login-request.dto';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-authentication',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, FormsModule],
+  imports: [RouterLink, RouterLinkActive, FormsModule, NgIf],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  loginRequest: any = {};
+  loginRequest: LoginRequest = { username: '', password: '' };
+  showPassword: boolean = false;
 
   constructor(private authService: AuthenticationService) {
   }
@@ -27,5 +30,9 @@ export class LoginComponent {
         },
         error: err => { console.log(err); }
       });
+  }
+
+  toggleShowPassword() {
+    this.showPassword = !this.showPassword;
   }
 }
