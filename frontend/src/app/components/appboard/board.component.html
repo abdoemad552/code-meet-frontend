@@ -1,9 +1,7 @@
 <app-header></app-header>
-
 <div class="flex">
-<app-sidebar [ngClass]="{'w-1/5': !isSidebarMinimized, 'w-1/12': isSidebarMinimized}" class="min-w-[90px]"></app-sidebar>
-
-   <div class="bg-white relative h-[88dvh] overflow-y-auto" [ngClass]="{'w-4/5': !isSidebarMinimized, 'w-11/12': isSidebarMinimized, 'p-12': Padding}">
-     <router-outlet></router-outlet>
-   </div>
+  <app-sidebar [ngClass]="{'w-1/5': !isSidebarMinimized, 'w-1/12': isSidebarMinimized}" class="min-w-[90px]"></app-sidebar>
+  <div class="bg-white relative h-[88dvh] overflow-y-auto" [ngClass]="{'w-4/5': !isSidebarMinimized, 'w-11/12': isSidebarMinimized, 'p-12': Padding}">
+   <router-outlet></router-outlet>
+  </div>
 </div>
