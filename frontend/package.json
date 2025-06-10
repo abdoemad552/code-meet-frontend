@@ -32,6 +32,8 @@
     "@stomp/stompjs": "^7.1.0",
     "@types/jasmine": "^5.1.7",
     "@types/sockjs-client": "^1.5.4",
+    "agora-rtc-sdk-ng": "^4.22.0",
+    "agora-rtm-sdk": "^1.5.1",
     "jasmine-core": "^5.6.0",
     "karma": "^6.4.4",
     "karma-chrome-launcher": "^3.2.0",
@@ -39,8 +41,6 @@
     "karma-jasmine": "^5.1.0",
     "karma-jasmine-html-reporter": "^2.1.0",
     "sockjs-client": "^1.6.1",
-    "typescript": "^5.8.2",
-    "agora-rtc-sdk-ng": "^4.22.0",
-    "agora-rtm-sdk": "^1.5.1"
+    "typescript": "^5.8.2"
   }
 }

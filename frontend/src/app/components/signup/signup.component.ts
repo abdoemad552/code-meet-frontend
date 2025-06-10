@@ -3,16 +3,27 @@ import {RouterLink, RouterLinkActive} from '@angular/router';
 import {AuthenticationService} from '../../services/authentication.service';
 import { UserInfoResponse } from '../../models/user/user-info-response.dto';
 import {FormsModule} from '@angular/forms';
+import {SignupRequest} from '../../models/authentication/signup-request.dto';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, FormsModule],
+  imports: [RouterLink, RouterLinkActive, FormsModule, NgIf],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
 })
 export class SignupComponent {
-  signupRequest: any = {};
+  signupRequest: SignupRequest = {
+    firstName: '',
+    lastName: '',
+    username: '',
+    email: '',
+    password: '',
+    phoneNumber: ''
+  };
+  showPassword: boolean = false;
+  selectedCountryCode: string = '+20';
 
   constructor(private authService: AuthenticationService) {
   }
@@ -27,5 +38,9 @@ export class SignupComponent {
         },
         error: err => { console.log(err); }
       });
+  }
+
+  toggleShowPassword() {
+    this.showPassword = !this.showPassword;
   }
 }
