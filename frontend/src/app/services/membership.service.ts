@@ -16,11 +16,11 @@ export class MembershipService {
   constructor(private http: HttpClient) {
   }
 
-  getAllUsersOfRoom(roomId: number): Observable<UserInfoResponse[]> {
-    return this.http.get<UserInfoResponse[]>(`${this.url}/room/${roomId}/members`);
+  getAllMembershipsByRoomId(roomId: number): Observable<MembershipInfoResponse[]> {
+    return this.http.get<MembershipInfoResponse[]>(`${this.url}/room/${roomId}/memberships`);
   }
 
-  getAllRoomsOfUser(userId: number): Observable<RoomInfoResponse[]> {
+  getAllRoomsByUserId(userId: number): Observable<RoomInfoResponse[]> {
     return this.http.get<RoomInfoResponse[]>(`${this.url}/user/${userId}/rooms`);
   }
 

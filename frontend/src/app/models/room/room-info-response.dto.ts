@@ -1,8 +1,10 @@
-export interface RoomInfoResponse{
+import {UserInfoResponse} from '../user/user-info-response.dto';
+
+export interface RoomInfoResponse {
   roomId: number;
   roomName: string;
   roomDescription: string;
-  creatorId: number;
+  creator: UserInfoResponse;
   createdAt: string;
   roomPictureUrl: string;
 }

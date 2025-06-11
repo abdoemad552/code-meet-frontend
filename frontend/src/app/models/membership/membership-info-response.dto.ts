@@ -1,6 +1,11 @@
 import { MembershipStatus } from "../enums/MembershipStatus.enum";
+import {UserInfoResponse} from '../user/user-info-response.dto';
+import {RoomInfoResponse} from '../room/room-info-response.dto';
 
-export interface MembershipInfoResponse{
+export interface MembershipInfoResponse {
   membershipId: number,
-  status: MembershipStatus
+  member: UserInfoResponse,
+  room: RoomInfoResponse,
+  status: MembershipStatus,
+  joinedAt: string
 }

@@ -37,7 +37,7 @@ export class RoomsComponent {
   }
 
   getAllRoomsOfUser(userId: number): void {
-    this.membershipService.getAllRoomsOfUser(userId)
+    this.membershipService.getAllRoomsByUserId(userId)
       .subscribe({
         next: rooms => {
           console.log(rooms);

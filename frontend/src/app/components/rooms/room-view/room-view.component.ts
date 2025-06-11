@@ -3,49 +3,71 @@ import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {RoomService} from '../../../services/room.service';
 import {RoomInfoResponse} from '../../../models/room/room-info-response.dto';
 import {UserInfoResponse} from '../../../models/user/user-info-response.dto';
-import {UserService} from '../../../services/user.service';
-import {switchMap} from 'rxjs';
 import {MembershipService} from '../../../services/membership.service';
 import {WebSocketService} from '../../../services/websocket.service';
-import {NgIf} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
+import {MemberCardComponent} from './member-card/member-card.component';
+import {MembershipInfoResponse} from '../../../models/membership/membership-info-response.dto';
+import {MembershipStatus} from '../../../models/enums/MembershipStatus.enum';
 
 @Component({
   selector: 'app-room-view',
   standalone: true,
   imports: [
     RouterLink,
-    NgIf
+    NgIf,
+    NgForOf,
+    MemberCardComponent
   ],
   templateUrl: './room-view.component.html',
   styleUrl: './room-view.component.css'
 })
 export class RoomViewComponent implements OnInit {
   room: RoomInfoResponse;
-  creator: UserInfoResponse;
+  memberships: MembershipInfoResponse[];
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private roomService: RoomService,
-    private userService: UserService,
     private membershipService: MembershipService,
     private websocketService: WebSocketService
   ) {
   }
 
+  private getRoom(roomId: number) {
+    this.roomService.getRoomById(roomId)
+      .subscribe({
+        next: room => {
+          setTimeout(() => {
+            console.log(room);
+            this.room = room;
+          }, 500);
+        },
+        error: err => console.error(err)
+      });
+  }
+
+  private getMemberships(roomId: number) {
+    this.membershipService.getAllMembershipsByRoomId(roomId)
+      .subscribe({
+        next: memberships => {
+          setTimeout(() => {
+            console.log(memberships);
+            this.memberships = memberships
+          }, 500);
+        },
+        error: err => console.error(err)
+      });
+  }
+
   ngOnInit() {
-    this.route.paramMap.pipe(
-      switchMap(params => {
+    this.route.paramMap.subscribe({
+      next: params => {
         const roomId = Number(params.get('id'));
-        return this.roomService.getRoomById(roomId).pipe(
-          switchMap(room => {
-            setTimeout(() => this.room = room, 500); // Update room first
-            return this.userService.getUserById(room.creatorId);
-          })
-        );
-      })
-    ).subscribe({
-      next: creator => setTimeout(() => this.creator = creator, 500),
+        this.getRoom(roomId);
+        this.getMemberships(roomId);
+      },
       error: err => console.error(err)
     });
   }

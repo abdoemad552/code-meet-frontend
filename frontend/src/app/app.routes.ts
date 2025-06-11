@@ -56,15 +56,15 @@ export const routes: Routes = [
       {
         path: 'notifications',
         component: NotificationsComponent,
-        title: 'Your notifications'
+        title: 'Notifications'
       },
       {
         path: 'profile',
         component: ProfileComponent,
-        title: 'My Profile',
+        title: 'Profile',
         children: [
           {
-            path: 'edit',
+            path: 'Edit profile',
             component: ProfileEditComponent
           }
         ]
@@ -76,12 +76,12 @@ export const routes: Routes = [
       {
         path: 'meetings',
         component: MeetingsComponent,
-        title: 'My Meetings'
+        title: 'Meetings'
       },
       {
         path: 'rooms',
         component: RoomsComponent,
-        title: 'My Rooms'
+        title: 'Rooms'
       },
       {
         path: 'room/:id',
@@ -90,7 +90,7 @@ export const routes: Routes = [
       {
         path: 'friends',
         component: FriendsComponent,
-        title: 'My Friends',
+        title: 'Friends',
         children: [
           {
             path: 'requests',

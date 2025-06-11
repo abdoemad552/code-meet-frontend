@@ -31,7 +31,9 @@ export class WebSocketService {
   }
 
   connect() {
-    this.stompClient.activate();
+    if (!!sessionStorage.getItem("userInfo")) {
+      this.stompClient.activate();
+    }
   }
 
   disconnect() {

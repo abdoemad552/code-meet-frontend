@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {ToastNotificationComponent} from './components/toast-notification/toast-notification.component';
+import {WebSocketService} from './services/websocket.service';
 
 @Component({
   selector: 'app-root',
@@ -11,6 +12,13 @@ import {ToastNotificationComponent} from './components/toast-notification/toast-
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
-  title = 'Mediator-Frontend';
+export class AppComponent implements OnInit {
+  title = 'Code Meet';
+
+  constructor(private ws: WebSocketService) {
+  }
+
+  ngOnInit() {
+    this.ws.connect();
+  }
 }
