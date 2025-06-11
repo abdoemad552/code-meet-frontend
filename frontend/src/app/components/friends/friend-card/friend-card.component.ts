@@ -7,7 +7,8 @@ import { FriendshipInfoResponse } from '../../../models/friendship/friendship-in
   selector: 'app-friend-card',
   standalone: true,
   imports: [
-    NgIf
+    NgIf,
+    RouterLink
   ],
   templateUrl: './friend-card.component.html',
   styleUrl: './friend-card.component.css'

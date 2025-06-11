@@ -21,7 +21,7 @@ import {UserInfoResponse} from '../../models/user/user-info-response.dto';
 })
 export class FriendsComponent {
   friendships: FriendshipInfoResponse[] = [];
-  requestsShown: boolean;
+  requestsShown: boolean = false;
 
   constructor(
     private router: Router,

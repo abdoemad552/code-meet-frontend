@@ -19,6 +19,7 @@ export class MemberCardComponent {
   @Output() membershipCanceled = new EventEmitter<number>();
 
   onMembershipAccepted() {
+    console.log('Accepted: ', this.membership.membershipId);
     this.membershipAccepted.emit(this.membership.membershipId);
   }
 

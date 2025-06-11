@@ -1,24 +1,25 @@
-<div class="bg-white flex justify-between items-center gap-4 lg:gap-8 border-gray-200 p-4">
-  <div class="flex items-center gap-4">
-    <img
-      [src]="friendship.otherProfilePictureUrl"
-      alt=""
-      class="h-10 w-10 rounded-full object-cover border border-gray-300"/>
+<div class="bg-white flex justify-between items-center gap-4 lg:gap-8 border-gray-200 p-2">
+  <div class="bg-white flex justify-between items-center gap-4 lg:gap-8 border-gray-200 p-2">
+    <!-- Left Side - Member Info -->
+    <div class="flex items-center gap-4 w-full">
+      <!-- Avatar -->
+      <img [src]="friendship.otherProfilePictureUrl"
+           alt="Profile picture"
+           class="h-10 w-10 rounded-full object-cover border border-gray-300">
 
-    <!-- Name and username aligned vertically center -->
-    <div class="flex-1">
-      <h4 class="text-base font-semibold text-gray-800 flex items-center gap-2 flex-wrap">
-
+      <!-- Full Name + Admin Tag -->
+      <div class="flex items-center gap-2">
         <!-- Full Name -->
-        <span>
-          {{ friendship.otherFirstName }} {{ friendship.otherLastName }}
-        </span>
-
+        <span class="text-base font-semibold text-gray-800">
+            {{ friendship.otherFirstName }} {{ friendship.otherLastName }}
+          </span>
         <!-- Username -->
-        <span class="text-xs text-indigo-700 font-medium">
-          ({{ friendship.otherUsername }})
-        </span>
-      </h4>
+        <a
+          [routerLink]="['/profile', friendship.otherUsername]"
+          class="text-xs text-indigo-700 bg-indigo-50 rounded-full px-2 py-1 font-medium hover:underline block">
+          &#64;{{ friendship.otherUsername }}
+        </a>
+      </div>
     </div>
   </div>
 

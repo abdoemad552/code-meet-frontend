@@ -31,9 +31,7 @@ export class FriendRequestsComponent {
   }
 
   ngOnInit(): void {
-    const userInfo: UserInfoResponse =
-      JSON.parse(sessionStorage.getItem("userInfo"));
-    this.getRequests(userInfo.userId);
+    this.getRequests();
   }
 
   @HostListener('document:keydown.escape', ['$event'])
@@ -42,8 +40,10 @@ export class FriendRequestsComponent {
     event.preventDefault();
   }
 
-  getRequests(userId: number) {
-    this.friendshipService.getAllPendingReceivedFriendships(userId)
+  getRequests() {
+    const userInfo: UserInfoResponse =
+      JSON.parse(sessionStorage.getItem("userInfo"));
+    this.friendshipService.getAllPendingReceivedFriendships(userInfo.userId)
       .subscribe({
         next: requests => {
           this.requests = requests;

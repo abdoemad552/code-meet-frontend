@@ -8,7 +8,7 @@ import {WebSocketService} from '../../../services/websocket.service';
 import {NgForOf, NgIf} from '@angular/common';
 import {MemberCardComponent} from './member-card/member-card.component';
 import {MembershipInfoResponse} from '../../../models/membership/membership-info-response.dto';
-import {MembershipStatus} from '../../../models/enums/MembershipStatus.enum';
+import {MembershipRequestsComponent} from './membership-requests/membership-requests.component';
 
 @Component({
   selector: 'app-room-view',
@@ -17,14 +17,17 @@ import {MembershipStatus} from '../../../models/enums/MembershipStatus.enum';
     RouterLink,
     NgIf,
     NgForOf,
-    MemberCardComponent
+    MemberCardComponent,
+    MembershipRequestsComponent
   ],
   templateUrl: './room-view.component.html',
   styleUrl: './room-view.component.css'
 })
 export class RoomViewComponent implements OnInit {
+  roomId: number;
   room: RoomInfoResponse;
   memberships: MembershipInfoResponse[];
+  requestsShown: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -35,8 +38,8 @@ export class RoomViewComponent implements OnInit {
   ) {
   }
 
-  private getRoom(roomId: number) {
-    this.roomService.getRoomById(roomId)
+  private getRoom() {
+    this.roomService.getRoomById(this.roomId)
       .subscribe({
         next: room => {
           setTimeout(() => {
@@ -48,14 +51,14 @@ export class RoomViewComponent implements OnInit {
       });
   }
 
-  private getMemberships(roomId: number) {
-    this.membershipService.getAllMembershipsByRoomId(roomId)
+  protected getMemberships() {
+    this.membershipService.getAllAcceptedMembershipsByRoomId(this.roomId)
       .subscribe({
         next: memberships => {
           setTimeout(() => {
             console.log(memberships);
             this.memberships = memberships
-          }, 500);
+          }, 4000);
         },
         error: err => console.error(err)
       });
@@ -64,9 +67,9 @@ export class RoomViewComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe({
       next: params => {
-        const roomId = Number(params.get('id'));
-        this.getRoom(roomId);
-        this.getMemberships(roomId);
+        this.roomId = Number(params.get('id'));
+        this.getRoom();
+        this.getMemberships();
       },
       error: err => console.error(err)
     });
@@ -87,5 +90,17 @@ export class RoomViewComponent implements OnInit {
         },
         error: err => console.error(err)
       });
+  }
+
+  showRequests() {
+    this.requestsShown = true;
+  }
+
+  hideRequests() {
+    this.requestsShown = false;
+  }
+
+  onRemove(membershipId: number) {
+    this.membershipService.cancelMembershipById(membershipId);
   }
 }
