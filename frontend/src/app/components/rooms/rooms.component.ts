@@ -1,48 +1,38 @@
 import { Component } from '@angular/core';
-import {RoomcardComponent} from './roomcard/roomcard.component';
-import {ActivatedRoute} from '@angular/router';
-import {RoomviewComponent} from './roomview/roomview.component';
-import {NgIf} from '@angular/common';
+import {RoomCardComponent} from './room-card/room-card.component';
+import {NgForOf, NgIf} from '@angular/common';
 import { RoomInfoResponse } from '../../models/room/room-info-response.dto';
-import { RoomService } from '../../services/room.service';
-import {AddRoomComponent} from './add-room/add-room.component';
+import {CreateRoomComponent} from './create-room/create-room.component';
 import {UserService} from '../../services/user.service';
 import {MembershipService} from '../../services/membership.service';
+import {JoinRoomComponent} from './join-room/join-room.component';
 
 @Component({
   selector: 'app-rooms',
   standalone: true,
   imports: [
-    RoomcardComponent,
-    RoomviewComponent,
     NgIf,
-    AddRoomComponent
+    CreateRoomComponent,
+    RoomCardComponent,
+    NgForOf,
+    JoinRoomComponent
   ],
   templateUrl: './rooms.component.html',
   styleUrl: './rooms.component.css'
 })
 export class RoomsComponent {
-  rooms: RoomInfoResponse[] = [];
+  rooms: RoomInfoResponse[] = null;
 
-  addRoom : boolean = false;
-
-  roomId!: string | null;
-  isRoomView: boolean = false;
+  showJoinRoomModal: boolean = false;
+  showCreateRoomModal: boolean = false;
 
   constructor(
     private userService: UserService,
-    private membershipService: MembershipService,
-    private route: ActivatedRoute,
-    private roomService: RoomService
+    private membershipService: MembershipService
   ) {
   }
 
   ngOnInit() {
-    this.route.paramMap.subscribe(params => {
-      this.roomId = params.get('id'); // Get the 'id' parameter from the URL
-      this.isRoomView = !(!this.roomId); // If no ID, it's the signed-in user's profile
-    });
-
     this.getAllRoomsOfUser(this.userService.userInfo.userId);
   }
 
@@ -50,14 +40,26 @@ export class RoomsComponent {
     this.membershipService.getAllRoomsOfUser(userId)
       .subscribe({
         next: rooms => {
-          this.rooms = rooms;
           console.log(rooms);
+          setTimeout(() => this.rooms = rooms, 500);
         },
         error: err => console.log(err)
       });
   }
 
-  openAddRoom() {
-    this.addRoom = true;
+  onShowCreateRoomModal() {
+    this.showCreateRoomModal = true;
+  }
+
+  onHideCreateRoomModal() {
+    this.showCreateRoomModal = false;
+  }
+
+  onShowJoinRoomModal() {
+    this.showJoinRoomModal = true;
+  }
+
+  onHideJoinRoomModal() {
+    this.showJoinRoomModal = false;
   }
 }

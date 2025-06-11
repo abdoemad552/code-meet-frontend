@@ -17,22 +17,22 @@ export class MembershipService {
   }
 
   getAllUsersOfRoom(roomId: number): Observable<UserInfoResponse[]> {
-    return this.http.get<UserInfoResponse[]>(`${this.url}/room/${roomId}/user/all`);
+    return this.http.get<UserInfoResponse[]>(`${this.url}/room/${roomId}/members`);
   }
 
   getAllRoomsOfUser(userId: number): Observable<RoomInfoResponse[]> {
-    return this.http.get<RoomInfoResponse[]>(`${this.url}/user/${userId}/room/all`);
+    return this.http.get<RoomInfoResponse[]>(`${this.url}/user/${userId}/rooms`);
   }
 
   requestMembership(membershipRequest: MembershipRequest): Observable<MembershipInfoResponse> {
     return this.http.post<MembershipInfoResponse>(`${this.url}/request`, membershipRequest);
   }
 
-  acceptMembership(membershipId: number): Observable<HttpResponse<null>> {
-    return this.http.patch<HttpResponse<null>>(`${this.url}/accept/${membershipId}`, null);
+  acceptMembership(membershipRequest: MembershipRequest): Observable<HttpResponse<void>> {
+    return this.http.patch<HttpResponse<void>>(`${this.url}/accept`, membershipRequest);
   }
 
-  cancelMembership(membershipId: number): Observable<HttpResponse<null>> {
-    return this.http.patch<HttpResponse<null>>(`${this.url}/cancel/${membershipId}`, null);
+  cancelMembership(membershipRequest: MembershipRequest): Observable<HttpResponse<void>> {
+    return this.http.delete<HttpResponse<void>>(`${this.url}/cancel`, { body: membershipRequest });
   }
 }

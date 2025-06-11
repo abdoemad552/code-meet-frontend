@@ -25,7 +25,7 @@ export class ProfileEditComponent {
     lastName: 'Montaser',
     email: 'a@a.com',
     gender: 'Male',
-    profilePicture: 'https://placehold.co/128',
+    profilePictureUrl: 'https://placehold.co/128',
     phoneNumber: '+201013598468',
     dateOfBirth: new Date(2025, 2, 5),
     jobTitle: 'Software Developer',

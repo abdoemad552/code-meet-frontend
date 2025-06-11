@@ -1,11 +1,11 @@
-import {NgClass, NgIf} from '@angular/common';
+import {NgIf} from '@angular/common';
 import { Component } from '@angular/core';
-import {Router, RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
+import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 
 @Component({
   standalone: true,
   selector: 'app-entry',
-  imports: [RouterLink, RouterLinkActive, NgClass, NgIf],
+  imports: [RouterLink, RouterLinkActive, NgIf],
   templateUrl: './entry.component.html',
   styleUrl: './entry.component.css'
 })

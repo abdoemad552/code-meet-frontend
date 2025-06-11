@@ -1,4 +1,4 @@
-export interface MembershipRequest{
-  userId:number,
-  roomId:number
+export interface MembershipRequest {
+  userId: number;
+  roomId: number;
 }

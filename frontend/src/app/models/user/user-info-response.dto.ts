@@ -5,7 +5,7 @@ export interface UserInfoResponse{
   username: string,
   email: string,
   phoneNumber: string,
-  profilePicture?: string,
+  profilePictureUrl?: string,
   dateOfBirth?: Date,
   gender?: string,
   country?: string,

@@ -1,9 +1,8 @@
 export interface RoomInfoResponse{
-
-     roomId:number,
-     roomName:String,
-     roomDescription:String,
-     creatorId:number,
-     createdAt:Date,
-    roomPicture:string
+  roomId: number;
+  roomName: string;
+  roomDescription: string;
+  creatorId: number;
+  createdAt: string;
+  roomPictureUrl: string;
 }

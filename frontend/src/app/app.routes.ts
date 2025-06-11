@@ -17,6 +17,7 @@ import {NotificationsComponent} from './components/notifications/notifications.c
 import {AuthGuard} from './services/guards/auth.guard';
 import {MeetingContainerComponent} from './components/meeting-container/meeting-container.component';
 import {MeetingCreationComponent} from './components/meeting-container/meeting-creation/meeting-creation.component';
+import {RoomViewComponent} from './components/rooms/room-view/room-view.component';
 
 export const routes: Routes = [
   // Public Routes
@@ -84,7 +85,7 @@ export const routes: Routes = [
       },
       {
         path: 'room/:id',
-        component: RoomsComponent
+        component: RoomViewComponent
       },
       {
         path: 'friends',

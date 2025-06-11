@@ -4,7 +4,7 @@
       <div class="z-100">
         <div class="profile-left">
           <div class="h-40 w-40 relative border-4 mx-auto border-white rounded-full overflow-hidden z-100">
-            <img class="object-cover object-center w-40 h-40" [src]="this.userInfo.profilePicture || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'" alt='...'>
+            <img class="object-cover object-center w-40 h-40" [src]="this.userInfo.profilePictureUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'" alt='...'>
           </div>
           <div class="text-center mt-6 ml-3">
             <h2 class="font-semibold text-3xl text-white">{{ this.userInfo.firstName | titlecase}} {{ ' ' }} {{ this.userInfo.lastName | titlecase  }}</h2>

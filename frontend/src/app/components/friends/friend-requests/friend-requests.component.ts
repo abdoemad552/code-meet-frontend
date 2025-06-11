@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, HostListener, Output} from '@angular/core';
 import {FriendCardComponent} from '../friend-card/friend-card.component';
 import {FriendshipInfoResponse} from '../../../models/friendship/friendship-info-response.dto';
 import {Router} from '@angular/router';
@@ -34,6 +34,12 @@ export class FriendRequestsComponent {
     const userInfo: UserInfoResponse =
       JSON.parse(sessionStorage.getItem("userInfo"));
     this.getRequests(userInfo.userId);
+  }
+
+  @HostListener('document:keydown.escape', ['$event'])
+  handleEscapeKey(event: KeyboardEvent) {
+    this.onHideRequests()
+    event.preventDefault();
   }
 
   getRequests(userId: number) {
