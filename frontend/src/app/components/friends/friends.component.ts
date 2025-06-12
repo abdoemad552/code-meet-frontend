@@ -20,7 +20,7 @@ import {UserInfoResponse} from '../../models/user/user-info-response.dto';
   styleUrl: './friends.component.css'
 })
 export class FriendsComponent {
-  friendships: FriendshipInfoResponse[] = [];
+  friendships: FriendshipInfoResponse[] = null;
   requestsShown: boolean = false;
 
   constructor(
@@ -39,8 +39,10 @@ export class FriendsComponent {
     this.friendshipService.getAllAcceptedFriendships(userInfo.userId)
       .subscribe({
         next: friendships => {
-          this.friendships = friendships;
-          console.log(friendships);
+          setTimeout(() => {
+            console.log(friendships);
+            this.friendships = friendships;
+          }, 500);
         },
         error: err => console.log(err)
       });
@@ -59,11 +61,11 @@ export class FriendsComponent {
     this.friendshipService.cancelFriendship(friendshipId)
       .subscribe({
         next: response => {
-          this.friendships = this.friendships.filter(f => f.friendshipId != friendshipId);
+          console.log(response);
+          this.friendships =
+            this.friendships.filter(fs => fs.friendshipId != friendshipId);
         },
-        error: response => {
-          // Handle the error...
-        }
+        error: err => console.log(err)
       });
   }
 }

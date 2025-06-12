@@ -65,10 +65,11 @@ export class FriendRequestsComponent {
         next: (response) => {
           if (response.status == HttpStatusCode.NoContent) {
             this.requests =
-              this.requests.filter(r => r.friendshipId != friendshipId);
+              this.requests.filter(fs => fs.friendshipId != friendshipId);
             this.friendshipAccepted.emit();
           }
-        }
+        },
+        error: err => console.log(err)
       });
   }
 
@@ -79,12 +80,10 @@ export class FriendRequestsComponent {
           console.log(response);
           if (response.status == HttpStatusCode.NoContent) {
             this.requests =
-              this.requests.filter(r => r.friendshipId != friendshipId);
+              this.requests.filter(fs => fs.friendshipId != friendshipId);
           }
         },
-        error: response => {
-          console.log(response);
-        }
+        error: err => console.log(err)
       });
   }
 }

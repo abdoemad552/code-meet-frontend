@@ -1,8 +1,6 @@
 import {NgClass, NgIf, TitleCasePipe} from '@angular/common';
 import { Component, Input } from '@angular/core';
 import {
-  ActivatedRoute,
-  Params,
   RouterLink,
   RouterLinkActive,
   RouterModule,

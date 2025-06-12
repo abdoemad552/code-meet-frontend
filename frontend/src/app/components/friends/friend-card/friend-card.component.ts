@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {NgClass, NgIf} from '@angular/common';
+import {NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import { FriendshipInfoResponse } from '../../../models/friendship/friendship-info-response.dto';
 
