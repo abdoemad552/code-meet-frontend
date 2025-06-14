@@ -45,7 +45,7 @@ export class RoomViewComponent implements OnInit {
           setTimeout(() => {
             console.log(room);
             this.room = room;
-          }, 500);
+          }, 2000);
         },
         error: err => console.error(err)
       });
@@ -57,8 +57,8 @@ export class RoomViewComponent implements OnInit {
         next: memberships => {
           setTimeout(() => {
             console.log(memberships);
-            this.memberships = memberships
-          }, 2000);
+            this.memberships = memberships;
+          }, 4000);
         },
         error: err => console.error(err)
       });

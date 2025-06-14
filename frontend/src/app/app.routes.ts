@@ -59,19 +59,16 @@ export const routes: Routes = [
         title: 'Notifications'
       },
       {
-        path: 'profile',
+        path: 'profile/:username',
         component: ProfileComponent,
         title: 'Profile',
         children: [
           {
-            path: 'Edit profile',
-            component: ProfileEditComponent
+            path: 'edit',
+            component: ProfileEditComponent,
+            title: 'Edit profile'
           }
         ]
-      },
-      {
-        path: 'profile/:userName',
-        component: ProfileComponent
       },
       {
         path: 'meetings',
@@ -90,13 +87,7 @@ export const routes: Routes = [
       {
         path: 'friends',
         component: FriendsComponent,
-        title: 'Friends',
-        children: [
-          {
-            path: 'requests',
-            component: FriendRequestsComponent
-          }
-        ]
+        title: 'Friends'
       },
       {
         path: 'chats',
@@ -110,15 +101,15 @@ export const routes: Routes = [
           }
         ]
       },
+      {
+        path: 'meeting/:id',
+        component: MeetingContainerComponent
+      },
+      {
+        path: 'meeting',
+        component: MeetingCreationComponent
+      }
     ]
-  },
-  {
-    path: 'meeting/:id',
-    component: MeetingContainerComponent
-  },
-  {
-    path: 'meeting',
-    component: MeetingCreationComponent
   },
   // Fallback route for undefined paths
   {

@@ -1,7 +1,6 @@
 import {Component, EventEmitter, HostListener, Output} from '@angular/core';
 import {FriendCardComponent} from '../friend-card/friend-card.component';
 import {FriendshipInfoResponse} from '../../../models/friendship/friendship-info-response.dto';
-import {Router} from '@angular/router';
 import {FriendshipService} from '../../../services/friendship.service';
 import {UserInfoResponse} from '../../../models/user/user-info-response.dto';
 import {NgForOf, NgIf} from '@angular/common';
@@ -24,10 +23,7 @@ export class FriendRequestsComponent {
   @Output() hideRequests = new EventEmitter<void>();
   @Output() friendshipAccepted = new EventEmitter<void>();
 
-  constructor(
-    private router: Router,
-    private friendshipService: FriendshipService
-  ) {
+  constructor(private friendshipService: FriendshipService) {
   }
 
   ngOnInit(): void {
@@ -54,9 +50,7 @@ export class FriendRequestsComponent {
   }
 
   onHideRequests() {
-    this.router.navigateByUrl('/friends')
-      .then(() => this.hideRequests.emit())
-      .catch(reason => console.log(reason));
+    this.hideRequests.emit()
   }
 
   onFriendshipAccepted(friendshipId: number) {

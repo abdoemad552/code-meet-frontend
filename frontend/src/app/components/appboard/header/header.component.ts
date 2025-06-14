@@ -43,7 +43,7 @@ export class HeaderComponent {
     this.dropdownOverlay.nativeElement.classList.add('hidden');
   }
 
-  logout(): void {
-    this.authService.logout();
+  signOut(): void {
+    this.authService.signOut();
   }
 }

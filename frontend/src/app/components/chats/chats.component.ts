@@ -25,7 +25,6 @@ export class ChatsComponent {
   constructor(private dataService: BoardDataService) {}
 
   ngOnInit() {
-    this.dataService.minimizeSidebar();
     this.dataService.removeMainContentPadding();
   }
 

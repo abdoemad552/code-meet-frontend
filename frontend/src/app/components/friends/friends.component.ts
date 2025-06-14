@@ -50,7 +50,6 @@ export class FriendsComponent {
 
   showRequests() : void {
     this.requestsShown = true;
-    this.router.navigateByUrl('/friends/requests');
   }
 
   hideRequests() : void {

@@ -6,10 +6,6 @@ export interface UserInfoResponse{
   email: string,
   phoneNumber: string,
   profilePictureUrl?: string,
-  dateOfBirth?: Date,
   gender?: string,
-  country?: string,
-  city?: string,
   bio?: string,
-  jobTitle?: string,
 }
