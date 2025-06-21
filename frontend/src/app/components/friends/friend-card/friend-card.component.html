@@ -3,9 +3,9 @@
     <!-- Left Side - Member Info -->
     <div class="flex items-center gap-4 w-full">
       <!-- Avatar -->
-      <div *ngIf="friendship.otherProfilePictureUrl; else svgIcon">
+      <div *ngIf="friendship.other.profilePictureUrl; else svgIcon">
         <img
-          [src]="friendship.otherProfilePictureUrl"
+          [src]="friendship.other.profilePictureUrl"
           alt="Room Image"
           class="w-10 h-10 p-2 bg-indigo-50 rounded-full">
       </div>
@@ -21,13 +21,13 @@
       <div class="flex items-center gap-2">
         <!-- Full Name -->
         <span class="text-base font-semibold text-gray-800">
-            {{ friendship.otherFirstName }} {{ friendship.otherLastName }}
+            {{ friendship.other.firstName }} {{ friendship.other.lastName }}
           </span>
         <!-- Username -->
         <a
-          [routerLink]="['/profile', friendship.otherUsername]"
+          [routerLink]="['/profile', friendship.other.username]"
           class="text-xs text-indigo-700 bg-indigo-50 rounded-full px-2 py-1 font-medium hover:underline block">
-          &#64;{{ friendship.otherUsername }}
+          &#64;{{ friendship.other.username }}
         </a>
       </div>
     </div>

@@ -1,4 +1,4 @@
-export interface UserInfoResponse{
+export interface UserInfoResponse {
   userId: number,
   firstName: string,
   lastName: string,
@@ -6,6 +6,6 @@ export interface UserInfoResponse{
   email: string,
   phoneNumber: string,
   profilePictureUrl?: string,
-  gender?: string,
+  gender: string,
   bio?: string,
 }

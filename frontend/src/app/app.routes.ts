@@ -59,6 +59,11 @@ export const routes: Routes = [
         title: 'Notifications'
       },
       {
+        path: 'profile',
+        component: ProfileComponent,
+        title: 'Profile',
+      },
+      {
         path: 'profile/:username',
         component: ProfileComponent,
         title: 'Profile',

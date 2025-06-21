@@ -4,6 +4,7 @@ export interface SignupRequest {
   username: string,
   email: string,
   password: string,
-  confirmPassword?: string
-  phoneNumber: string
+  confirmPassword: string
+  phoneNumber: string,
+  gender: string
 }

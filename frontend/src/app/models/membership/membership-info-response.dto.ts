@@ -1,4 +1,4 @@
-import { MembershipStatus } from "../enums/MembershipStatus.enum";
+import { MembershipStatus } from "../enums/membership-status.enum";
 import {UserInfoResponse} from '../user/user-info-response.dto';
 import {RoomInfoResponse} from '../room/room-info-response.dto';
 

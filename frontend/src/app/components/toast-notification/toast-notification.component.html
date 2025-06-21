@@ -3,7 +3,7 @@
   <div *ngIf="notifications.length > 0" class="flex justify-end mb-2">
     <button
       (click)="clearAll()"
-      class="text-blue-600 bg-white hover:bg-gray-100 border-2 border-blue-600 text-sm cursor-pointer font-medium px-3 py-1 rounded-full shadow-sm flex items-center">
+      class="text-indigo-700 bg-white hover:bg-gray-50 active:bg-gray-100 border-2 border-indigo-700 text-sm cursor-pointer font-medium px-3 py-1 rounded-full shadow-sm flex items-center">
       Clear All
       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -11,10 +11,10 @@
     </button>
   </div>
 
-  <div class="flex flex-col space-y-4 max-h-[80vh] overflow-y-auto">
+  <div class="flex flex-col space-y-1 max-h-[80vh] overflow-y-auto">
     <div
       *ngFor="let notification of notifications; let i = index"
-      class="bg-blue-600 text-white p-4 rounded-lg shadow-md flex items-start cursor-pointer group"
+      class="bg-indigo-700 text-white p-4 rounded-lg shadow-md flex items-start cursor-pointer group hover:scale-98 active:scale-95 transition"
       (click)="onClick(notification)">
 
       <!-- Bell Icon (aligned with first line) -->
@@ -38,7 +38,7 @@
             <!-- Close Button (aligned with top row) -->
             <button
               (click)="$event.stopPropagation(); removeNotification(i)"
-              class="text-white hover:bg-blue-800 ml-2 cursor-pointer rounded-full px-1 py-1">
+              class="text-white hover:bg-indigo-800 ml-2 cursor-pointer rounded-full px-1 py-1">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
               </svg>
@@ -47,9 +47,10 @@
         </div>
 
         <!-- Notification Text -->
-        <p class="text-sm text-white mt-1 group-hover:whitespace-normal group-hover:overflow-visible">
-          {{ getNotificationText(notification) }}
-        </p>
+        <div
+          [innerHTML]="getNotificationText(notification)"
+          class="text-sm text-white mt-1 group-hover:whitespace-normal group-hover:overflow-visible">
+        </div>
       </div>
     </div>
   </div>

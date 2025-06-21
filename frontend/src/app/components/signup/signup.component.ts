@@ -20,7 +20,9 @@ export class SignupComponent {
     username: '',
     email: '',
     password: '',
-    phoneNumber: ''
+    confirmPassword: '',
+    phoneNumber: '',
+    gender: 'MALE'
   };
   showPassword: boolean = false;
   selectedCountryCode: string = '+20';

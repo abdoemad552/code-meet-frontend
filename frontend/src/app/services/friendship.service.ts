@@ -14,6 +14,12 @@ export class FriendshipService {
   constructor(private http: HttpClient) {
   }
 
+  getFriendship(fromId: number, toId: number): Observable<FriendshipInfoResponse> {
+    return this.http.get<any>(`${this.url}`, {
+      params: { fromId: fromId, toId: toId }
+    });
+  }
+
   getAllFriendships(userId: number): Observable<FriendshipInfoResponse[]> {
     return this.http.get<FriendshipInfoResponse[]>(`${this.url}/${userId}`)
   }
@@ -30,15 +36,15 @@ export class FriendshipService {
     return this.http.get<FriendshipInfoResponse[]>(`${this.url}/pending/${userId}/received`)
   }
 
-  requestFriendship(friendshipRequest: FriendshipRequest): Observable<number> {
-    return this.http.post<number>(`${this.url}/request`, friendshipRequest);
+  requestFriendship(friendshipRequest: FriendshipRequest): Observable<FriendshipInfoResponse> {
+    return this.http.post<any>(`${this.url}/request`, friendshipRequest);
   }
 
   cancelFriendship(friendshipId: number): Observable<HttpResponse<void>> {
     return this.http.delete<void>(`${this.url}/cancel/${friendshipId}`, { observe: 'response' });
   }
 
-  acceptFriendship(friendshipId: number): Observable<HttpResponse<void>> {
-    return this.http.patch<void>(`${this.url}/accept/${friendshipId}`, null, { observe: 'response' });
+  acceptFriendship(friendshipRequest: FriendshipRequest): Observable<FriendshipInfoResponse> {
+    return this.http.patch<any>(`${this.url}/accept`, friendshipRequest);
   }
 }

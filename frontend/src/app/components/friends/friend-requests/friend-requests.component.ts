@@ -18,12 +18,14 @@ import {HttpStatusCode} from '@angular/common/http';
   styleUrl: './friend-requests.component.css'
 })
 export class FriendRequestsComponent {
+  owner: UserInfoResponse;
   requests: FriendshipInfoResponse[] = [];
 
   @Output() hideRequests = new EventEmitter<void>();
   @Output() friendshipAccepted = new EventEmitter<void>();
 
   constructor(private friendshipService: FriendshipService) {
+    this.owner = JSON.parse(sessionStorage.getItem("userInfo"));
   }
 
   ngOnInit(): void {
@@ -53,15 +55,15 @@ export class FriendRequestsComponent {
     this.hideRequests.emit()
   }
 
-  onFriendshipAccepted(friendshipId: number) {
-    this.friendshipService.acceptFriendship(friendshipId)
-      .subscribe({
-        next: (response) => {
-          if (response.status == HttpStatusCode.NoContent) {
-            this.requests =
-              this.requests.filter(fs => fs.friendshipId != friendshipId);
-            this.friendshipAccepted.emit();
-          }
+  onFriendshipAccepted(toId: number) {
+    this.friendshipService.acceptFriendship({
+      fromId: this.owner.userId,
+      toId: toId
+    }).subscribe({
+        next: fs => {
+          this.requests = this.requests.filter(
+            fsr => fsr.friendshipId != fs.friendshipId);
+          this.friendshipAccepted.emit();
         },
         error: err => console.log(err)
       });
@@ -73,8 +75,8 @@ export class FriendRequestsComponent {
         next: response => {
           console.log(response);
           if (response.status == HttpStatusCode.NoContent) {
-            this.requests =
-              this.requests.filter(fs => fs.friendshipId != friendshipId);
+            this.requests = this.requests.filter(
+              fs => fs.friendshipId != friendshipId);
           }
         },
         error: err => console.log(err)

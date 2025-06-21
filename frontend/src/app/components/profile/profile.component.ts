@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {NgIf} from '@angular/common';
-import {BoardDataService} from '../../services/states/board-data.service';
+import {NgClass, NgIf} from '@angular/common';
 import {UserInfoResponse} from '../../models/user/user-info-response.dto';
 import {UserService} from '../../services/user.service';
 import {AuthenticationService} from '../../services/authentication.service';
 import {ProfileEditComponent} from './profile-edit/profile-edit.component';
+import {FriendshipService} from '../../services/friendship.service';
+import {FriendshipInfoResponse, noFriendship} from '../../models/friendship/friendship-info-response.dto';
 
 @Component({
   selector: 'app-profile',
@@ -13,45 +14,59 @@ import {ProfileEditComponent} from './profile-edit/profile-edit.component';
   imports: [
     NgIf,
     RouterLink,
-    ProfileEditComponent
+    ProfileEditComponent,
+    NgClass
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent {
   user: UserInfoResponse;
+  owner: UserInfoResponse;
+  friendship: FriendshipInfoResponse;
   isOwner: boolean;
-  areFriends : boolean = false;
   editProfileShown: boolean = false;
-
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private dataService: BoardDataService,
     private userService: UserService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private friendshipService: FriendshipService
   ) {
+    this.owner = JSON.parse(sessionStorage.getItem("userInfo"));
   }
 
   ngOnInit() {
     this.route.paramMap.subscribe({
       next: params => {
         this.user = null;
-        const owner = JSON.parse(sessionStorage.getItem("userInfo"));
         const username = params.get("username");
-        if (username === owner.username) {
+        if (!username || username === this.owner.username) {
+          this.isOwner = true;
           setTimeout(() => {
-            this.isOwner = true;
-            this.user = owner;
+            this.user = this.owner;
           }, 2000);
         } else {
+          this.isOwner = false;
           this.userService.getUserByUsername(username)
             .subscribe({
               next: user => {
                 setTimeout(() => {
-                  this.isOwner = false;
                   this.user = user;
+                  this.friendshipService.getFriendship(this.owner.userId, user.userId)
+                    .subscribe({
+                      next: friendship => {
+                        console.log(friendship);
+                        setTimeout(() => {
+                          this.friendship = friendship;
+                        }, 1000);
+                      },
+                      error: err => {
+                        console.error(err);
+                        this.friendship = noFriendship(user);
+                      }
+                    });
                 }, 2000);
               },
               error: err => console.error(err)
@@ -60,18 +75,6 @@ export class ProfileComponent {
       },
       error: err => console.error(err)
     });
-  }
-
-  ngOnDestroy() {
-    this.dataService.addMainContentPadding();
-  }
-
-  addFriend() {
-    this.areFriends = true;
-  }
-
-  removeFriend() {
-    this.areFriends = false;
   }
 
   showEditProfile() {
@@ -84,5 +87,44 @@ export class ProfileComponent {
 
   signOut() {
     this.authService.signOut();
+  }
+
+  requestFriendship() {
+    this.friendshipService.requestFriendship({
+      fromId: this.owner.userId,
+      toId: this.user.userId
+    }).subscribe({
+      next: friendship => {
+        setTimeout(() => {
+          this.friendship = friendship;
+        }, 2000);
+      },
+      error: err => console.error(err)
+    });
+  }
+
+  acceptFriendship() {
+    this.friendshipService.acceptFriendship({
+      fromId: this.owner.userId,
+      toId: this.user.userId
+    }).subscribe({
+      next: friendship => {
+        setTimeout(() => {
+          this.friendship = friendship;
+        }, 2000);
+      },
+      error: err => console.error(err)
+    });
+  }
+
+  cancelFriendship() {
+    this.friendshipService.cancelFriendship(this.friendship.friendshipId)
+      .subscribe({
+        next: response => {
+          console.log(response);
+          this.friendship = noFriendship(this.user);
+        },
+        error: err => console.error(err)
+      });
   }
 }

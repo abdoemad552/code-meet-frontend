@@ -20,7 +20,7 @@ export class FriendCardComponent {
   @Output() friendshipCanceled = new EventEmitter<number>();
 
   onFriendshipAccepted() {
-    this.friendshipAccepted.emit(this.friendship.friendshipId);
+    this.friendshipAccepted.emit(this.friendship.other.userId);
   }
 
   onFriendshipCanceled() {
