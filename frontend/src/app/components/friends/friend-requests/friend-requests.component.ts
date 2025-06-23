@@ -1,10 +1,11 @@
-import {Component, EventEmitter, HostListener, Output} from '@angular/core';
+import {Component, HostListener} from '@angular/core';
 import {FriendCardComponent} from '../friend-card/friend-card.component';
 import {FriendshipInfoResponse} from '../../../models/friendship/friendship-info-response.dto';
 import {FriendshipService} from '../../../services/friendship.service';
 import {UserInfoResponse} from '../../../models/user/user-info-response.dto';
 import {NgForOf, NgIf} from '@angular/common';
 import {HttpStatusCode} from '@angular/common/http';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-friend-requests',
@@ -21,14 +22,14 @@ export class FriendRequestsComponent {
   owner: UserInfoResponse;
   requests: FriendshipInfoResponse[] = [];
 
-  @Output() hideRequests = new EventEmitter<void>();
-  @Output() friendshipAccepted = new EventEmitter<void>();
-
-  constructor(private friendshipService: FriendshipService) {
-    this.owner = JSON.parse(sessionStorage.getItem("userInfo"));
+  constructor(
+    private router: Router,
+    private friendshipService: FriendshipService
+  ) {
   }
 
   ngOnInit(): void {
+    this.owner = JSON.parse(sessionStorage.getItem("userInfo"));
     this.getRequests();
   }
 
@@ -52,7 +53,7 @@ export class FriendRequestsComponent {
   }
 
   onHideRequests() {
-    this.hideRequests.emit()
+    this.router.navigateByUrl('/friends');
   }
 
   onFriendshipAccepted(toId: number) {
@@ -63,7 +64,6 @@ export class FriendRequestsComponent {
         next: fs => {
           this.requests = this.requests.filter(
             fsr => fsr.friendshipId != fs.friendshipId);
-          this.friendshipAccepted.emit();
         },
         error: err => console.log(err)
       });

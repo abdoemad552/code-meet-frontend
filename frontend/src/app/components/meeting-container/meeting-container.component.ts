@@ -9,6 +9,7 @@ import {AgoraTokenService} from '../../services/agora-token.service';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {MeetingExitComponent} from './meeting-exit/meeting-exit.component';
 import {Subscription} from 'rxjs';
+import {BoardDataService} from '../../services/states/board-data.service';
 
 @Component({
   selector: 'app-meeting-container',
@@ -29,16 +30,22 @@ import {Subscription} from 'rxjs';
   styleUrl: './meeting-container.component.css'
 })
 
-export class MeetingContainerComponent implements OnDestroy {
+export class MeetingContainerComponent implements OnInit, OnDestroy {
   meetingId: string = null;
   subscriptions: Subscription[] = [];
   currentView: 'MEETING_ENTRANCE' | 'MEETING_ROOM' | 'MEETING_EXIT' = 'MEETING_ENTRANCE';
 
   constructor(
+    private dataService: BoardDataService,
     private tokenService: AgoraTokenService,
     protected rtcService: AgoraRtcService,
     protected rtmService: AgoraRtmService
   ) {
+  }
+
+  ngOnInit() {
+    this.dataService.minimizeSidebar();
+    this.dataService.removeMainContentPadding();
   }
 
   async onEntranceJoin(meetingId: string) {

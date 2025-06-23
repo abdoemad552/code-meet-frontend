@@ -48,7 +48,7 @@
               <label class="text-indigo-800 font-bold text-xs block mb-2 pl-3 select-none">First Name</label>
               <div class="relative flex items-center">
                 <input
-                  [(ngModel)]="user.firstName"
+                  [(ngModel)]="owner.firstName"
                   name="firstName"
                   type="text"
                   required
@@ -61,7 +61,7 @@
               <label class="text-indigo-800 font-bold text-xs block mb-2 pl-3 select-none">Last Name</label>
               <div class="relative flex items-center">
                 <input
-                  [(ngModel)]="user.lastName"
+                  [(ngModel)]="owner.lastName"
                   name="lastName"
                   type="text"
                   required
@@ -76,7 +76,7 @@
             <label class="text-indigo-800 font-bold text-xs block mb-2 pl-3 select-none">Email Address</label>
             <div class="relative flex items-center">
               <input
-                [(ngModel)]="user.email"
+                [(ngModel)]="owner.email"
                 name="email"
                 type="email"
                 required
@@ -90,7 +90,7 @@
             <label class="text-indigo-800 font-bold text-xs block mb-2 pl-3 select-none">Username</label>
             <div class="relative flex items-center">
               <input
-                [(ngModel)]="user.username"
+                [(ngModel)]="owner.username"
                 name="username"
                 type="text"
                 required
@@ -105,7 +105,7 @@
               <label class="text-indigo-800 font-bold text-xs block mb-2 pl-3 select-none">Phone Number</label>
               <div class="relative flex items-center">
                 <input
-                  [(ngModel)]="user.phoneNumber"
+                  [(ngModel)]="owner.phoneNumber"
                   name="phoneNumber"
                   type="tel"
                   class="rounded-xl w-full text-sm text-gray-800 border-2 border-gray-300 focus:border-indigo-600 px-3 py-3 outline-none"
@@ -117,7 +117,7 @@
               <label class="text-indigo-800 font-bold text-xs block mb-2 pl-3 select-none">Gender</label>
               <div class="relative">
                 <select
-                  [(ngModel)]="user.gender"
+                  [(ngModel)]="owner.gender"
                   name="gender"
                   class="appearance-none rounded-xl w-full text-sm text-gray-800 border-2 border-gray-300 focus:border-indigo-600 px-4 py-3 outline-none bg-white pr-10">
                   <option value="" disabled selected>Select gender</option>
@@ -141,7 +141,7 @@
             <label class="text-indigo-800 font-bold text-xs block mb-2 pl-3 select-none">Bio</label>
             <div class="relative flex items-center">
               <textarea
-                [(ngModel)]="user.bio"
+                [(ngModel)]="owner.bio"
                 name="bio"
                 rows="3"
                 class="rounded-xl w-full text-sm text-gray-800 border-2 border-gray-300 focus:border-indigo-600 px-3 py-3 outline-none resize-none"

@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import {FriendCardComponent} from './friend-card/friend-card.component';
 import { FriendshipService } from '../../services/friendship.service';
 import { FriendshipInfoResponse } from '../../models/friendship/friendship-info-response.dto';
-import {Router} from '@angular/router';
-import {FriendRequestsComponent} from './friend-requests/friend-requests.component';
+import {Router, RouterOutlet} from '@angular/router';
 import {NgForOf, NgIf} from '@angular/common';
 import {UserInfoResponse} from '../../models/user/user-info-response.dto';
 
@@ -12,16 +11,15 @@ import {UserInfoResponse} from '../../models/user/user-info-response.dto';
   standalone: true,
   imports: [
     FriendCardComponent,
-    FriendRequestsComponent,
     NgIf,
-    NgForOf
+    NgForOf,
+    RouterOutlet
   ],
   templateUrl: './friends.component.html',
   styleUrl: './friends.component.css'
 })
 export class FriendsComponent {
   friendships: FriendshipInfoResponse[] = null;
-  requestsShown: boolean = false;
 
   constructor(
     private router: Router,
@@ -49,11 +47,7 @@ export class FriendsComponent {
   }
 
   showRequests() : void {
-    this.requestsShown = true;
-  }
-
-  hideRequests() : void {
-    this.requestsShown = false;
+    this.router.navigateByUrl('/friends/requests');
   }
 
   onUnfriend(friendshipId: number) {

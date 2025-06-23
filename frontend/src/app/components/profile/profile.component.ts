@@ -1,10 +1,9 @@
 import {Component} from '@angular/core';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink, RouterOutlet} from '@angular/router';
 import {NgClass, NgIf} from '@angular/common';
 import {UserInfoResponse} from '../../models/user/user-info-response.dto';
 import {UserService} from '../../services/user.service';
 import {AuthenticationService} from '../../services/authentication.service';
-import {ProfileEditComponent} from './profile-edit/profile-edit.component';
 import {FriendshipService} from '../../services/friendship.service';
 import {FriendshipInfoResponse, noFriendship} from '../../models/friendship/friendship-info-response.dto';
 
@@ -14,8 +13,8 @@ import {FriendshipInfoResponse, noFriendship} from '../../models/friendship/frie
   imports: [
     NgIf,
     RouterLink,
-    ProfileEditComponent,
-    NgClass
+    NgClass,
+    RouterOutlet
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
@@ -25,7 +24,6 @@ export class ProfileComponent {
   owner: UserInfoResponse;
   friendship: FriendshipInfoResponse;
   isOwner: boolean;
-  editProfileShown: boolean = false;
 
   constructor(
     private router: Router,
@@ -34,15 +32,22 @@ export class ProfileComponent {
     private authService: AuthenticationService,
     private friendshipService: FriendshipService
   ) {
-    this.owner = JSON.parse(sessionStorage.getItem("userInfo"));
   }
 
   ngOnInit() {
+    this.owner = JSON.parse(sessionStorage.getItem("userInfo"));
     this.route.paramMap.subscribe({
       next: params => {
         this.user = null;
         const username = params.get("username");
-        if (!username || username === this.owner.username) {
+
+        if (!username) {
+          this.router.navigateByUrl(`/profile/${this.owner.username}`, {
+            replaceUrl: true
+          });
+        }
+
+        if (username === this.owner.username) {
           this.isOwner = true;
           setTimeout(() => {
             this.user = this.owner;
@@ -78,11 +83,7 @@ export class ProfileComponent {
   }
 
   showEditProfile() {
-    this.editProfileShown = true;
-  }
-
-  hideEditProfile() {
-    this.editProfileShown = false;
+    this.router.navigateByUrl(`/profile/${this.owner.username}/edit`);
   }
 
   signOut() {

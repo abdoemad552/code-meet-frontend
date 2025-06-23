@@ -92,7 +92,14 @@ export const routes: Routes = [
       {
         path: 'friends',
         component: FriendsComponent,
-        title: 'Friends'
+        title: 'Friends',
+        children: [
+          {
+            path: 'requests',
+            component: FriendRequestsComponent,
+            title: 'Friend requests'
+          }
+        ]
       },
       {
         path: 'chats',

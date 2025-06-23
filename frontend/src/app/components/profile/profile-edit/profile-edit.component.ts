@@ -3,6 +3,7 @@ import {FormsModule} from '@angular/forms';
 import {UserInfoResponse} from '../../../models/user/user-info-response.dto';
 import {NgIf} from '@angular/common';
 import {UserService} from '../../../services/user.service';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-profile-edit',
@@ -15,28 +16,30 @@ import {UserService} from '../../../services/user.service';
   styleUrl: './profile-edit.component.css'
 })
 export class ProfileEditComponent implements OnInit {
-  @Output() hideEditProfile = new EventEmitter<void>();
-
-  user: UserInfoResponse;
+  owner: UserInfoResponse;
   isSubmitting: boolean = false;
   submitError: string = '';
   requestSent: boolean = false;
 
-  constructor(private userService: UserService) {
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private userService: UserService
+  ) {
   }
 
   ngOnInit() {
-    this.user = JSON.parse(sessionStorage.getItem("userInfo"));
+    this.owner = JSON.parse(sessionStorage.getItem("userInfo"));
   }
 
   @HostListener('document:keydown.escape', ['$event'])
   handleEscapeKey(event: KeyboardEvent) {
-    this.onHideEditProfile();
     event.preventDefault();
+    this.onHideEditProfile();
   }
 
   onHideEditProfile() {
-    this.hideEditProfile.emit();
+    this.router.navigateByUrl(`/profile/${this.owner.username}`);
   }
 
   onSubmit() {
