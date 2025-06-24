@@ -1,36 +1,64 @@
-import {Component, EventEmitter, Output} from '@angular/core';
-import {RecentChatsComponent} from './recentchats/recentchats.component';
+import {Component} from '@angular/core';
+import {RecentChatsComponent} from './recent-chats/recent-chats.component';
 import {RouterOutlet} from '@angular/router';
-import {Chat} from '../../models/chats/chat';
-import data from '../../../../public/chats.json';
 import {BoardDataService} from '../../services/states/board-data.service';
+import {ChatService} from '../../services/chat.service';
+import {ChatInfoResponse} from '../../models/chats/chat-info-response';
+import {ChatboxComponent} from './chatbox/chatbox.component';
+import {NgIf} from '@angular/common';
+import {MessageInfoResponse} from '../../models/chats/message-info-response';
 
 @Component({
   selector: 'app-chats',
   standalone: true,
   imports: [
     RecentChatsComponent,
-    RouterOutlet
+    ChatboxComponent,
   ],
   templateUrl: './chats.component.html',
   styleUrl: './chats.component.css'
 })
 export class ChatsComponent {
-  @Output() sidebarMinimizationState = new EventEmitter<boolean>();
-  isSidebarMinimized: boolean = false;
+  peerChats: ChatInfoResponse[] = [];
+  roomChats: ChatInfoResponse[] = [];
 
-  friendsChats: Chat[] = data;
-  roomChats: Chat[] = [data[0]];
+  selectedChat: ChatInfoResponse = null;
+  selectedChatMessages: MessageInfoResponse[] = null;
 
-  constructor(private dataService: BoardDataService) {}
+  constructor(
+    private chatService: ChatService,
+    private dataService: BoardDataService
+  ) {
+  }
 
   ngOnInit() {
-    this.dataService.removeMainContentPadding();
+    this.chatService.getAllChats('peer')
+      .subscribe({
+        next: peerChats => {
+          console.log(peerChats);
+          this.peerChats = peerChats;
+        }
+      });
+    this.chatService.getAllChats('room')
+      .subscribe({
+        next: roomChats => {
+          console.log(roomChats);
+          this.roomChats = roomChats;
+        }
+      });
   }
 
-  ngOnDestroy() {
-    this.dataService.maximizeSidebar();
-    this.dataService.addMainContentPadding();
+  onChatSelected(selectedChat: ChatInfoResponse) {
+    this.selectedChat = selectedChat;
+    this.chatService.getAllMessagesOfChatByChatId(selectedChat.chatId)
+      .subscribe({
+        next: selectedChatMessages => {
+          this.selectedChatMessages = selectedChatMessages;
+        }
+      });
   }
 
+  onHideChatbox() {
+    this.selectedChat = null;
+  }
 }

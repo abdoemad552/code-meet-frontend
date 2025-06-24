@@ -62,4 +62,12 @@ export class RoomsComponent {
   onHideJoinRoomModal() {
     this.showJoinRoomModal = false;
   }
+
+  onShowInvitations() {
+
+  }
+
+  onHideInvitations() {
+
+  }
 }

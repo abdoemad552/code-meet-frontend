@@ -1,5 +1,4 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
 import {NgIf} from '@angular/common';
 import {MeetingEntranceComponent} from './meeting-entrance/meeting-entrance.component';
 import {MeetingRoomComponent} from './meeting-room/meeting-room.component';
@@ -9,7 +8,6 @@ import {AgoraTokenService} from '../../services/agora-token.service';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {MeetingExitComponent} from './meeting-exit/meeting-exit.component';
 import {Subscription} from 'rxjs';
-import {BoardDataService} from '../../services/states/board-data.service';
 
 @Component({
   selector: 'app-meeting-container',
@@ -36,7 +34,6 @@ export class MeetingContainerComponent implements OnInit, OnDestroy {
   currentView: 'MEETING_ENTRANCE' | 'MEETING_ROOM' | 'MEETING_EXIT' = 'MEETING_ENTRANCE';
 
   constructor(
-    private dataService: BoardDataService,
     private tokenService: AgoraTokenService,
     protected rtcService: AgoraRtcService,
     protected rtmService: AgoraRtmService
@@ -44,8 +41,6 @@ export class MeetingContainerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.dataService.minimizeSidebar();
-    this.dataService.removeMainContentPadding();
   }
 
   async onEntranceJoin(meetingId: string) {

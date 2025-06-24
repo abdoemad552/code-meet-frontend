@@ -45,9 +45,7 @@ export class ProfileComponent {
           this.router.navigateByUrl(`/profile/${this.owner.username}`, {
             replaceUrl: true
           });
-        }
-
-        if (username === this.owner.username) {
+        } else if (username === this.owner.username) {
           this.isOwner = true;
           setTimeout(() => {
             this.user = this.owner;

@@ -1,6 +1,6 @@
 <div
   *ngIf="friendships; else loadingFriendships"
-  class="rounded-lg border-gray-200 h-full w-full flex flex-col">
+  class="h-full w-full flex flex-col p-10">
   <!-- Header section -->
   <div class="flex justify-between items-center pb-6 mb-6 border-b border-gray-200">
     <h3 class="text-2xl font-bold text-gray-700 flex items-center gap-3">
@@ -55,7 +55,7 @@
 <router-outlet></router-outlet>
 
 <ng-template #loadingFriendships>
-  <div class="rounded-lg border-gray-200 h-full w-full flex flex-col">
+  <div class="rounded-lg border-gray-200 h-full w-full flex flex-col p-10">
     <!-- Header section - Skeleton -->
     <div class="flex justify-between items-center pb-6 mb-6 border-b border-gray-200">
       <div class="flex items-center gap-3">

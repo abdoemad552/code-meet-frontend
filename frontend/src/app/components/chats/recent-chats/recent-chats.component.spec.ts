@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RecentChatsComponent } from './recentchats.component';
+import { RecentChatsComponent } from './recent-chats.component';
 
 describe('RecentchatsComponent', () => {
   let component: RecentChatsComponent;

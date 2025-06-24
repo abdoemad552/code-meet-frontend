@@ -6,5 +6,5 @@ export interface Chat {
   senderUsername: string,
   senderProfileImage: string,
   lastMessage: string,
-  chatMessages: ChatMessage[],
+  chatMessages: ChatMessage[]
 }

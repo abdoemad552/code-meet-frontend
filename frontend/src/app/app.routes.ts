@@ -104,24 +104,26 @@ export const routes: Routes = [
       {
         path: 'chats',
         component: ChatsComponent,
-        title: 'My Personal Chats',
+        title: 'Chats',
         data: { isChatPage: true },
         children: [
           {
-            path: ':id',
+            path: ':chatId',
             component: ChatboxComponent
           }
         ]
-      },
-      {
-        path: 'meeting/:id',
-        component: MeetingContainerComponent
-      },
-      {
-        path: 'meeting',
-        component: MeetingCreationComponent
       }
     ]
+  },
+  {
+    path: 'meeting/:id',
+    component: MeetingContainerComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'meeting',
+    component: MeetingCreationComponent,
+    canActivate: [AuthGuard]
   },
   // Fallback route for undefined paths
   {

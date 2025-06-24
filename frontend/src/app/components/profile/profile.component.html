@@ -1,7 +1,7 @@
 <div *ngIf="user; else loading">
   <div *ngIf="isOwner; else other">
     <div class="flex items-center justify-center">
-      <div class="bg-white rounded-xl shadow-lg p-10 border w-full h-full border-gray-300">
+      <div class="bg-white w-full h-full p-10">
         <a
           routerLink="/home"
           class="group flex items-center justify-center w-10 h-10 rounded-full hover:bg-indigo-50 active:bg-indigo-100 hover:text-indigo-700 text-gray-600 transition-colors">
@@ -27,9 +27,9 @@
         </div>
 
         <div class="mt-4 relative flex justify-center">
-      <span class="text-center text-2xl font-bold text-gray-700">
-        {{ user.firstName }} {{user.lastName}}
-      </span>
+          <span class="text-center text-2xl font-bold text-gray-700">
+            {{ user.firstName }} {{user.lastName}}
+          </span>
         </div>
 
         <div class="mt-2 relative flex justify-center">
@@ -143,7 +143,7 @@
 
   <ng-template #other>
     <div class="flex items-center justify-center">
-      <div class="bg-white rounded-xl shadow-lg p-10 border w-full h-full border-gray-300">
+      <div class="bg-white w-full h-full p-10">
         <a
           routerLink="/home"
           class="group flex items-center justify-center w-10 h-10 rounded-full hover:bg-indigo-50 active:bg-indigo-100 hover:text-indigo-700 text-gray-600 transition-colors">
@@ -322,7 +322,7 @@
 
 <ng-template #loading>
   <div class="flex items-center justify-center">
-    <div class="bg-white rounded-xl shadow-lg p-10 border w-full h-full border-gray-300">
+    <div class="bg-white w-full h-full p-10">
       <!-- Back button skeleton -->
       <div class="group flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 animate-pulse"></div>
 

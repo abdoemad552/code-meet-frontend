@@ -22,10 +22,14 @@ export class BoardComponent {
   ) {}
 
   ngOnInit() {
-    this.dataService.isSidebarMinimized$.subscribe(isSidebarMinimized => {
-      this.isSidebarMinimized = isSidebarMinimized;
-    });
-
-    this.dataService.isPadding$.subscribe((isPadding: boolean) => this.Padding = isPadding);
+    this.dataService.isSidebarMinimized$
+      .subscribe({
+        next: isSidebarMinimized =>
+          this.isSidebarMinimized = isSidebarMinimized
+      });
+    this.dataService.isPadding$
+      .subscribe({
+        next: isPadding => this.Padding = isPadding
+      });
   }
 }
