@@ -1,17 +1,66 @@
-<div
-  (click)="onChatSelected()"
-  class="flex w-full items-center gap-4 py-3 px-5 cursor-pointer transition select-none"
-  [ngClass]="{'bg-gray-200': isSelected, 'hover:bg-gray-50 active:bg-gray-100': !isSelected}">
-  <!-- Avatar/Icon -->
-  <div class="flex-shrink-0 w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center">
-    <svg class="w-6 h-6 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
-    </svg>
-  </div>
+<div *ngIf="peerChat; else rc">
+  <div
+    (click)="onChatSelected()"
+    class="flex w-full items-center gap-4 py-3 px-5 cursor-pointer transition select-none"
+    [ngClass]="{'bg-gray-200': isSelected, 'hover:bg-gray-50 active:bg-gray-100': !isSelected}">
+    <!-- Avatar/Icon -->
+    <div class="flex-shrink-0 w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center">
+      <svg class="w-6 h-6 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+      </svg>
+    </div>
 
-  <!-- Chat Content -->
-  <div class="flex flex-col justify-center overflow-hidden">
-    <h2 class="text-base font-semibold text-gray-800 truncate">{{ chatName }}</h2>
-    <p class="text-sm text-gray-600 truncate">{{ lastSentMessageContent }}</p>
+    <!-- Chat Content -->
+    <div class="flex flex-col justify-center overflow-hidden">
+      <h2 class="text-base font-semibold text-gray-800 truncate">{{ peerChat.peer.firstName }} {{peerChat.peer.lastName}}</h2>
+      <p class="text-sm truncate">
+        <ng-container *ngIf="peerChat.lastSentMessage; else noMessage">
+          <span class="text-indigo-600 font-semibold">
+            {{
+              peerChat.lastSentMessage.sender.userId === owner.userId ?
+                'You:' : ''
+            }}
+          </span>
+          <span class="text-gray-600"> {{ peerChat.lastSentMessage.content }} </span>
+        </ng-container>
+
+        <ng-template #noMessage>
+          <span class="text-gray-400 italic">No messages yet</span>
+        </ng-template>
+      </p>
+    </div>
   </div>
 </div>
+<ng-template #rc>
+  <div
+    (click)="onChatSelected()"
+    class="flex w-full items-center gap-4 py-3 px-5 cursor-pointer transition select-none"
+    [ngClass]="{'bg-gray-200': isSelected, 'hover:bg-gray-50 active:bg-gray-100': !isSelected}">
+    <!-- Avatar/Icon -->
+    <div class="flex-shrink-0 w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center">
+      <svg class="w-6 h-6 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+      </svg>
+    </div>
+
+    <!-- Chat Content -->
+    <div class="flex flex-col justify-center overflow-hidden">
+      <h2 class="text-base font-semibold text-gray-800 truncate">{{ roomChat.room.roomName }}</h2>
+      <p class="text-sm truncate">
+        <ng-container *ngIf="roomChat.lastSentMessage; else noMessage">
+          <span class="text-indigo-600 font-semibold">
+            {{
+              roomChat.lastSentMessage.sender.userId === owner.userId ?
+                'You:' : (roomChat.lastSentMessage.sender.username + ':')
+            }}
+          </span>
+          <span class="text-gray-600"> {{ roomChat.lastSentMessage.content }} </span>
+        </ng-container>
+
+        <ng-template #noMessage>
+          <span class="text-gray-400 italic">No messages yet</span>
+        </ng-template>
+      </p>
+    </div>
+  </div>
+</ng-template>

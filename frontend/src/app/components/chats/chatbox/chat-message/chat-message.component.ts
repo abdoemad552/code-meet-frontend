@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {NgClass, NgIf} from '@angular/common';
-import {MessageInfoResponse} from '../../../../models/chats/message-info-response';
+import {MessageResponse} from '../../../../models/chats/message-response';
 
 @Component({
   selector: 'app-chat-message',
@@ -13,14 +13,12 @@ import {MessageInfoResponse} from '../../../../models/chats/message-info-respons
   styleUrl: './chat-message.component.css'
 })
 export class ChatMessageComponent {
-  @Input() _message: MessageInfoResponse;
+  @Input() message: MessageResponse;
   @Input() outgoingMessage: boolean;
-  @Input() message: string = '';
-  @Input() senderName: string = '';
-  @Input() senderProfileImage: string = '';
-  @Input() isPrevSame!: boolean;
+  @Input() isPrevSame: boolean;
+  @Input() isPeerChat: boolean;
 
   constructor() {
-    console.log(this.isPrevSame)
+    console.log(this.isPrevSame);
   }
 }

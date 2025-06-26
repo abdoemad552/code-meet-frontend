@@ -1,8 +1,0 @@
-import {RoomInfoResponse} from '../room/room-info-response.dto';
-import {MessageInfoResponse} from './message-info-response';
-
-export interface RoomChatInfo {
-  chatId: number,
-  roomInfo: RoomInfoResponse,
-  lastSentMessageInfo: MessageInfoResponse
-}

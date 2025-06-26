@@ -1,12 +1,14 @@
 import {Component} from '@angular/core';
 import {RecentChatsComponent} from './recent-chats/recent-chats.component';
-import {RouterOutlet} from '@angular/router';
-import {BoardDataService} from '../../services/states/board-data.service';
 import {ChatService} from '../../services/chat.service';
-import {ChatInfoResponse} from '../../models/chats/chat-info-response';
 import {ChatboxComponent} from './chatbox/chatbox.component';
-import {NgIf} from '@angular/common';
-import {MessageInfoResponse} from '../../models/chats/message-info-response';
+import {MessageService} from '../../services/message.service';
+import {PeerMessageRequest} from '../../models/chats/peer-message-request';
+import {PeerChatInfoResponse} from '../../models/chats/peer-chat-info-response';
+import {RoomChatInfoResponse} from '../../models/chats/room-chat-info-response';
+import {PeerMessageResponse} from '../../models/chats/peer-message-response';
+import {RoomMessageResponse} from '../../models/chats/room-message-response';
+import {RoomMessageRequest} from '../../models/chats/room-message-request';
 
 @Component({
   selector: 'app-chats',
@@ -19,46 +21,116 @@ import {MessageInfoResponse} from '../../models/chats/message-info-response';
   styleUrl: './chats.component.css'
 })
 export class ChatsComponent {
-  peerChats: ChatInfoResponse[] = [];
-  roomChats: ChatInfoResponse[] = [];
+  peerChats: PeerChatInfoResponse[];
+  roomChats: RoomChatInfoResponse[];
+  peerChatsMessages = new Map<number, PeerMessageResponse[]>();
+  roomChatsMessages = new Map<number, RoomMessageResponse[]>();
 
-  selectedChat: ChatInfoResponse = null;
-  selectedChatMessages: MessageInfoResponse[] = null;
+  selectedPeerChat: PeerChatInfoResponse = null;
+  selectedRoomChat: RoomChatInfoResponse = null;
 
   constructor(
     private chatService: ChatService,
-    private dataService: BoardDataService
+    private messageService: MessageService
   ) {
   }
 
   ngOnInit() {
-    this.chatService.getAllChats('peer')
+    this.getAllPeerChats();
+    this.getAllRoomChats();
+
+    this.messageService.peerMessage$
+      .subscribe({
+        next: message => {
+          this.peerChatsMessages.get(message.peerId).push(message);
+          for (let chat of this.peerChats) {
+            if (chat.peer.userId === message.peerId) {
+              chat.lastSentMessage = message;
+            }
+          }
+        }
+      });
+    this.messageService.roomMessage$
+      .subscribe({
+        next: message => {
+          this.roomChatsMessages.get(message.roomId).push(message);
+          for (let chat of this.roomChats) {
+            if (chat.room.roomId === message.roomId) {
+              chat.lastSentMessage = message;
+            }
+          }
+        },
+        error: err => console.error(err)
+      });
+  }
+
+  getAllPeerChats() {
+    this.chatService.getAllPeerChats()
       .subscribe({
         next: peerChats => {
           console.log(peerChats);
           this.peerChats = peerChats;
+          for (let chat of this.peerChats) {
+            this.chatService.getAllMessagesOfPeerChatByChatId(chat.chatId)
+              .subscribe({
+                next: peerChatMessages => this.peerChatsMessages.set(chat.peer.userId, peerChatMessages),
+                error: err => console.error(err)
+              });
+          }
         }
       });
-    this.chatService.getAllChats('room')
+  }
+
+  getAllRoomChats() {
+    this.chatService.getAllRoomChats()
       .subscribe({
         next: roomChats => {
           console.log(roomChats);
           this.roomChats = roomChats;
+          for (let chat of this.roomChats) {
+            this.chatService.getAllMessagesOfRoomChatByChatId(chat.chatId)
+              .subscribe({
+                next: roomChatMessages => {
+                  console.log(roomChatMessages);
+                  this.roomChatsMessages.set(chat.room.roomId, roomChatMessages)
+                },
+                error: err => console.error(err)
+              });
+          }
         }
       });
   }
 
-  onChatSelected(selectedChat: ChatInfoResponse) {
-    this.selectedChat = selectedChat;
-    this.chatService.getAllMessagesOfChatByChatId(selectedChat.chatId)
-      .subscribe({
-        next: selectedChatMessages => {
-          this.selectedChatMessages = selectedChatMessages;
-        }
-      });
+  onPeerChatSelected(selectedPeerChat: PeerChatInfoResponse) {
+    this.selectedPeerChat = selectedPeerChat;
+    this.selectedRoomChat = null;
+  }
+
+  onRoomChatSelected(selectedRoomChat: RoomChatInfoResponse) {
+    this.selectedPeerChat = null;
+    this.selectedRoomChat = selectedRoomChat;
   }
 
   onHideChatbox() {
-    this.selectedChat = null;
+    this.selectedPeerChat = null;
+    this.selectedPeerChat = null;
+  }
+
+  onPeerMessageSent(messageRequest: PeerMessageRequest) {
+    this.messageService.sendPeerMessage(messageRequest);
+  }
+
+  onRoomMessageSent(messageRequest: RoomMessageRequest) {
+    this.messageService.sendRoomMessage(messageRequest);
+  }
+
+  get selectedPeerChatMessages() {
+    return this.selectedPeerChat ?
+      this.peerChatsMessages.get(this.selectedPeerChat.peer.userId) : null
+  }
+
+  get selectedRoomChatMessages() {
+    return this.selectedRoomChat ?
+      this.roomChatsMessages.get(this.selectedRoomChat.room.roomId) : null
   }
 }

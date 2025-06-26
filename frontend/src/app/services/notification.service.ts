@@ -8,26 +8,26 @@ import {Subject} from 'rxjs';
 })
 export class NotificationService {
 
-  private notification = new Subject<NotificationInfo>();
-  notification$ = this.notification.asObservable();
+  notification$ = new Subject<NotificationInfo>();
 
   constructor(
     private wsService: WebSocketService
   ) {
-    this.wsService.connection$.subscribe({
-      next: isConnected => {
-        if (isConnected) {
-          const userId = JSON.parse(sessionStorage.getItem("userInfo")).userId;
-          const topic = `/user/${userId}/notifications`;
-          wsService.subscribe(topic)
-            .subscribe({
-              next: message => this.notification.next(JSON.parse(message.body)),
-              error: error => console.log(error)
-            });
-        } else {
-        }
-      },
-      error: error => console.log(error)
-    });
+    this.wsService.connection$
+      .subscribe({
+        next: isConnected => {
+          if (isConnected) {
+            const user = JSON.parse(sessionStorage.getItem("userInfo"));
+            const topic = `/user/${user.userId}/notifications`;
+            wsService.subscribe(topic)
+              .subscribe({
+                next: message => this.notification$.next(JSON.parse(message.body)),
+                error: error => console.log(error)
+              });
+          } else {
+          }
+        },
+        error: error => console.log(error)
+      });
   }
 }

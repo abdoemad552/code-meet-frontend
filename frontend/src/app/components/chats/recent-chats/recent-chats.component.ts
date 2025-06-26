@@ -1,7 +1,8 @@
 import {Component, EventEmitter, HostListener, Input, Output} from '@angular/core';
 import {NgClass, NgForOf} from '@angular/common';
 import {ChatCardComponent} from './chat-card/chat-card.component';
-import {ChatInfoResponse} from '../../../models/chats/chat-info-response';
+import {PeerChatInfoResponse} from '../../../models/chats/peer-chat-info-response';
+import {RoomChatInfoResponse} from '../../../models/chats/room-chat-info-response';
 
 @Component({
   selector: 'app-recent-chats',
@@ -15,17 +16,19 @@ import {ChatInfoResponse} from '../../../models/chats/chat-info-response';
   styleUrl: './recent-chats.component.css'
 })
 export class RecentChatsComponent {
-  @Input() peerChats: ChatInfoResponse[];
-  @Input() roomChats: ChatInfoResponse[];
-  @Input() selectedChat: ChatInfoResponse = null;
-  @Output() chatSelected = new EventEmitter<ChatInfoResponse>();
+  @Input() peerChats: PeerChatInfoResponse[];
+  @Input() roomChats: RoomChatInfoResponse[];
+  @Input() selectedPeerChat: PeerChatInfoResponse = null;
+  @Input() selectedRoomChat: RoomChatInfoResponse = null;
+  @Output() peerChatSelected = new EventEmitter<PeerChatInfoResponse>();
+  @Output() roomChatSelected = new EventEmitter<RoomChatInfoResponse>();
 
   isPeerChats: boolean = true;
 
   @HostListener('document:keydown.escape', ['$event'])
   handleEscapeKey(event: KeyboardEvent) {
     event.preventDefault();
-    this.onChatSelected(null);
+    this.onPeerChatSelected(null);
   }
 
   showPeerChats() {
@@ -36,12 +39,15 @@ export class RecentChatsComponent {
     this.isPeerChats = false;
   }
 
-  onChatSelected(selectedChat: ChatInfoResponse) {
-    this.selectedChat = selectedChat;
-    this.chatSelected.emit(selectedChat);
+  onPeerChatSelected(selectedPeerChat: PeerChatInfoResponse) {
+    this.selectedPeerChat = selectedPeerChat;
+    this.selectedRoomChat = null;
+    this.peerChatSelected.emit(this.selectedPeerChat);
   }
 
-  get currentChats() {
-    return this.isPeerChats ? this.peerChats : this.roomChats;
+  onRoomChatSelected(selectedRoomChat: RoomChatInfoResponse) {
+    this.selectedPeerChat = null;
+    this.selectedRoomChat = selectedRoomChat;
+    this.roomChatSelected.emit(this.selectedRoomChat);
   }
 }

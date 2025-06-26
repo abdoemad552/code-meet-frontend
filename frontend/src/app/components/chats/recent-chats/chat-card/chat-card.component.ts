@@ -1,46 +1,37 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {ChatInfoResponse} from '../../../../models/chats/chat-info-response';
-import {NgClass} from '@angular/common';
+import {NgClass, NgIf} from '@angular/common';
+import {PeerChatInfoResponse} from '../../../../models/chats/peer-chat-info-response';
+import {RoomChatInfoResponse} from '../../../../models/chats/room-chat-info-response';
+import {UserInfoResponse} from '../../../../models/user/user-info-response.dto';
 
 @Component({
   selector: 'app-chat-card',
   standalone: true,
   imports: [
-    NgClass
+    NgClass,
+    NgIf
   ],
   templateUrl: './chat-card.component.html',
   styleUrl: './chat-card.component.css'
 })
 export class ChatCardComponent {
-  @Input() chat: ChatInfoResponse;
-  @Output() chatSelected = new EventEmitter<ChatInfoResponse>();
+  @Input() peerChat: PeerChatInfoResponse;
+  @Input() roomChat: RoomChatInfoResponse;
   @Input() isSelected: boolean;
+  @Output() peerChatSelected = new EventEmitter<PeerChatInfoResponse>();
+  @Output() roomChatSelected = new EventEmitter<RoomChatInfoResponse>();
 
-  get chatId() {
-    return this.chat.chatId;
-  }
+  owner: UserInfoResponse;
 
-  get chatPictureUrl() {
-    if (this.chat.isPeerChat) {
-      return this.chat.other.profilePictureUrl;
-    } else {
-      return this.chat.other.roomPictureUrl;
-    }
-  }
-
-  get chatName() {
-    if (this.chat.isPeerChat) {
-      return this.chat.other.firstName + ' ' + this.chat.other.lastName;
-    } else {
-      return this.chat.other.roomName;
-    }
-  }
-
-  get lastSentMessageContent() {
-    return this.chat.lastSentMessage?.content || '...';
+  ngOnInit() {
+    this.owner = JSON.parse(sessionStorage.getItem("userInfo"));
   }
 
   onChatSelected() {
-    this.chatSelected.emit(this.chat);
+    if (this.peerChat) {
+      this.peerChatSelected.emit(this.peerChat);
+    } else {
+      this.roomChatSelected.emit(this.roomChat);
+    }
   }
 }

@@ -1,8 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from 'rxjs';
-import {ChatInfoResponse} from '../models/chats/chat-info-response';
-import {MessageInfoResponse} from '../models/chats/message-info-response';
+import {PeerChatInfoResponse} from '../models/chats/peer-chat-info-response';
+import {RoomChatInfoResponse} from '../models/chats/room-chat-info-response';
+import {PeerMessageResponse} from '../models/chats/peer-message-response';
+import {RoomMessageResponse} from '../models/chats/room-message-response';
 
 @Injectable({
   providedIn: 'root'
@@ -14,20 +16,29 @@ export class ChatService {
   constructor(private http: HttpClient) {
   }
 
-  getChatById(chatId: number): Observable<ChatInfoResponse> {
-    return this.http.get<ChatInfoResponse>(`${this.url}/${chatId}`);
+  getPeerChatById(chatId: number): Observable<PeerChatInfoResponse> {
+    return this.http.get<PeerChatInfoResponse>(`${this.url}/peer/${chatId}`);
   }
 
-  getAllChats(chatType: string): Observable<ChatInfoResponse[]>  {
-    const user = JSON.parse(sessionStorage.getItem("userInfo"));
-    return this.http.get<ChatInfoResponse[]>(`${this.url}/${user.userId}/all`, {
-      params: {
-        chatType: chatType
-      }
-    });
+  getRoomChatById(chatId: number): Observable<RoomChatInfoResponse> {
+    return this.http.get<RoomChatInfoResponse>(`${this.url}/room/${chatId}`);
   }
 
-  getAllMessagesOfChatByChatId(chatId: number): Observable<MessageInfoResponse[]> {
-    return this.http.get<MessageInfoResponse[]>(`${this.url}/${chatId}/messages`);
+  getAllPeerChats(): Observable<PeerChatInfoResponse[]>  {
+    const owner = JSON.parse(sessionStorage.getItem("userInfo"));
+    return this.http.get<PeerChatInfoResponse[]>(`${this.url}/peer/${owner.userId}/all`);
+  }
+
+  getAllRoomChats(): Observable<RoomChatInfoResponse[]>  {
+    const owner = JSON.parse(sessionStorage.getItem("userInfo"));
+    return this.http.get<RoomChatInfoResponse[]>(`${this.url}/room/${owner.userId}/all`);
+  }
+
+  getAllMessagesOfPeerChatByChatId(chatId: number): Observable<PeerMessageResponse[]> {
+    return this.http.get<PeerMessageResponse[]>(`${this.url}/peer/${chatId}/messages`);
+  }
+
+  getAllMessagesOfRoomChatByChatId(chatId: number): Observable<RoomMessageResponse[]> {
+    return this.http.get<RoomMessageResponse[]>(`${this.url}/room/${chatId}/messages`);
   }
 }

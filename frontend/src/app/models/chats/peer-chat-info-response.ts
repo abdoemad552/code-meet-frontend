@@ -1,8 +1,8 @@
-import {MessageInfoResponse} from './message-info-response';
 import {UserInfoResponse} from '../user/user-info-response.dto';
+import {PeerMessageResponse} from './peer-message-response';
 
-export interface PeerChatInfoResponse {
+export class PeerChatInfoResponse {
   chatId: number;
   peer: UserInfoResponse;
-  lastSentMessage: MessageInfoResponse;
+  lastSentMessage: PeerMessageResponse;
 }

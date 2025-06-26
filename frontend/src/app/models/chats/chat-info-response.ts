@@ -1,8 +1,6 @@
-import {MessageInfoResponse} from './message-info-response';
+import {PeerChatInfoResponse} from './peer-chat-info-response';
+import {RoomChatInfoResponse} from './room-chat-info-response';
 
-export interface ChatInfoResponse {
-  chatId: number;
-  other: any;
-  lastSentMessage?: MessageInfoResponse;
-  isPeerChat: boolean;
-}
+export type ChatInfoResponse = PeerChatInfoResponse | RoomChatInfoResponse;
+
+export type ChatInfoResponses = PeerChatInfoResponse[] | RoomChatInfoResponse[];

@@ -3,14 +3,20 @@
     class="w-[30%] min-w-[250px] max-w-[400px] border-r border-gray-300 flex flex-col"
     [peerChats]="peerChats"
     [roomChats]="roomChats"
-    [selectedChat]="selectedChat"
-    (chatSelected)="onChatSelected($event)">
+    [selectedPeerChat]="selectedPeerChat"
+    [selectedRoomChat]="selectedRoomChat"
+    (peerChatSelected)="onPeerChatSelected($event)"
+    (roomChatSelected)="onRoomChatSelected($event)">
   </app-recent-chats>
 
   <app-chatbox
     class="flex flex-col flex-grow"
-    [chat]="selectedChat"
-    [messages]="selectedChatMessages"
+    [peerChat]="selectedPeerChat"
+    [roomChat]="selectedRoomChat"
+    [peerChatMessages]="selectedPeerChatMessages"
+    [roomChatMessages]="selectedRoomChatMessages"
+    (peerMessageSent)="onPeerMessageSent($event)"
+    (roomMessageSent)="onRoomMessageSent($event)"
     (hideChatbox)="onHideChatbox()">
   </app-chatbox>
 </div>
