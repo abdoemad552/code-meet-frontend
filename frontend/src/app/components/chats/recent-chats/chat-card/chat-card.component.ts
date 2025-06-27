@@ -28,10 +28,22 @@ export class ChatCardComponent {
   }
 
   onChatSelected() {
-    if (this.peerChat) {
-      this.peerChatSelected.emit(this.peerChat);
-    } else {
-      this.roomChatSelected.emit(this.roomChat);
+    if (!this.isSelected) {
+      if (this.peerChat) {
+        this.peerChatSelected.emit(this.peerChat);
+      } else {
+        this.roomChatSelected.emit(this.roomChat);
+      }
     }
+  }
+
+  formatTime(isoString: string): string {
+    if (!isoString) isoString = new Date().toISOString();
+    const date = new Date(isoString);
+
+    const timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const dateString = date.toLocaleDateString('en-GB'); // British format gives DD/MM/YYYY
+
+    return `${dateString} at ${timeString}`;
   }
 }

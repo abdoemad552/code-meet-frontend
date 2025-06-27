@@ -1,0 +1,8 @@
+<div *ngFor="let message of messages; let i = index">
+  <app-chat-message
+    [message]="message"
+    [outgoingMessage]="message.sender.userId === owner.userId"
+    [isPrevSame]="isPrevSame(i)"
+    [isPeerChat]="isPeerChat">
+  </app-chat-message>
+</div>

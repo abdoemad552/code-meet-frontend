@@ -27,23 +27,35 @@
       </div>
     </header>
 
-    <!-- Message Container -->
-    <div class="flex-grow overflow-y-auto px-6 py-4 space-y-2">
-      <div *ngFor="let message of peerChatMessages; let i = index">
-        <app-chat-message
-          [message]="message"
-          [outgoingMessage]="message.sender.userId === owner.userId"
-          [isPrevSame]="isPrevSame(i)"
+    <div class="flex-grow overflow-auto relative flex flex-col">
+      <!-- Message Container -->
+      <div
+        #messageContainer
+        class="flex-grow overflow-y-auto scrollbar-overlay px-6 py-4 space-y-2 group">
+        <chat-messages-container
+          [messages]="peerChatMessages"
           [isPeerChat]="true">
-        </app-chat-message>
+        </chat-messages-container>
       </div>
+
+      <!-- Scroll to Bottom Button -->
+      <button
+        #scrollButton
+        class="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 bg-white hover:bg-gray-100 active:bg-gray-200 border border-gray-300 rounded-full p-2 shadow-md transition duration-300 opacity-0 group-hover:opacity-100 cursor-pointer"
+        (click)="scrollToBottom()"
+        (mouseenter)="cancelHideTimeout()"
+        (mouseleave)="startHideTimeout()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/>
+        </svg>
+      </button>
     </div>
 
     <!-- Chat Input -->
     <footer class="border-t border-gray-300 px-4 py-3 bg-white">
       <div class="flex items-center gap-2">
         <input
-          id="peer-chat-input"
+          [(ngModel)]="peerChat.currentInput"
           (keydown.enter)="onPeerMessageSent()"
           type="text" placeholder="Type a message..."
           class="flex-grow px-5 py-3 border border-gray-300 text-gray-700 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-gray-500 transition"/>
@@ -87,22 +99,35 @@
     </header>
 
     <!-- Message Container -->
-    <div class="flex-grow overflow-y-auto px-6 py-4 space-y-2">
-      <div *ngFor="let message of roomChatMessages; let i = index">
-        <app-chat-message
-          [message]="message"
-          [outgoingMessage]="message.sender.userId === owner.userId"
-          [isPrevSame]="isPrevSame(i)"
+    <div class="flex-grow overflow-auto relative flex flex-col">
+      <!-- Message Container -->
+      <div
+        #messageContainer
+        class="flex-grow overflow-y-auto scrollbar-overlay px-6 py-4 space-y-2 group">
+        <chat-messages-container
+          [messages]="roomChatMessages"
           [isPeerChat]="false">
-        </app-chat-message>
+        </chat-messages-container>
       </div>
+
+      <!-- Scroll to Bottom Button -->
+      <button
+        #scrollButton
+        class="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 bg-white hover:bg-gray-100 active:bg-gray-200 border border-gray-300 rounded-full p-2 shadow-md transition duration-300 opacity-0 group-hover:opacity-100 cursor-pointer"
+        (click)="scrollToBottom()"
+        (mouseenter)="cancelHideTimeout()"
+        (mouseleave)="startHideTimeout()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/>
+        </svg>
+      </button>
     </div>
 
     <!-- Chat Input -->
     <footer class="border-t border-gray-300 px-4 py-3 bg-white">
       <div class="flex items-center gap-2">
         <input
-          id="room-chat-input"
+          [(ngModel)]="roomChat.currentInput"
           (keydown.enter)="onRoomMessageSent()"
           type="text" placeholder="Type a message..."
           class="flex-grow px-5 py-3 border border-gray-300 text-gray-700 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-gray-500 transition"/>

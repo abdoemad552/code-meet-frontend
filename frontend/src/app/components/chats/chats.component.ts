@@ -71,9 +71,13 @@ export class ChatsComponent {
           console.log(peerChats);
           this.peerChats = peerChats;
           for (let chat of this.peerChats) {
+            chat.currentInput = '';
             this.chatService.getAllMessagesOfPeerChatByChatId(chat.chatId)
               .subscribe({
-                next: peerChatMessages => this.peerChatsMessages.set(chat.peer.userId, peerChatMessages),
+                next: peerChatMessages => {
+                  console.log(peerChatMessages);
+                  this.peerChatsMessages.set(chat.peer.userId, peerChatMessages)
+                },
                 error: err => console.error(err)
               });
           }
@@ -88,6 +92,7 @@ export class ChatsComponent {
           console.log(roomChats);
           this.roomChats = roomChats;
           for (let chat of this.roomChats) {
+            chat.currentInput = '';
             this.chatService.getAllMessagesOfRoomChatByChatId(chat.chatId)
               .subscribe({
                 next: roomChatMessages => {
@@ -113,7 +118,7 @@ export class ChatsComponent {
 
   onHideChatbox() {
     this.selectedPeerChat = null;
-    this.selectedPeerChat = null;
+    this.selectedRoomChat = null;
   }
 
   onPeerMessageSent(messageRequest: PeerMessageRequest) {

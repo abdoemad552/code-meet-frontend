@@ -11,21 +11,30 @@
     </div>
 
     <!-- Chat Content -->
-    <div class="flex flex-col justify-center overflow-hidden">
+    <div class="flex flex-col justify-center overflow-hidden w-full">
       <h2 class="text-base font-semibold text-gray-800 truncate">{{ peerChat.peer.firstName }} {{peerChat.peer.lastName}}</h2>
       <p class="text-sm truncate">
-        <ng-container *ngIf="peerChat.lastSentMessage; else noMessage">
-          <span class="text-indigo-600 font-semibold">
-            {{
-              peerChat.lastSentMessage.sender.userId === owner.userId ?
-                'You:' : ''
-            }}
-          </span>
-          <span class="text-gray-600"> {{ peerChat.lastSentMessage.content }} </span>
+        <ng-container *ngIf="peerChat.currentInput.trim() && !isSelected; else noDraft">
+          <span class="text-indigo-600 font-semibold">Draft:</span>
+          <span class="text-gray-600"> {{ peerChat.currentInput }} </span>
         </ng-container>
+        <ng-template #noDraft>
+          <ng-container *ngIf="peerChat.lastSentMessage; else noMessage">
+            <span class="text-indigo-600 font-semibold">
+              {{
+                peerChat.lastSentMessage.sender.userId === owner.userId ?
+                  'You:' : ''
+              }}
+            </span>
+            <span class="text-gray-600"> {{ peerChat.lastSentMessage.content }} </span>
+            <div class="text-xs text-gray-500 text-left pt-1 select-none">
+              {{ formatTime(peerChat.lastSentMessage.sentAt) }}
+            </div>
+          </ng-container>
 
-        <ng-template #noMessage>
-          <span class="text-gray-400 italic">No messages yet</span>
+          <ng-template #noMessage>
+            <span class="text-gray-400 italic">No messages yet</span>
+          </ng-template>
         </ng-template>
       </p>
     </div>
@@ -44,21 +53,30 @@
     </div>
 
     <!-- Chat Content -->
-    <div class="flex flex-col justify-center overflow-hidden">
+    <div class="flex flex-col justify-center overflow-hidden w-full">
       <h2 class="text-base font-semibold text-gray-800 truncate">{{ roomChat.room.roomName }}</h2>
       <p class="text-sm truncate">
-        <ng-container *ngIf="roomChat.lastSentMessage; else noMessage">
-          <span class="text-indigo-600 font-semibold">
-            {{
-              roomChat.lastSentMessage.sender.userId === owner.userId ?
-                'You:' : (roomChat.lastSentMessage.sender.username + ':')
-            }}
-          </span>
-          <span class="text-gray-600"> {{ roomChat.lastSentMessage.content }} </span>
+        <ng-container *ngIf="roomChat.currentInput.trim() && !isSelected; else noDraft">
+          <span class="text-indigo-600 font-semibold">Draft:</span>
+          <span class="text-gray-600"> {{ roomChat.currentInput }} </span>
         </ng-container>
+        <ng-template #noDraft>
+          <ng-container *ngIf="roomChat.lastSentMessage; else noMessage">
+            <span class="text-indigo-600 font-semibold">
+              {{
+                roomChat.lastSentMessage.sender.userId === owner.userId ?
+                  'You:' : (roomChat.lastSentMessage.sender.username + ':')
+              }}
+            </span>
+            <span class="text-gray-600"> {{ roomChat.lastSentMessage.content }} </span>
+            <div class="text-xs text-gray-500 text-left pt-1 pr-1 select-none">
+              {{ formatTime(roomChat.lastSentMessage.sentAt) }}
+            </div>
+          </ng-container>
 
-        <ng-template #noMessage>
-          <span class="text-gray-400 italic">No messages yet</span>
+          <ng-template #noMessage>
+            <span class="text-gray-400 italic">No messages yet</span>
+          </ng-template>
         </ng-template>
       </p>
     </div>

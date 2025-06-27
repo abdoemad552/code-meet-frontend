@@ -35,3 +35,23 @@
 body {
   font-family: "Inter", sans-serif;
 }
+
+.scrollbar-overlay {
+  scrollbar-gutter: stable both-edges; /* Prevent shift in supporting browsers */
+  overflow-y: auto;
+}
+
+/* Optional: overlay scrollbar for WebKit browsers */
+.scrollbar-overlay::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-overlay::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-overlay::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+

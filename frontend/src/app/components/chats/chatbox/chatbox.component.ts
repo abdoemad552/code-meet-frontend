@@ -1,15 +1,15 @@
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {ChatService} from '../../../services/chat.service';
+import {RouterLink} from '@angular/router';
 import {UserInfoResponse} from '../../../models/user/user-info-response.dto';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgIf} from '@angular/common';
 import {PeerChatInfoResponse} from '../../../models/chats/peer-chat-info-response';
 import {RoomChatInfoResponse} from '../../../models/chats/room-chat-info-response';
 import {PeerMessageResponse} from '../../../models/chats/peer-message-response';
 import {RoomMessageResponse} from '../../../models/chats/room-message-response';
 import {PeerMessageRequest} from '../../../models/chats/peer-message-request';
 import {RoomMessageRequest} from '../../../models/chats/room-message-request';
-import {ChatMessageComponent} from './chat-message/chat-message.component';
+import {FormsModule} from '@angular/forms';
+import {MessagesContainerComponent} from './messages-container/messages-container.component';
 
 @Component({
   selector: 'app-chatbox',
@@ -17,8 +17,8 @@ import {ChatMessageComponent} from './chat-message/chat-message.component';
   imports: [
     NgIf,
     RouterLink,
-    NgForOf,
-    ChatMessageComponent
+    FormsModule,
+    MessagesContainerComponent
   ],
   templateUrl: './chatbox.component.html',
   styleUrl: './chatbox.component.css'
@@ -31,23 +31,22 @@ export class ChatboxComponent {
   @Output() hideChatbox = new EventEmitter<void>();
   @Output() peerMessageSent = new EventEmitter<PeerMessageRequest>();
   @Output() roomMessageSent = new EventEmitter<RoomMessageRequest>();
+  @ViewChild('messageContainer') messageContainer: ElementRef;
+  @ViewChild('scrollButton') scrollButton: ElementRef;
 
+  hideTimeout: any;
   owner: UserInfoResponse;
-
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private chatService: ChatService
-  ) {
-  }
 
   ngOnInit(): void {
     this.owner = JSON.parse(sessionStorage.getItem("userInfo"));
   }
 
+  ngAfterViewInit(): void {
+    this.scrollToBottom();
+  }
+
   onPeerMessageSent(): void {
-    const input = document.getElementById('peer-chat-input') as HTMLInputElement;
-    const content = input.value;
+    const content = this.peerChat.currentInput.trim();
     if (content) {
       console.log(content);
       this.peerMessageSent.emit({
@@ -55,13 +54,12 @@ export class ChatboxComponent {
         peerId: this.peerChat.peer.userId,
         content: content
       });
-      input.value = '';
+      this.peerChat.currentInput = '';
     }
   }
 
   onRoomMessageSent(): void {
-    const input = document.getElementById('room-chat-input') as HTMLInputElement;
-    const content = input.value;
+    const content = this.roomChat.currentInput.trim();
     if (content) {
       console.log(content);
       this.roomMessageSent.emit({
@@ -69,7 +67,7 @@ export class ChatboxComponent {
         roomId: this.roomChat.room.roomId,
         content: content
       });
-      input.value = '';
+      this.roomChat.currentInput = '';
     }
   }
 
@@ -77,12 +75,27 @@ export class ChatboxComponent {
     this.hideChatbox.emit();
   }
 
-  isPrevSame(i: number) {
-    if (i === 0) return false;
-    if (this.peerChat) {
-      return this.peerChatMessages[i - 1].sender.userId === this.peerChatMessages[i].sender.userId;
-    } else {
-      return this.roomChatMessages[i - 1].sender.userId === this.roomChatMessages[i].sender.userId;
+  scrollToBottom(): void {
+    const container = this.messageContainer?.nativeElement;
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
+  }
+
+  startHideTimeout(): void {
+    this.hideTimeout = setTimeout(() => {
+      if (this.scrollButton?.nativeElement) {
+        this.scrollButton.nativeElement.style.opacity = '0';
+      }
+    }, 500);
+  }
+
+  cancelHideTimeout(): void {
+    if (this.hideTimeout) {
+      clearTimeout(this.hideTimeout);
+    }
+    if (this.scrollButton?.nativeElement) {
+      this.scrollButton.nativeElement.style.opacity = '1';
     }
   }
 }
