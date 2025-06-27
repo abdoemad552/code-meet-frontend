@@ -18,6 +18,7 @@ import {AuthGuard} from './services/guards/auth.guard';
 import {MeetingContainerComponent} from './components/meeting-container/meeting-container.component';
 import {MeetingCreationComponent} from './components/meeting-container/meeting-creation/meeting-creation.component';
 import {RoomViewComponent} from './components/rooms/room-view/room-view.component';
+import {SearchComponent} from './components/search/search.component';
 
 export const routes: Routes = [
   // Public Routes
@@ -112,6 +113,11 @@ export const routes: Routes = [
             component: ChatboxComponent
           }
         ]
+      },
+      {
+        path: 'search',
+        component: SearchComponent,
+        title: 'Search'
       }
     ]
   },
