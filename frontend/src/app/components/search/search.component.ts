@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {UserService} from '../../services/user.service';
 import {RoomService} from '../../services/room.service';
 import {UserInfoResponse} from '../../models/user/user-info-response.dto';
 import {RoomInfoResponse} from '../../models/room/room-info-response.dto';
-import {ChatCardComponent} from '../chats/recent-chats/chat-card/chat-card.component';
 import {RoomCardComponent} from './room-card/room-card.component';
-import {FriendCardComponent} from '../friends/friend-card/friend-card.component';
 import {UserCardComponent} from './user-card/user-card.component';
 
 @Component({
@@ -15,12 +13,8 @@ import {UserCardComponent} from './user-card/user-card.component';
   imports: [
     NgClass,
     FormsModule,
-    ChatCardComponent,
     NgForOf,
-    NgIf,
     RoomCardComponent,
-    RoomCardComponent,
-    FriendCardComponent,
     UserCardComponent
   ],
   templateUrl: './search.component.html',
@@ -30,7 +24,9 @@ export class SearchComponent {
   users: UserInfoResponse[];
   rooms: RoomInfoResponse[];
 
+  uno: boolean;
   searchInput: string = '';
+  searchTimeout: any;
   isUsersShown: boolean = true;
 
   constructor(
@@ -50,13 +46,54 @@ export class SearchComponent {
   }
 
   get input() {
-    return this.searchInput.trim();
+    let input = this.searchInput.trim();
+    if (input.startsWith('@')) {
+      this.uno = true;
+      input = input.substring(1).trim();
+      if (!input) return '';
+    } else {
+      this.uno = false;
+    }
+    return input;
   }
 
   search() {
-    const input = this.input;
-    if (input) {
-
+    if (this.input) {
+      if (this.isUsersShown) {
+        this.users = null;
+        if (this.searchTimeout) {
+          clearTimeout(this.searchTimeout);
+        }
+        this.searchTimeout = setTimeout(() => {
+          console.log(`Searching for users like ~${this.input}`);
+          this.userService.searchForUsers(this.input, this.uno)
+            .subscribe({
+              next: user => {
+                this.users = user;
+              },
+              error: err => console.error(err)
+            });
+        }, 1000);
+      } else {
+        if (this.uno) {
+          this.rooms = [];
+        } else {
+          this.rooms = null;
+          if (this.searchTimeout) {
+            clearTimeout(this.searchTimeout);
+          }
+          this.searchTimeout = setTimeout(() => {
+            console.log(`Searching for rooms like ~${this.input}`);
+            this.roomService.searchForRooms(this.input)
+              .subscribe({
+                next: rooms => {
+                  this.rooms = rooms;
+                },
+                error: err => console.error(err)
+              });
+          }, 1000);
+        }
+      }
     }
   }
 }

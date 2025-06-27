@@ -3,9 +3,9 @@ import {RoomCardComponent} from './room-card/room-card.component';
 import {NgForOf, NgIf} from '@angular/common';
 import { RoomInfoResponse } from '../../models/room/room-info-response.dto';
 import {CreateRoomComponent} from './create-room/create-room.component';
-import {UserService} from '../../services/user.service';
 import {MembershipService} from '../../services/membership.service';
 import {JoinRoomComponent} from './join-room/join-room.component';
+import {UserInfoResponse} from '../../models/user/user-info-response.dto';
 
 @Component({
   selector: 'app-rooms',
@@ -21,23 +21,21 @@ import {JoinRoomComponent} from './join-room/join-room.component';
   styleUrl: './rooms.component.css'
 })
 export class RoomsComponent {
+  owner: UserInfoResponse;
   rooms: RoomInfoResponse[] = null;
 
   showJoinRoomModal: boolean = false;
   showCreateRoomModal: boolean = false;
 
-  constructor(
-    private userService: UserService,
-    private membershipService: MembershipService
-  ) {
-  }
+  constructor(private membershipService: MembershipService) {}
 
   ngOnInit() {
-    this.getAllRoomsOfUser(this.userService.userInfo.userId);
+    this.owner = JSON.parse(sessionStorage.getItem("userInfo"));
+    this.getAllRooms();
   }
 
-  getAllRoomsOfUser(userId: number): void {
-    this.membershipService.getAllRoomsByUserId(userId)
+  getAllRooms(): void {
+    this.membershipService.getAllRoomsByUserId(this.owner.userId)
       .subscribe({
         next: rooms => {
           console.log(rooms);

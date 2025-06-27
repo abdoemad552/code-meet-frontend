@@ -22,7 +22,7 @@ export class HeaderComponent {
     private userService: UserService,
     private authService: AuthenticationService
   ) {
-    this.userInfo = this.userService.userInfo;
+    this.userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
   }
 
   toggleProfileDropdown () : void {

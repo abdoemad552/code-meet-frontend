@@ -23,12 +23,18 @@ export class RoomService{
     return this.http.get<RoomInfoResponse[]>(`${this.url}/all/${creatorId}`);
   }
 
-  createRoom(roomCreationRequest: RoomCreationRequest): Observable<RoomInfoResponse>{
+  searchForRooms(query: string): Observable<RoomInfoResponse[]> {
+    return this.http.get<RoomInfoResponse[]>(`${this.url}/search`, {
+      params: { query: query }
+    });
+  }
+
+  createRoom(roomCreationRequest: RoomCreationRequest): Observable<RoomInfoResponse> {
     return this.http.post<RoomInfoResponse>(
       `${this.url}/create`, roomCreationRequest);
   }
 
-  updateRoom(roomUpdateRequest: RoomUpdateRequest): Observable<RoomInfoResponse>{
+  updateRoom(roomUpdateRequest: RoomUpdateRequest): Observable<RoomInfoResponse> {
     return this.http.put<RoomInfoResponse>(
       `${this.url}/update`, roomUpdateRequest);
   }
