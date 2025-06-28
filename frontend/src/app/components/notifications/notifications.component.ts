@@ -1,11 +1,14 @@
 import {Component} from '@angular/core';
 import {WebSocketService} from '../../services/websocket.service';
 import {UserService} from '../../services/user.service';
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-notifications',
   standalone: true,
-  imports: [],
+    imports: [
+        NgIf
+    ],
   templateUrl: './notifications.component.html',
   styleUrl: './notifications.component.css'
 })
