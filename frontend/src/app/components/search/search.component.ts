@@ -54,6 +54,7 @@ export class SearchComponent {
     } else {
       this.uno = false;
     }
+    console.log(input);
     return input;
   }
 

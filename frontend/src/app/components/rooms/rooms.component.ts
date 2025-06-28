@@ -39,7 +39,7 @@ export class RoomsComponent {
       .subscribe({
         next: rooms => {
           console.log(rooms);
-          setTimeout(() => this.rooms = rooms, 500);
+          setTimeout(() => this.rooms = rooms, 1000);
         },
         error: err => console.log(err)
       });
