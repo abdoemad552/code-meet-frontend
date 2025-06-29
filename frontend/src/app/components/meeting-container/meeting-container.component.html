@@ -1,7 +1,6 @@
 <ng-container *ngIf="currentView === 'MEETING_ENTRANCE'">
   <div [@fadeInOut]>
     <app-meeting-entrance
-      [meetingId]="this.meetingId"
       (join)="onEntranceJoin($event)">
     </app-meeting-entrance>
   </div>

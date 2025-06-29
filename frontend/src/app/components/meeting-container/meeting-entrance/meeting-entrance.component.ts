@@ -1,7 +1,7 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {AgoraRtcService} from '../../../services/agora-rtc.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-meeting-entrance',
@@ -13,19 +13,24 @@ import {ActivatedRoute} from '@angular/router';
   styleUrl: './meeting-entrance.component.css'
 })
 export class MeetingEntranceComponent implements AfterViewInit {
-  @Input() meetingId: string;
   @Output() join = new EventEmitter<string>();
   @ViewChild('videoTrackWrapper') videoTrackWrapper: ElementRef<HTMLVideoElement>;
 
+  meetingId: string;
+
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     protected rtcService: AgoraRtcService
   ) {
+    console.log('Meeting Entrance');
   }
 
   ngOnInit() {
-    this.route.paramMap.subscribe(params => {
-      this.meetingId = params.get('id');
+    this.route.paramMap
+      .subscribe({
+        next: params => this.meetingId = params.get('id'),
+        error: err => console.error(err)
     });
     this.rtcService.initEventListeners();
     this.rtcService.createMicrophoneAndVideoTracks();
@@ -53,7 +58,6 @@ export class MeetingEntranceComponent implements AfterViewInit {
   }
 
   onReturnHome() {
-
   }
 
   ngAfterViewInit() {
@@ -67,8 +71,8 @@ export class MeetingEntranceComponent implements AfterViewInit {
       return 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-60';
     }
     return this.rtcService.isCamEnabled
-      ? 'bg-white text-gray-700 hover:bg-indigo-100 cursor-pointer'
-      : 'bg-red-600 text-white hover:bg-red-700 cursor-pointer';
+      ? 'bg-white text-gray-700 hover:bg-indigo-100 active:bg-indigo-200 cursor-pointer'
+      : 'bg-red-500 text-white hover:bg-red-700 active:bg-red-800 cursor-pointer';
   }
 
   get micButtonClasses(): string {
@@ -76,8 +80,8 @@ export class MeetingEntranceComponent implements AfterViewInit {
       return 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-60';
     }
     return this.rtcService.isMicMuted
-      ? 'bg-red-600 text-white hover:bg-red-700 cursor-pointer'
-      : 'bg-white text-gray-700 hover:bg-indigo-100 cursor-pointer';
+      ? 'bg-red-500 text-white hover:bg-red-700 active:bg-red-800 cursor-pointer'
+      : 'bg-white text-gray-700 hover:bg-indigo-100 active:bg-indigo-200';
   }
 
   get camIconClass(): string {
