@@ -19,6 +19,9 @@ import {MeetingContainerComponent} from './components/meeting-container/meeting-
 import {MeetingCreationComponent} from './components/meeting-container/meeting-creation/meeting-creation.component';
 import {RoomViewComponent} from './components/rooms/room-view/room-view.component';
 import {SearchComponent} from './components/search/search.component';
+import {
+  MembershipRequestsComponent
+} from './components/rooms/room-view/membership-requests/membership-requests.component';
 
 export const routes: Routes = [
   // Public Routes
@@ -88,7 +91,15 @@ export const routes: Routes = [
       },
       {
         path: 'room/:id',
-        component: RoomViewComponent
+        component: RoomViewComponent,
+        title: 'Room',
+        children: [
+          {
+            path: 'requests',
+            component: MembershipRequestsComponent,
+            title: 'Room - requests'
+          }
+        ]
       },
       {
         path: 'friends',

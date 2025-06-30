@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -12,7 +12,7 @@ import {WebSocketService} from './services/websocket.service';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   title = 'Code Meet';
 
   constructor(private ws: WebSocketService) {
@@ -20,5 +20,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.ws.connect();
+  }
+
+  ngOnDestroy() {
+    this.ws.disconnect();
   }
 }

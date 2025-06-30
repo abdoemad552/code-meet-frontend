@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import AgoraRTM, {RtmChannel, RtmClient} from 'agora-rtm-sdk';
 import {Subject} from 'rxjs';
-import {AGORA_APP_ID} from '../environment';
+import {AGORA_APP_ID} from '../shared/environment';
 
 @Injectable({
   providedIn: 'root'

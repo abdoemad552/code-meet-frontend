@@ -5,7 +5,7 @@ import AgoraRTC, {
   ILocalAudioTrack, ILocalVideoTrack
 } from 'agora-rtc-sdk-ng';
 import {BehaviorSubject, Subject} from 'rxjs';
-import {AGORA_APP_ID} from '../environment';
+import {AGORA_APP_ID} from '../shared/environment';
 
 @Injectable({
   providedIn: 'root'

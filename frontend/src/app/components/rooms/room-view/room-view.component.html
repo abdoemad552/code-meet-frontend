@@ -167,12 +167,6 @@
         </div>
       </div>
     </ng-template>
+    <router-outlet></router-outlet>
   </div>
 </div>
-
-<app-membership-requests
-  [roomId]="roomId"
-  (hideRequests)="hideRequests()"
-  (membershipAccepted)="getMemberships()"
-  *ngIf="requestsShown">
-</app-membership-requests>
