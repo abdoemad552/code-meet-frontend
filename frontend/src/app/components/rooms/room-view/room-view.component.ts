@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink, RouterOutlet} from '@angular/router';
 import {RoomService} from '../../../services/room.service';
 import {RoomInfoResponse} from '../../../models/room/room-info-response.dto';
 import {UserInfoResponse} from '../../../models/user/user-info-response.dto';
@@ -8,7 +8,6 @@ import {WebSocketService} from '../../../services/websocket.service';
 import {NgForOf, NgIf} from '@angular/common';
 import {MemberCardComponent} from './member-card/member-card.component';
 import {MembershipInfoResponse} from '../../../models/membership/membership-info-response.dto';
-import {MembershipRequestsComponent} from './membership-requests/membership-requests.component';
 
 @Component({
   selector: 'app-room-view',
@@ -18,7 +17,7 @@ import {MembershipRequestsComponent} from './membership-requests/membership-requ
     NgIf,
     NgForOf,
     MemberCardComponent,
-    MembershipRequestsComponent
+    RouterOutlet
   ],
   templateUrl: './room-view.component.html',
   styleUrl: './room-view.component.css'
@@ -93,11 +92,7 @@ export class RoomViewComponent implements OnInit {
   }
 
   showRequests() {
-    this.requestsShown = true;
-  }
-
-  hideRequests() {
-    this.requestsShown = false;
+    this.router.navigateByUrl(`/room/${this.roomId}/requests`);
   }
 
   onRemove(membershipId: number) {

@@ -28,7 +28,7 @@
             </span>
             <span class="text-gray-600"> {{ peerChat.lastSentMessage.content }} </span>
             <div class="text-xs text-gray-500 text-left pt-1 select-none">
-              {{ formatTime(peerChat.lastSentMessage.sentAt) }}
+              {{ formatDateTime(peerChat.lastSentMessage.sentAt) }}
             </div>
           </ng-container>
 
@@ -70,7 +70,7 @@
             </span>
             <span class="text-gray-600"> {{ roomChat.lastSentMessage.content }} </span>
             <div class="text-xs text-gray-500 text-left pt-1 pr-1 select-none">
-              {{ formatTime(roomChat.lastSentMessage.sentAt) }}
+              {{ formatDateTime(roomChat.lastSentMessage.sentAt) }}
             </div>
           </ng-container>
 

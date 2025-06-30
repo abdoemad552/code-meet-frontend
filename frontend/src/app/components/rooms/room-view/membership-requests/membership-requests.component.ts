@@ -4,6 +4,7 @@ import {NgForOf, NgIf} from '@angular/common';
 import {MemberCardComponent} from '../member-card/member-card.component';
 import {MembershipService} from '../../../../services/membership.service';
 import {HttpStatusCode} from '@angular/common/http';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-membership-requests',
@@ -16,17 +17,25 @@ import {HttpStatusCode} from '@angular/common/http';
   styleUrl: './membership-requests.component.css'
 })
 export class MembershipRequestsComponent implements OnInit {
+  roomId: number;
   requests: MembershipInfoResponse[] = [];
 
-  @Input() roomId: number;
-  @Output() hideRequests = new EventEmitter<void>();
-  @Output() membershipAccepted = new EventEmitter<void>();
-
-  constructor(private membershipService: MembershipService) {
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private membershipService: MembershipService
+  ) {
   }
 
   ngOnInit() {
-    this.getRequests();
+    this.route.parent.paramMap
+      .subscribe({
+        next: params => {
+          this.roomId = Number(params.get("id"));
+          console.log(params.get("id"), this.roomId);
+          this.getRequests();
+        }
+      });
   }
 
   getRequests() {
@@ -47,7 +56,7 @@ export class MembershipRequestsComponent implements OnInit {
   }
 
   onHideRequests() {
-    this.hideRequests.emit();
+    this.router.navigateByUrl(`/room/${this.roomId}`);
   }
 
   onMembershipAccepted(membershipId: number) {
@@ -58,7 +67,6 @@ export class MembershipRequestsComponent implements OnInit {
           if (response.status == HttpStatusCode.NoContent) {
             this.requests =
               this.requests.filter(r => r.membershipId != membershipId);
-            this.membershipAccepted.emit();
           }
         },
         error: err => console.error(err)
