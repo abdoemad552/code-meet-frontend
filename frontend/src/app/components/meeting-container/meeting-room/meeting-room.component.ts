@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, HostListener, Input, Output} from '@angular/core';
 import {MeetingHeaderComponent} from './header/meeting-header.component';
 import {MeetingContentComponent} from './content/meeting-content.component';
 import {AgoraRtcService} from '../../../services/agora-rtc.service';
@@ -17,6 +17,7 @@ export class MeetingRoomComponent {
   @Output() leave = new EventEmitter<void>();
 
   sidebarContent: 'CHAT' | 'PARTICIPANTS' | 'HIDDEN' = 'CHAT';
+  mainAreaContent: 'EDITOR' | 'SCREEN_SHARE' | 'PARTICIPANTS' = 'PARTICIPANTS';
   volumeLevels: { [userId: number]: number } = {};
   subscriptions: Subscription[] = [];
 
@@ -24,6 +25,14 @@ export class MeetingRoomComponent {
     protected rtcService: AgoraRtcService,
     protected rtmService: AgoraRtmService
   ) {}
+
+  ngOnInit() {}
+
+  @HostListener('document:keydown.escape', ['$event'])
+  handleEscapeKey(event: KeyboardEvent) {
+    event.preventDefault();
+    this.onSidebarChanged('HIDDEN');
+  }
 
   onLeave() {
     this.leave.emit();
@@ -33,7 +42,7 @@ export class MeetingRoomComponent {
     this.sidebarContent = 'HIDDEN';
   }
 
-  onSidebarChanged(content: 'CHAT' | 'PARTICIPANTS') {
+  onSidebarChanged(content: 'CHAT' | 'PARTICIPANTS' | 'HIDDEN') {
     console.log(content);
     if (this.sidebarContent === content) {
       this.sidebarContent = 'HIDDEN';

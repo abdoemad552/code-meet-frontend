@@ -2,6 +2,18 @@ import { Injectable } from '@angular/core';
 import AgoraRTM, {RtmChannel, RtmClient} from 'agora-rtm-sdk';
 import {Subject} from 'rxjs';
 import {AGORA_APP_ID} from '../shared/environment';
+import {formatDateTime} from '../shared/utils';
+
+interface Message {
+  sender: {
+    id: string,
+    firstName?: string,
+    lastName?: string,
+    username?: string
+  },
+  content: string,
+  sentAt: string
+}
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +26,7 @@ export class AgoraRtmService {
   //////////////////////////////////////////////////////////
   tokenExpired$ = new Subject<void>();
   privilegeTokenWillExpire$ = new Subject<void>();
-  channelMessage$ = new Subject<{ content: string, memberId: string, ts: number }>();
+  channelMessage$ = new Subject<Message>();
   memberJoined$ = new Subject<string>();
   memberLeft$ = new Subject<string>();
   //////////////////////////////////////////////////////////
@@ -70,7 +82,13 @@ export class AgoraRtmService {
 
   initChannelEventListeners() {
     this.channel.on('ChannelMessage', async (message, memberId, props) => {
-      this.channelMessage$.next({ content: message.text, memberId: memberId, ts: props.serverReceivedTs });
+      this.channelMessage$.next({
+        sender: {
+          id: memberId
+        },
+        content: message.text,
+        sentAt: formatDateTime(new Date(props.serverReceivedTs).toISOString())
+      });
     });
 
     this.channel.on('MemberJoined', async memberId => {

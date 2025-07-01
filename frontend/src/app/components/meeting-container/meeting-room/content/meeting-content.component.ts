@@ -1,26 +1,32 @@
-import {Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
-import {DatePipe, NgForOf, NgIf} from '@angular/common';
+import {Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild} from '@angular/core';
+import {NgForOf, NgIf} from '@angular/common';
 import {UserInfoResponse} from '../../../../models/user/user-info-response.dto';
 import {FormsModule} from '@angular/forms';
 import {AgoraRtcService} from '../../../../services/agora-rtc.service';
 import {AgoraRtmService} from '../../../../services/agora-rtm.service';
 import {UserService} from '../../../../services/user.service';
 import {Subscription} from 'rxjs';
+import {MeetingMessagesContainerComponent} from './meeting-messages-container/meeting-messages-container.component';
+import {formatDateTime} from '../../../../shared/utils';
 
 interface Message {
-  senderId: number;
-  senderName: string;
-  text: string;
-  timestamp: Date;
+  sender: {
+    id: string,
+    firstName?: string,
+    lastName?: string,
+    username?: string
+  },
+  content: string,
+  sentAt: string
 }
 
 @Component({
-  selector: 'app-content',
+  selector: 'meeting-room-content',
   imports: [
-    DatePipe,
     NgForOf,
     NgIf,
-    FormsModule
+    FormsModule,
+    MeetingMessagesContainerComponent
   ],
   templateUrl: './meeting-content.component.html',
   standalone: true,
@@ -29,7 +35,11 @@ interface Message {
 export class MeetingContentComponent implements OnDestroy {
   @Input() sidebarContent: 'CHAT' | 'PARTICIPANTS' | 'HIDDEN';
   @Output() hideSidebar = new EventEmitter<void>();
+  @ViewChild('messageContainer') messageContainer: ElementRef;
+  @ViewChild('scrollButton') scrollButton: ElementRef;
 
+  hideTimeout: any;
+  owner: UserInfoResponse;
   messages: Message[] = [];
   participants: UserInfoResponse[] = [];
   volumeLevels: { [userId: number]: number } = {};
@@ -44,6 +54,7 @@ export class MeetingContentComponent implements OnDestroy {
   }
 
   ngOnInit(): void {
+    this.owner = JSON.parse(sessionStorage.getItem("userInfo"));
     this.subscriptions.push(
       this.rtmService.memberJoined$.subscribe(memberId => {
         console.log(`RTM: ${memberId} joined the channel`);
@@ -61,8 +72,13 @@ export class MeetingContentComponent implements OnDestroy {
       }),
       this.rtmService.channelMessage$.subscribe(message => {
         // message: { content: string, memberId: string, ts: number }
-        console.log(`RTM: A new message ${message.content} from ${message.memberId} at ${message.ts}`);
-        this.messages.push(JSON.parse(message.content));
+        console.log(`RTM: A new message ${message.content} from ${message.sender.id} at ${message.sentAt}`);
+        const participant = this.participants.find(p => String(p.userId) === message.sender.id);
+        message.sender.firstName = participant.firstName;
+        message.sender.lastName = participant.lastName;
+        message.sender.username = participant.username;
+        this.messages.push(message);
+        this.scrollToBottom();
       }),
       this.rtcService.volumeIndicator$.subscribe(volumes => {
         // volumes: { level: number, uid: number }[]
@@ -97,16 +113,20 @@ export class MeetingContentComponent implements OnDestroy {
   }
 
   sendMessage() {
-    if (this.inputMessage.trim()) {
-      const userInfo: UserInfoResponse =
-        JSON.parse(sessionStorage.getItem("userInfo"));
+    const content = this.inputMessage.trim();
+    if (content) {
       const message = {
-        senderId: userInfo.userId,
-        senderName: `${userInfo.firstName} ${userInfo.lastName}`,
-        text: this.inputMessage.trim(),
-        timestamp: new Date()
+        sender: {
+          id: String(this.owner.userId),
+          firstName: this.owner.firstName,
+          lastName: this.owner.lastName
+        },
+        content: content,
+        sentAt: formatDateTime(new Date().toISOString())
       };
+      this.rtmService.sendMessage(content);
       this.messages.push(message);
+      this.scrollToBottom();
       this.inputMessage = '';
     }
   }
@@ -119,6 +139,30 @@ export class MeetingContentComponent implements OnDestroy {
             a.lastName > b.lastName ? 1 :
               a.username.toLowerCase().localeCompare(b.username.toLowerCase());
     });
+  }
+
+  scrollToBottom(): void {
+    const container = this.messageContainer?.nativeElement;
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
+  }
+
+  startHideTimeout(): void {
+    this.hideTimeout = setTimeout(() => {
+      if (this.scrollButton?.nativeElement) {
+        this.scrollButton.nativeElement.style.opacity = '0';
+      }
+    }, 500);
+  }
+
+  cancelHideTimeout(): void {
+    if (this.hideTimeout) {
+      clearTimeout(this.hideTimeout);
+    }
+    if (this.scrollButton?.nativeElement) {
+      this.scrollButton.nativeElement.style.opacity = '1';
+    }
   }
 
   ngOnDestroy() {

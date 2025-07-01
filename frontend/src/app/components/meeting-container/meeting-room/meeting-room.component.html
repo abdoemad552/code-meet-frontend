@@ -1,14 +1,15 @@
-<div class="bg-gray-100 h-screen flex flex-col">
-  <app-header
+<div class="bg-gray-100 h-screen w-screen flex flex-col">
+  <meeting-room-header
+    [sidebarContent]="sidebarContent"
     (toggleParticipantsSidebar)="onSidebarChanged('PARTICIPANTS')"
     (toggleChatSidebar)="onSidebarChanged('CHAT')"
     (leave)="onLeave()"
-    class="header-gradient text-white px-5 py-7 flex items-center justify-between shadow-md">
-  </app-header>
+    class="header-gradient text-white px-4 py-2 flex items-center justify-between shadow-md">
+  </meeting-room-header>
 
-  <app-content
+  <meeting-room-content
     [sidebarContent]="sidebarContent"
     (hideSidebar)="onHideSidebar()"
-    class="flex-1 flex flex-row">
-  </app-content>
+    class="h-full flex-1 flex flex-row overflow-hidden">
+  </meeting-room-content>
 </div>

@@ -36,10 +36,6 @@ export class MeetingEntranceComponent implements AfterViewInit {
     this.rtcService.createMicrophoneAndVideoTracks();
   }
 
-  get isMicObtained() {
-    return this.rtcService.isMicObtained();
-  }
-
   onJoin() {
     this.join.emit(this.meetingId);
   }
@@ -68,7 +64,7 @@ export class MeetingEntranceComponent implements AfterViewInit {
 
   get camButtonClasses(): string {
     if (!this.rtcService.isCamObtained()) {
-      return 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-60';
+      return 'bg-gray-300 text-gray-400 cursor-not-allowed opacity-60';
     }
     return this.rtcService.isCamEnabled
       ? 'bg-white text-gray-700 hover:bg-indigo-100 active:bg-indigo-200 cursor-pointer'
@@ -77,11 +73,11 @@ export class MeetingEntranceComponent implements AfterViewInit {
 
   get micButtonClasses(): string {
     if (!this.rtcService.isMicObtained()) {
-      return 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-60';
+      return 'bg-gray-300 text-gray-400 cursor-not-allowed opacity-60';
     }
     return this.rtcService.isMicMuted
       ? 'bg-red-500 text-white hover:bg-red-700 active:bg-red-800 cursor-pointer'
-      : 'bg-white text-gray-700 hover:bg-indigo-100 active:bg-indigo-200';
+      : 'bg-white text-gray-700 hover:bg-indigo-100 active:bg-indigo-200 cursor-pointer';
   }
 
   get camIconClass(): string {
