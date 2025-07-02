@@ -1,15 +1,19 @@
 <div class="bg-gray-100 h-screen w-screen flex flex-col">
   <meeting-room-header
     [sidebarContent]="sidebarContent"
+    [mainAreaContent]="mainAreaContent"
     (toggleParticipantsSidebar)="onSidebarChanged('PARTICIPANTS')"
     (toggleChatSidebar)="onSidebarChanged('CHAT')"
+    (toggleEditor)="onMainAreaChanged('EDITOR')"
+    (toggleScreenShare)="onMainAreaChanged('SCREEN_SHARE')"
     (leave)="onLeave()"
-    class="header-gradient text-white px-4 py-2 flex items-center justify-between shadow-md">
+    class="bg-indigo-400 text-white px-4 py-2 z-20 flex items-center justify-between shadow-md">
   </meeting-room-header>
 
   <meeting-room-content
+    [mainAreaContent]="mainAreaContent"
     [sidebarContent]="sidebarContent"
     (hideSidebar)="onHideSidebar()"
-    class="h-full flex-1 flex flex-row overflow-hidden">
+    class="w-full h-full flex overflow-hidden z-10">
   </meeting-room-content>
 </div>

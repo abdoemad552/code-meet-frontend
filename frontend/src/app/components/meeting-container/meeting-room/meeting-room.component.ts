@@ -31,7 +31,11 @@ export class MeetingRoomComponent {
   @HostListener('document:keydown.escape', ['$event'])
   handleEscapeKey(event: KeyboardEvent) {
     event.preventDefault();
-    this.onSidebarChanged('HIDDEN');
+    if (this.sidebarContent !== 'HIDDEN') {
+      this.onSidebarChanged('HIDDEN');
+    } else if (this.mainAreaContent === 'EDITOR') {
+      this.onMainAreaChanged('PARTICIPANTS');
+    }
   }
 
   onLeave() {
@@ -48,6 +52,14 @@ export class MeetingRoomComponent {
       this.sidebarContent = 'HIDDEN';
     } else {
       this.sidebarContent = content;
+    }
+  }
+
+  onMainAreaChanged(content: 'EDITOR' | 'SCREEN_SHARE' | 'PARTICIPANTS') {
+    if (this.mainAreaContent === content) {
+      this.mainAreaContent = 'PARTICIPANTS';
+    } else {
+      this.mainAreaContent = content;
     }
   }
 }

@@ -1,31 +1,42 @@
-<div class="flex h-full w-full overflow-hidden">
-  <!-- Participants Grid -->
-  <div class="scrollbar-overlay w-full h-full">
-    <div class="overflow-auto grid grid-cols-4 py-2 transition-all duration-300">
-      <ng-container *ngFor="let participant of sortedParticipants">
-        <div
-          class="participant-card"
-          [class.speaking]="isSpeaking(participant.userId)">
-          <div
-            class="avatar"
-            [id]="`video-wrapper-${participant.userId}`">
-            <ng-container *ngIf="!rtcService.isCamEnabled">
-              <!-- SVG Placeholder -->
-              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-circle text-gray-500">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-              </svg>
-            </ng-container>
-          </div>
-          <p class="name">{{ participant.firstName + ' ' + participant.lastName }}</p>
+<div class="flex w-full justify-between overflow-hidden">
+  <div
+    class="flex overflow-hidden"
+    [ngClass]="{'w-[75%]': sidebarContent !== 'HIDDEN', 'w-full': sidebarContent === 'HIDDEN'}">
+    @if (mainAreaContent === 'PARTICIPANTS') {
+      <!-- Participants Grid -->
+      <div class="scrollbar-overlay w-full h-full">
+        <div class="overflow-auto grid grid-cols-3 py-2 transition-all duration-300">
+          <ng-container *ngFor="let participant of [1, 1,1,1,1,1,1,11,1,1,1,1,1,1,1,11,1]">
+            <div
+              class="participant-card"
+              [class.speaking]="isSpeaking(participants[0].userId)">
+              <div
+                class="avatar"
+                [id]="`video-wrapper-${participants[0].userId}`">
+                <ng-container *ngIf="!rtcService.isCamEnabled">
+                  <!-- SVG Placeholder -->
+                  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-circle text-gray-500">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                  </svg>
+                </ng-container>
+              </div>
+              <p class="name">{{ participants[0].firstName + ' ' + participants[0].lastName }}</p>
+            </div>
+          </ng-container>
         </div>
-      </ng-container>
-    </div>
+      </div>
+    } @else if (mainAreaContent === 'EDITOR') {
+      <app-code-editor
+        class="w-full">
+      </app-code-editor>
+    } @else if (mainAreaContent === 'SCREEN_SHARE') {
+    }
   </div>
 
   <!-- Sidebar -->
   <aside
     *ngIf="sidebarContent !== 'HIDDEN'"
-    class="w-[35%] border-l border-gray-300 flex flex-col overflow-hidden">
+    class="w-[25%] border-l border-gray-300 flex flex-col overflow-hidden">
 
     <header class="flex justify-between items-center border-b border-gray-300 px-3 py-3 select-none">
       <h3 class="text-lg text-gray-800">{{ sidebarContent === 'CHAT' ? 'Chat' : `Participants (${participants.length})` }}</h3>
@@ -85,38 +96,39 @@
 
     <!-- Participants View -->
     <ng-container *ngIf="sidebarContent === 'PARTICIPANTS'">
-      <div class="sidebar-content">
-        <div *ngFor="let participant of sortedParticipants; let last = last" class="participants-items-container">
-          <div class="participant-item">
-            <!-- Avatar Container -->
-            <div class="avatar-container">
-              <ng-container *ngIf="participant.profilePictureUrl; else svgIcon">
-                <img
-                  [src]="participant.profilePictureUrl"
-                  alt="Room Image"
-                  class="w-10 h-10 p-2 bg-indigo-50 rounded-full">
-              </ng-container>
-              <ng-template #svgIcon>
-                <svg
-                  class="w-10 h-10 text-indigo-500 bg-indigo-50 rounded-full"
-                  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"></path>
-                </svg>
-              </ng-template>
+      <div class="border border-gray-300 rounded-lg h-full scrollbar-overlay m-2">
+        <div
+          *ngFor="let participant of sortedParticipants; let i = index;"
+          [class]="i !== participants.length ? 'border-b border-gray-300' : ''"
+          [class.speaking]="isSpeaking(participant.userId)">
+          <div class="flex items-center gap-4 w-full p-2">
+            <!-- Avatar -->
+            <div *ngIf="participant.profilePictureUrl; else svgIcon">
+              <img
+                [src]="participant.profilePictureUrl"
+                alt="Room Image"
+                class="w-10 h-10 p-2 bg-indigo-50 rounded-full">
             </div>
+            <ng-template #svgIcon>
+              <svg
+                class="w-10 h-10 text-indigo-500 bg-indigo-50 rounded-full"
+                xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"></path>
+              </svg>
+            </ng-template>
 
-            <!-- Participant Info -->
-            <div class="participant-info">
-              <div class="participant-fullname">
+            <!-- Full Name + Admin Tag -->
+            <div class="flex flex-col">
+              <!-- Full Name -->
+              <span class="text-base font-semibold text-gray-800">
                 {{ participant.firstName }} {{ participant.lastName }}
-              </div>
-              <div class="text-sm text-indigo-700 font-medium">
+              </span>
+              <!-- Username -->
+              <span class="text-xs text-indigo-700 font-medium">
                 <span class="select-none">{{ '@' }}</span>{{ participant.username }}
-              </div>
+              </span>
             </div>
           </div>
-          <!-- Divider line (except after last item) -->
-          <div *ngIf="!last" class="participant-divider"></div>
         </div>
       </div>
     </ng-container>

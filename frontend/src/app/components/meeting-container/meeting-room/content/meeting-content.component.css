@@ -33,6 +33,12 @@
   border-color: #8229cb;     /* green border */
 }
 
+.speaking {
+  background-color: rgba(238, 212, 251, 0.68); /* light green background */
+  border-color: #8229cb;     /* green border */
+  transition: background-color 0.3s ease-in-out;
+}
+
 .sidebar {
   width: 25%;
   height: 100%;
@@ -188,10 +194,6 @@
   padding: 0.75rem 1rem;
   border-radius: 0.5rem;
   transition: background-color 0.2s ease;
-}
-
-.participant-item:hover {
-  background-color: #f3f4f6;
 }
 
 .participant-divider {

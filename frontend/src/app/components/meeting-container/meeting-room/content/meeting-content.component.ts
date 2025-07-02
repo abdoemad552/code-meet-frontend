@@ -1,5 +1,5 @@
 import {Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild} from '@angular/core';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {UserInfoResponse} from '../../../../models/user/user-info-response.dto';
 import {FormsModule} from '@angular/forms';
 import {AgoraRtcService} from '../../../../services/agora-rtc.service';
@@ -8,6 +8,7 @@ import {UserService} from '../../../../services/user.service';
 import {Subscription} from 'rxjs';
 import {MeetingMessagesContainerComponent} from './meeting-messages-container/meeting-messages-container.component';
 import {formatDateTime} from '../../../../shared/utils';
+import {CodeEditorComponent} from '../../../code-editor/code-editor.component';
 
 interface Message {
   sender: {
@@ -26,7 +27,9 @@ interface Message {
     NgForOf,
     NgIf,
     FormsModule,
-    MeetingMessagesContainerComponent
+    MeetingMessagesContainerComponent,
+    CodeEditorComponent,
+    NgClass
   ],
   templateUrl: './meeting-content.component.html',
   standalone: true,
@@ -34,6 +37,7 @@ interface Message {
 })
 export class MeetingContentComponent implements OnDestroy {
   @Input() sidebarContent: 'CHAT' | 'PARTICIPANTS' | 'HIDDEN';
+  @Input() mainAreaContent: 'EDITOR' | 'SCREEN_SHARE' | 'PARTICIPANTS';
   @Output() hideSidebar = new EventEmitter<void>();
   @ViewChild('messageContainer') messageContainer: ElementRef;
   @ViewChild('scrollButton') scrollButton: ElementRef;

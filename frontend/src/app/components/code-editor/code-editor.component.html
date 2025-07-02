@@ -1,0 +1,101 @@
+<div class="flex flex-col w-full h-full text-gray-800">
+  <!-- Header -->
+  <header class="bg-gray-100 p-4 border-b border-gray-300 flex items-center justify-between select-none">
+    <div class="flex space-x-4 items-center">
+      <button
+        (click)="runCode()"
+        class="flex gap-2 px-4 py-2 bg-emerald-600 font-medium text-md text-white rounded-full shadow hover:bg-emerald-600 active:bg-emerald-700 focus:outline-none transition duration-200 cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="4 17 10 11 4 5"/>
+          <line x1="12" y1="19" x2="20" y2="19"/>
+        </svg>
+        Run
+      </button>
+      <button
+        (click)="toggleIO()"
+        class="flex gap-2 px-4 py-2 font-medium text-md rounded-full focus:outline-none transition duration-200 cursor-pointer"
+        [ngClass]="{'shadow bg-gray-600 active:bg-gray-700 text-white': ioShown, 'hover:bg-gray-200 active:bg-gray-300 text-gray-700': !ioShown}">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H6.911a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661Z" />
+        </svg>
+        IO
+      </button>
+    </div>
+
+    <div class="flex space-x-4 items-center">
+      <drop-down-list
+        [label]="'Language'"
+        [(selectedOption)]="language"
+        [options]="languages"
+        class="text-white">
+      </drop-down-list>
+
+      <drop-down-list
+        [label]="'Theme'"
+        [(selectedOption)]="theme"
+        [options]="themes"
+        class="text-white">
+      </drop-down-list>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main
+    class="flex w-full h-full p-6 bg-gray-100 overflow-hidden"
+    [ngClass]="{'gap-3': ioShown}">
+    <!-- Code Editor Area -->
+    <app-editor
+      [(code)]="code"
+      [theme]="theme"
+      [language]="language"
+      class="w-full bg-white rounded-lg h-full shadow-md overflow-auto border border-gray-300"
+      [ngClass]="{ 'w-full': !ioShown, 'w-[75%]': ioShown }">
+    </app-editor>
+
+    <!-- Input/Output Wrapper -->
+    <div
+      class="relative transition-all duration-150"
+      [ngClass]="{ 'w-[25%]': ioShown, 'w-0 overflow-hidden': !ioShown }">
+
+      <div *ngIf="ioShown" class="flex flex-col gap-3 w-full h-full shadow-md border border-gray-300 rounded-lg p-3 bg-white">
+        <!-- Input Area -->
+        <div class="flex flex-col h-1/2 bg-white rounded-lg border border-gray-300 select-none">
+          <div class="p-2 border-b border-gray-300 rounded-t-lg bg-gray-50">
+            <h3 class="text-md font-medium text-gray-700 flex items-center gap-2">
+              Input
+            </h3>
+          </div>
+          <textarea
+            [(ngModel)]="input"
+            class="flex h-full p-2 text-md text-gray-800 font-mono resize-none placeholder:text-gray-400 focus:outline-none"
+            placeholder="Enter your input here..."
+            spellcheck="false">
+          </textarea>
+        </div>
+
+        <!-- Output Area -->
+        <div class="flex flex-col h-1/2 bg-white border border-gray-300 rounded-lg">
+          <div class="p-2 border-b border-gray-300 rounded-t-lg bg-gray-50 flex justify-between items-center select-none">
+            <h3 class="text-md font-medium text-gray-700 flex items-center gap-2">
+              Output
+            </h3>
+            <button
+              (click)="copyOutput()"
+              class="p-1 text-md hover:bg-gray-100 active:bg-gray-200 rounded-md text-indigo-500 flex items-center gap-1 focus:outline-none transition duration-200 cursor-pointer">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
+                <path d="M7.5 3.375c0-1.036.84-1.875 1.875-1.875h.375a3.75 3.75 0 0 1 3.75 3.75v1.875C13.5 8.161 14.34 9 15.375 9h1.875A3.75 3.75 0 0 1 21 12.75v3.375C21 17.16 20.16 18 19.125 18h-9.75A1.875 1.875 0 0 1 7.5 16.125V3.375Z" />
+                <path d="M15 5.25a5.23 5.23 0 0 0-1.279-3.434 9.768 9.768 0 0 1 6.963 6.963A5.23 5.23 0 0 0 17.25 7.5h-1.875A.375.375 0 0 1 15 7.125V5.25ZM4.875 6H6v10.125A3.375 3.375 0 0 0 9.375 19.5H16.5v1.125c0 1.035-.84 1.875-1.875 1.875h-9.75A1.875 1.875 0 0 1 3 20.625V7.875C3 6.839 3.84 6 4.875 6Z" />
+              </svg>
+            </button>
+          </div>
+          <textarea
+            [(ngModel)]="output"
+            class="caret-transparent flex h-full p-2 text-md text-gray-800 font-mono resize-none placeholder:text-gray-400 focus:outline-none"
+            spellcheck="false"
+            readonly>
+          </textarea>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

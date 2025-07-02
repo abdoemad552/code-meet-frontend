@@ -22,6 +22,7 @@ import {SearchComponent} from './components/search/search.component';
 import {
   MembershipRequestsComponent
 } from './components/rooms/room-view/membership-requests/membership-requests.component';
+import {CodeEditorComponent} from './components/code-editor/code-editor.component';
 
 export const routes: Routes = [
   // Public Routes
@@ -129,6 +130,11 @@ export const routes: Routes = [
         path: 'search',
         component: SearchComponent,
         title: 'Search'
+      },
+      {
+        path: 'editor',
+        component: CodeEditorComponent,
+        title: 'Code Editor'
       }
     ]
   },

@@ -14,9 +14,12 @@ import {AgoraRtcService} from '../../../../services/agora-rtc.service';
 })
 export class MeetingHeaderComponent {
   @Input() sidebarContent: 'CHAT' | 'PARTICIPANTS' | 'HIDDEN';
+  @Input() mainAreaContent: 'EDITOR' | 'SCREEN_SHARE' | 'PARTICIPANTS';
   @Output() leave = new EventEmitter<void>();
   @Output() toggleChatSidebar = new EventEmitter<void>();
   @Output() toggleParticipantsSidebar = new EventEmitter<void>();
+  @Output() toggleEditor = new EventEmitter<void>();
+  @Output() toggleScreenShare = new EventEmitter<void>();
 
   constructor(
     protected rtc: AgoraRtcService
@@ -33,5 +36,13 @@ export class MeetingHeaderComponent {
 
   onToggleParticipantsSidebar() {
     this.toggleParticipantsSidebar.emit();
+  }
+
+  onToggleEditor() {
+    this.toggleEditor.emit();
+  }
+
+  onToggleScreenShare() {
+    this.toggleScreenShare.emit();
   }
 }
