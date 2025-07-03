@@ -1,59 +1,73 @@
 import { Component } from '@angular/core';
-import {MeetingsboxComponent} from './meetingsbox/meetingsbox.component';
-import {Router} from '@angular/router';
-import {MeetingsTabsComponent} from './meetingstabs/meetingstabs.component';
-import { MeetingResponse } from '../../models/meeting/meeting-response.dto';
+import {ActivatedRoute, Router} from '@angular/router';
+import { MeetingInfoResponse } from '../../models/meeting/meeting-info-response.dto';
 import { MeetingService } from '../../services/meeting.service';
+import {ReactiveFormsModule} from '@angular/forms';
+import {NgClass, NgForOf, NgStyle} from '@angular/common';
+import {MeetingCardComponent} from './meeting-card/meeting-card.component';
+import {MeetingBoxComponent} from './meeting-box/meeting-box.component';
 
 @Component({
   selector: 'app-meetings',
   standalone: true,
   imports: [
-    MeetingsboxComponent,
-    MeetingsTabsComponent
+    ReactiveFormsModule,
+    NgClass,
+    NgStyle,
+    NgForOf,
+    MeetingCardComponent,
+    MeetingBoxComponent
   ],
   templateUrl: './meetings.component.html',
   styleUrl: './meetings.component.css'
 })
 export class MeetingsComponent {
-
-  currentRoute: string = '';
-
-  comingMeetings:MeetingResponse[]=[];
-  previousMeetings:MeetingResponse[]=[];
+  isScheduledShown: boolean = true;
+  scheduledMeetings: MeetingInfoResponse[] = [];
+  previousMeetings: MeetingInfoResponse[] = [];
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private meetingService: MeetingService
   ) {
   }
 
   ngOnInit() {
-    this.getCurrentRoute();
-    this.getComingMeetings(1);
-    this.getPreviousMeetings(1);
+    const owner = JSON.parse(sessionStorage.getItem("userInfo"));
+    this.getComingMeetings(owner.userId);
+    this.getPreviousMeetings(owner.userId);
   }
 
-  getComingMeetings(userId: number): void {
+  getComingMeetings(userId: number){
     this.meetingService.getScheduledMeetings(userId)
-      .subscribe((data: MeetingResponse[]) => {
-        this.comingMeetings = data;
-        console.log(data);
+      .subscribe({
+        next: scheduledMeetings => {
+          console.log(scheduledMeetings);
+          this.scheduledMeetings = scheduledMeetings;
+        }
       });
   }
 
-  getPreviousMeetings(userId: number): void {
+  getPreviousMeetings(userId: number) {
     this.meetingService.getPreviousMeetings(userId)
-      .subscribe((data: MeetingResponse[]) => {
-        this.previousMeetings = data;
-        console.log(data);
+      .subscribe({
+        next: previousMeetings => {
+          console.log(previousMeetings);
+          this.previousMeetings = previousMeetings;
+        }
       });
   }
 
-  private getCurrentRoute() {
-    // Get the current route URL
-    this.currentRoute = this.router.url;
+  onShowScheduledMeetings() {
+    this.isScheduledShown = true;
+  }
 
-    console.log(this.currentRoute);
+  onShowPreviousMeetings() {
+    this.isScheduledShown = false;
+  }
+
+  get shownMeetings() {
+    return this.isScheduledShown ? this.scheduledMeetings : this.previousMeetings;
   }
 }

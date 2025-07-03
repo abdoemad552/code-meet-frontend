@@ -1,9 +1,9 @@
 import {UserInfoResponse} from '../user/user-info-response.dto';
 
-export interface MeetingResponse {
-  meetingId: number;
+export interface MeetingInfoResponse {
+  meetingId: string;
   title: string;
   description: string;
-  creatorInfo: UserInfoResponse;
+  creator: UserInfoResponse;
   startsAt: string;
 }

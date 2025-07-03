@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MeetingService} from '../../../services/meeting.service';
 import {ScheduleMeetingRequest} from '../../../models/meeting/schedule-meeting-request.dto';
-import {MeetingResponse} from '../../../models/meeting/meeting-response.dto';
 
 @Component({
   selector: 'app-meeting-creation',
@@ -47,36 +46,33 @@ export class MeetingCreationComponent {
     this.participants.splice(index, 1);
   }
 
-  async onSubmit() {
+  onSubmit() {
     console.log(this.meetingForm.valid);
     if (this.meetingForm.valid && !this.isSubmitting) {
       this.isSubmitting = true;
       this.errorMessage = '';
       this.successMessage = '';
 
-
       const formData = this.prepareFormData();
       console.log('Meeting scheduled:', formData);
 
-      const userId = JSON.parse(sessionStorage.getItem("userInfo")).userId;
+      const owner = JSON.parse(sessionStorage.getItem("userInfo"));
       const scheduleMeetingRequest: ScheduleMeetingRequest = {
-        title: formData.title,
-        description: formData.description,
-        creatorId: userId,
-        startsAt: formData.startsAt,
-        participants: formData.participants
+        ...formData,
+        creatorId: owner.userId,
       };
+      console.log(scheduleMeetingRequest);
 
       this.meetingService.scheduleMeeting(scheduleMeetingRequest)
         .subscribe({
-          next: (meetingInfo: MeetingResponse) => {
-            console.log(meetingInfo);
+          next: meeting => {
+            console.log(meeting);
           },
           error: (error: any) => {
-            this.handleSubmissionError(error);
+            this.handleSubmissionError(error); // Notif service...
           },
           complete: () => {
-            this.showSuccessFeedback();
+            this.showSuccessFeedback(); // Notif service...
           }
         });
     } else {
@@ -88,6 +84,9 @@ export class MeetingCreationComponent {
     const localDateTime = new Date(
       `${this.meetingForm.value.date}T${this.meetingForm.value.time}`
     );
+
+    console.log(localDateTime);
+    console.log(localDateTime.toISOString());
 
     return {
       title: this.meetingForm.value['title'],

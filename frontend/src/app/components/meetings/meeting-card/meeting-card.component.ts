@@ -1,31 +1,35 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { MeetingResponse } from '../../../models/meeting/meeting-response.dto';
+import { MeetingInfoResponse } from '../../../models/meeting/meeting-info-response.dto';
+import {formatDateTime} from '../../../shared/utils';
+import {NgClass, NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-meeting-card',
   standalone: true,
   templateUrl: './meeting-card.component.html',
+  imports: [
+    NgClass,
+    NgIf
+  ],
   styleUrl: './meeting-card.component.css'
 })
-export class MeetingCardComponent implements OnChanges {
+export class MeetingCardComponent {
+  @Input() meeting: MeetingInfoResponse;
+  @Input() isScheduled: boolean;
 
-  @Input() comingMeeting!: MeetingResponse;
-  @Input() previousMeeting!: MeetingResponse;
+  ngOnInit() {
+    this.meeting.startsAt = formatDateTime(this.meeting.startsAt);
+  }
 
-  meetingDay: string = '';
-  meetingMonth: string = '';
-  meetingYear: string = '';
-  meetingTime: string = '';
+  onCardClick() {
 
-  ngOnChanges(): void {
-    let meetingDate=new Date();
-    if(this.comingMeeting?.startsAt) meetingDate=new Date(this.comingMeeting.startsAt);
-    if(this.previousMeeting?.startsAt) meetingDate=new Date(this.previousMeeting.startsAt);
+  }
 
-      this.meetingDay = meetingDate.getDate().toString();
-      this.meetingMonth = meetingDate.toLocaleString('en-US', { month: 'short' }).toUpperCase();
-      this.meetingYear = meetingDate.getFullYear().toString();
-      this.meetingTime = meetingDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-    
+  onActionButtonClick($event: MouseEvent) {
+
+  }
+
+  get buttonText(): string {
+    return this.isScheduled ? 'Join / Details' : 'View Summary';
   }
 }

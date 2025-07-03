@@ -1,5 +1,5 @@
-export interface InstantMeetingRequest{
-      title:String,
-     description:String,
-      creatorId:number
+export interface InstantMeetingRequest {
+  title: string;
+  description: string;
+  creatorId: number;
 }

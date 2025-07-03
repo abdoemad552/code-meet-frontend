@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { MeetingResponse } from "../models/meeting/meeting-response.dto";
+import { MeetingInfoResponse } from "../models/meeting/meeting-info-response.dto";
 import { ScheduleMeetingRequest } from "../models/meeting/schedule-meeting-request.dto";
 import { InstantMeetingRequest } from "../models/meeting/instant-meeting-request.dto";
 import { ParticipantRequest } from "../models/meeting/participant-request.dto";
@@ -21,25 +21,25 @@ export class MeetingService {
     return this.http.post<ParticipantInfo>(`${this.url}/join`, participantRequest);
   }
 
-  scheduleMeeting(scheduleMeetingRequest: ScheduleMeetingRequest): Observable<MeetingResponse> {
-    return this.http.post<MeetingResponse>(
+  scheduleMeeting(scheduleMeetingRequest: ScheduleMeetingRequest): Observable<MeetingInfoResponse> {
+    return this.http.post<MeetingInfoResponse>(
       `${this.url}/schedule`, scheduleMeetingRequest);
   }
 
-  instantMeeting(instantMeetingRequest: InstantMeetingRequest): Observable<MeetingResponse> {
-    return this.http.post<MeetingResponse>(
+  instantMeeting(instantMeetingRequest: InstantMeetingRequest): Observable<MeetingInfoResponse> {
+    return this.http.post<MeetingInfoResponse>(
       `${this.url}/instant`, instantMeetingRequest);
   }
 
-  getScheduledMeetings(userId: number): Observable<MeetingResponse[]> {
-    return this.http.get<MeetingResponse[]>(`${this.url}/scheduled/${userId}`);
+  getScheduledMeetings(userId: number): Observable<MeetingInfoResponse[]> {
+    return this.http.get<MeetingInfoResponse[]>(`${this.url}/scheduled/${userId}`);
   }
 
-  getPreviousMeetings(userId: number): Observable<MeetingResponse[]> {
-    return this.http.get<MeetingResponse[]>(`${this.url}/previous/${userId}`);
+  getPreviousMeetings(userId: number): Observable<MeetingInfoResponse[]> {
+    return this.http.get<MeetingInfoResponse[]>(`${this.url}/previous/${userId}`);
   }
 
-  getParticipantOfMeeting(meetingId: number, userId: number): Observable<ParticipantInfo> {
+  getParticipantOfMeeting(meetingId: string, userId: number): Observable<ParticipantInfo> {
     return this.http.get<ParticipantInfo>(`${this.url}/${meetingId}/user/${userId}`);
   }
 }
