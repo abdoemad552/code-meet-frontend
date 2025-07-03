@@ -4,6 +4,7 @@ import {NotificationInfo} from '../../models/notification/notification-info.dto'
 import {NgClass, NgForOf} from '@angular/common';
 import {formatDateTime} from '../../shared/utils';
 import {SafeHtml} from '@angular/platform-browser';
+import {NotificationType} from '../../models/notification/notification-type.enum';
 
 @Component({
   selector: 'app-notifications',

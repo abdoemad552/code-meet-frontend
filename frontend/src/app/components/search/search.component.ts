@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {NgClass, NgForOf} from '@angular/common';
+import {NgClass, NgForOf, NgStyle} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {UserService} from '../../services/user.service';
 import {RoomService} from '../../services/room.service';
@@ -15,7 +15,8 @@ import {UserCardComponent} from './user-card/user-card.component';
     FormsModule,
     NgForOf,
     RoomCardComponent,
-    UserCardComponent
+    UserCardComponent,
+    NgStyle
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.css'
