@@ -6,6 +6,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {NgClass, NgForOf, NgStyle} from '@angular/common';
 import {MeetingCardComponent} from './meeting-card/meeting-card.component';
 import {MeetingBoxComponent} from './meeting-box/meeting-box.component';
+import {UserInfoResponse} from '../../models/user/user-info-response.dto';
 
 @Component({
   selector: 'app-meetings',
@@ -22,6 +23,7 @@ import {MeetingBoxComponent} from './meeting-box/meeting-box.component';
   styleUrl: './meetings.component.css'
 })
 export class MeetingsComponent {
+  owner: UserInfoResponse;
   isScheduledShown: boolean = true;
   scheduledMeetings: MeetingInfoResponse[] = [];
   previousMeetings: MeetingInfoResponse[] = [];
@@ -31,16 +33,16 @@ export class MeetingsComponent {
     private route: ActivatedRoute,
     private meetingService: MeetingService
   ) {
+    this.owner = JSON.parse(sessionStorage.getItem("userInfo"));
   }
 
   ngOnInit() {
-    const owner = JSON.parse(sessionStorage.getItem("userInfo"));
-    this.getComingMeetings(owner.userId);
-    this.getPreviousMeetings(owner.userId);
+    this.getComingMeetings();
+    this.getPreviousMeetings();
   }
 
-  getComingMeetings(userId: number){
-    this.meetingService.getScheduledMeetings(userId)
+  getComingMeetings(){
+    this.meetingService.getScheduledMeetings(this.owner.userId)
       .subscribe({
         next: scheduledMeetings => {
           console.log(scheduledMeetings);
@@ -49,8 +51,8 @@ export class MeetingsComponent {
       });
   }
 
-  getPreviousMeetings(userId: number) {
-    this.meetingService.getPreviousMeetings(userId)
+  getPreviousMeetings() {
+    this.meetingService.getPreviousMeetings(this.owner.userId)
       .subscribe({
         next: previousMeetings => {
           console.log(previousMeetings);

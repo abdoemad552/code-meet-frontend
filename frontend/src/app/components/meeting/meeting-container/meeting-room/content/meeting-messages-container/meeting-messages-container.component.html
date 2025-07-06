@@ -1,0 +1,8 @@
+<div *ngFor="let message of state.messages; let i = index">
+  <app-chat-message
+    [message]="message"
+    [outgoingMessage]="outgoingMessage(i)"
+    [isPrevSame]="isPrevSame(i)"
+    [isPeerChat]="false">
+  </app-chat-message>
+</div>

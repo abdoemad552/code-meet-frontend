@@ -2,44 +2,36 @@ import { Injectable } from '@angular/core';
 import AgoraRTM, {RtmChannel, RtmClient} from 'agora-rtm-sdk';
 import {Subject} from 'rxjs';
 import {AGORA_APP_ID} from '../shared/environment';
-import {formatDateTime} from '../shared/utils';
-
-interface Message {
-  sender: {
-    id: string,
-    firstName?: string,
-    lastName?: string,
-    username?: string
-  },
-  content: string,
-  sentAt: string
-}
+import {AgoraTokenService} from './agora-token.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AgoraRtmService {
-
+  uid: string;
+  channelName: string;
   private client: RtmClient;
   private channel: RtmChannel;
 
   //////////////////////////////////////////////////////////
-  tokenExpired$ = new Subject<void>();
-  privilegeTokenWillExpire$ = new Subject<void>();
-  channelMessage$ = new Subject<Message>();
+  channelMessage$ = new Subject<{ content: any, memberId: string, ts: number }>();
   memberJoined$ = new Subject<string>();
   memberLeft$ = new Subject<string>();
   //////////////////////////////////////////////////////////
 
-  constructor() {
+  constructor(private tokenService: AgoraTokenService) {
     this.client = AgoraRTM.createInstance(AGORA_APP_ID);
   }
 
-  async join(channelName: string, token: string) {
+  async join(channelName: string, uid: string) {
+    this.uid = uid;
+    this.channelName = channelName;
+
     this.initClientEventListeners();
 
-    const uid = JSON.parse(sessionStorage.getItem("userInfo")).userId;
-    await this.client.login({ uid: uid.toString(), token: token });
+    // Generating RTM token...
+    const token = await this.tokenService.getRtmToken(channelName, uid);
+    await this.client.login({ uid: uid, token: token });
 
     this.channel = this.client.createChannel(channelName);
     this.initChannelEventListeners();
@@ -62,32 +54,37 @@ export class AgoraRtmService {
   }
 
   sendMessage(message: string) {
-    this.channel.sendMessage({ text: message });
+    if (this.channel) {
+      this.channel.sendMessage({ text: message });
+    }
   }
 
-  async renewToken(token: string) {
-    await this.client.renewToken(token);
-    console.log('RTM: RTM token renewed');
+  doSomething() {
+    this.client.setChannelAttributes(this.channelName, {
+
+    });
   }
 
   initClientEventListeners() {
     this.client.on('TokenExpired', async () => {
-      this.tokenExpired$.next();
+      // Generating RTM token...
+      const token = await this.tokenService.getRtmToken(this.channelName, this.uid);
+      this.client.renewToken(token);
     });
 
     this.client.on('TokenPrivilegeWillExpire', async () => {
-      this.privilegeTokenWillExpire$.next();
+      // Generating RTM token...
+      const token = await this.tokenService.getRtmToken(this.channelName, this.uid);
+      this.client.renewToken(token);
     });
   }
 
   initChannelEventListeners() {
     this.channel.on('ChannelMessage', async (message, memberId, props) => {
       this.channelMessage$.next({
-        sender: {
-          id: memberId
-        },
-        content: message.text,
-        sentAt: formatDateTime(new Date(props.serverReceivedTs).toISOString())
+        content: JSON.parse(message.text),
+        memberId: memberId,
+        ts: props.serverReceivedTs
       });
     });
 

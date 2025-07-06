@@ -39,23 +39,33 @@ body {
 .scrollbar-overlay {
   scrollbar-gutter: stable both-edges; /* Prevent shift in supporting browsers */
   overflow-y: auto;
+  overflow-x: auto; /* Add horizontal scroll */
 }
 
-/* Optional: overlay scrollbar for WebKit browsers */
+/* Scrollbar styling for WebKit browsers (Chrome, Edge, Safari) */
 .scrollbar-overlay::-webkit-scrollbar {
-  width: 8px;
+  width: 8px;  /* Vertical scrollbar */
+  height: 8px; /* Horizontal scrollbar */
 }
 
+/* Track */
 .scrollbar-overlay::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.scrollbar-overlay::-webkit-scrollbar-thumb {
+/* Thumb for vertical scrollbar */
+.scrollbar-overlay::-webkit-scrollbar-thumb:vertical {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+/* Thumb for horizontal scrollbar */
+.scrollbar-overlay::-webkit-scrollbar-thumb:horizontal {
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 4px;
 }
 
 .custom-mono {
-  font-family: "JetBrains Mono", "Inter", serif;
+  font-family: "JetBrains Mono", "Consolas", monospace;
 }
 

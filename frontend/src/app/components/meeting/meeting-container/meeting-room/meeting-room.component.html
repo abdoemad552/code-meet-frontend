@@ -1,0 +1,17 @@
+<div class="bg-gray-100 h-screen w-screen flex flex-col">
+  <meeting-room-header
+    [sidebarContent]="sidebarContent"
+    [mainAreaContent]="mainAreaContent"
+    (sidebarContentChange)="onSidebarChanged($event)"
+    (mainAreaContentChange)="onMainAreaChanged($event)"
+    (leave)="onLeave()"
+    class="bg-indigo-400 text-white px-4 py-2 z-20 flex items-center justify-between shadow-md">
+  </meeting-room-header>
+
+  <meeting-room-content
+    [sidebarContent]="sidebarContent"
+    [mainAreaContent]="mainAreaContent"
+    (hideSidebar)="onHideSidebar()"
+    class="w-full h-full flex overflow-hidden z-10">
+  </meeting-room-content>
+</div>

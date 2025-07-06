@@ -4,11 +4,13 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import {NgClass} from '@angular/common';
 import {RouterOutlet, Router} from '@angular/router';
 import {BoardDataService} from '../../services/states/board-data.service';
+import {fadeInOut} from '../../shared/animations';
 
 @Component({
   selector: 'app-board',
   standalone: true,
   imports: [HeaderComponent, SidebarComponent, NgClass, RouterOutlet],
+  animations: [fadeInOut],
   templateUrl: './board.component.html',
   styleUrl: './board.component.css',
 })

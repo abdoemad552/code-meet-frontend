@@ -15,14 +15,17 @@ import {ChatboxComponent} from './components/chats/chatbox/chatbox.component';
 import {FriendRequestsComponent} from './components/friends/friend-requests/friend-requests.component';
 import {NotificationsComponent} from './components/notifications/notifications.component';
 import {AuthGuard} from './services/guards/auth.guard';
-import {MeetingContainerComponent} from './components/meeting-container/meeting-container.component';
-import {MeetingCreationComponent} from './components/meeting-container/meeting-creation/meeting-creation.component';
+import {MeetingContainerComponent} from './components/meeting/meeting-container/meeting-container.component';
 import {RoomViewComponent} from './components/rooms/room-view/room-view.component';
 import {SearchComponent} from './components/search/search.component';
 import {
   MembershipRequestsComponent
 } from './components/rooms/room-view/membership-requests/membership-requests.component';
 import {CodeEditorComponent} from './components/code-editor/code-editor.component';
+import {MeetingComponent} from './components/meeting/meeting.component';
+import {InstantMeetingComponent} from './components/meeting/instant-meeting/instant-meeting.component';
+import {JoinMeetingComponent} from './components/meeting/join-meeting/join-meeting.component';
+import {ScheduleMeetingComponent} from './components/meeting/schedule-meeting/schedule-meeting.component';
 
 export const routes: Routes = [
   // Public Routes
@@ -139,14 +142,39 @@ export const routes: Routes = [
     ]
   },
   {
-    path: 'meeting/:id',
-    component: MeetingContainerComponent,
-    canActivate: [AuthGuard]
-  },
-  {
     path: 'meeting',
-    component: MeetingCreationComponent,
-    canActivate: [AuthGuard]
+    component: MeetingComponent,
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: '',
+        redirectTo: 'schedule',
+        pathMatch: 'full'
+      },
+      {
+        path: 'schedule',
+        component: ScheduleMeetingComponent,
+        title: 'Schedule new meeting'
+      },
+      {
+        path: 'instant',
+        component: InstantMeetingComponent,
+        title: 'Start new meeting'
+      },
+      {
+        path: 'join',
+        component: JoinMeetingComponent,
+        title: 'Join meeting'
+      },
+      {
+        matcher: (segments) => {
+          const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/i;
+          const id = segments[0]?.path;
+          return uuidRegex.test(id) ? { consumed: segments } : null;
+        },
+        component: MeetingContainerComponent,
+      }
+    ]
   },
   // Fallback route for undefined paths
   {

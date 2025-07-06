@@ -14,12 +14,14 @@ export class MeetingBoxComponent {
   }
 
   onInstantMeeting() {
+    this.router.navigateByUrl('/meeting/instant');
   }
 
   onScheduleMeeting() {
+    this.router.navigateByUrl('/meeting/schedule');
   }
 
   onJoinExistingMeeting() {
-
+    this.router.navigateByUrl('/meeting/join');
   }
 }

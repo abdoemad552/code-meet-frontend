@@ -1,7 +1,7 @@
 <app-header></app-header>
 <div class="flex">
   <app-sidebar [ngClass]="{'w-1/6': !isSidebarMinimized, 'w-1/20': isSidebarMinimized}" class="min-w-[90px]"></app-sidebar>
-  <div class="bg-white relative h-[90dvh] overflow-y-auto" [ngClass]="{'w-5/6': !isSidebarMinimized, 'w-19/20': isSidebarMinimized}">
+  <div [@fadeInOut] class="bg-white relative h-[90dvh] overflow-y-auto" [ngClass]="{'w-5/6': !isSidebarMinimized, 'w-19/20': isSidebarMinimized}">
    <router-outlet></router-outlet>
   </div>
 </div>

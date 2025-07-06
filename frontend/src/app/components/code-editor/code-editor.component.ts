@@ -3,6 +3,7 @@ import {EditorComponent} from './editor/editor.component';
 import {DropDownListComponent} from '../custom-components/drop-down-list/drop-down-list.component';
 import {FormsModule} from '@angular/forms';
 import {NgClass, NgIf} from '@angular/common';
+import {fadeInOut} from '../../shared/animations';
 
 @Component({
   selector: 'app-code-editor',
@@ -13,6 +14,7 @@ import {NgClass, NgIf} from '@angular/common';
     NgClass,
     NgIf
   ],
+  animations: [fadeInOut],
   templateUrl: './code-editor.component.html',
   styleUrl: './code-editor.component.css'
 })
