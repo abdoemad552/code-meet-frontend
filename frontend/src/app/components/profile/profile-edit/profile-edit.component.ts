@@ -1,9 +1,8 @@
-import {Component, EventEmitter, HostListener, OnInit, Output} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {UserInfoResponse} from '../../../models/user/user-info-response.dto';
 import {NgIf} from '@angular/common';
-import {UserService} from '../../../services/user.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Router} from '@angular/router';
+import {getOwner} from '../../../shared/environment';
 
 @Component({
   selector: 'app-profile-edit',
@@ -16,20 +15,14 @@ import {ActivatedRoute, Router} from '@angular/router';
   styleUrl: './profile-edit.component.css'
 })
 export class ProfileEditComponent implements OnInit {
-  owner: UserInfoResponse;
   isSubmitting: boolean = false;
   submitError: string = '';
   requestSent: boolean = false;
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private userService: UserService
-  ) {
+  constructor(private router: Router) {
   }
 
   ngOnInit() {
-    this.owner = JSON.parse(sessionStorage.getItem("userInfo"));
   }
 
   @HostListener('document:keydown.escape', ['$event'])
@@ -57,5 +50,9 @@ export class ProfileEditComponent implements OnInit {
   }
 
   validate() {
+  }
+
+  get owner() {
+    return getOwner();
   }
 }

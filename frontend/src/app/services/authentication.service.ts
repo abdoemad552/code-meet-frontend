@@ -6,6 +6,7 @@ import {SignupRequest} from '../models/authentication/signup-request.dto';
 import {UserInfoResponse} from '../models/user/user-info-response.dto';
 import {Router} from '@angular/router';
 import {WebSocketService} from './websocket.service';
+import {clearOwner, setOwner} from '../shared/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -30,18 +31,15 @@ export class AuthenticationService {
   }
 
   signOut(): void {
-    if (sessionStorage.getItem('userInfo')) {
-      sessionStorage.removeItem('userInfo');
-      this.wsService.disconnect();
-      this.router.navigateByUrl('/entry')
-        .catch(reason => console.log(reason));
-    }
+    clearOwner();
+    this.wsService.disconnect();
+    this.router.navigateByUrl('/entry');
   }
 
   initUser(userInfo: UserInfoResponse): void {
-    sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
+    setOwner(userInfo);
     this.wsService.connect();
     this.router.navigateByUrl('/home')
-      .catch(reason => console.log(reason));
+      .catch(err => console.error(err));
   }
 }

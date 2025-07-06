@@ -6,6 +6,7 @@ import {UserService} from '../../services/user.service';
 import {AuthenticationService} from '../../services/authentication.service';
 import {FriendshipService} from '../../services/friendship.service';
 import {FriendshipInfoResponse, noFriendship} from '../../models/friendship/friendship-info-response.dto';
+import {getOwner} from '../../shared/environment';
 
 @Component({
   selector: 'app-profile',
@@ -21,7 +22,6 @@ import {FriendshipInfoResponse, noFriendship} from '../../models/friendship/frie
 })
 export class ProfileComponent {
   user: UserInfoResponse;
-  owner: UserInfoResponse;
   friendship: FriendshipInfoResponse;
   isOwner: boolean;
 
@@ -35,20 +35,19 @@ export class ProfileComponent {
   }
 
   ngOnInit() {
-    this.owner = JSON.parse(sessionStorage.getItem("userInfo"));
     this.route.paramMap.subscribe({
       next: params => {
         this.user = null;
         const username = params.get("username");
 
         if (!username) {
-          this.router.navigateByUrl(`/profile/${this.owner.username}`, {
+          this.router.navigateByUrl(`/profile/${getOwner().username}`, {
             replaceUrl: true
           });
-        } else if (username === this.owner.username) {
+        } else if (username === getOwner().username) {
           this.isOwner = true;
           setTimeout(() => {
-            this.user = this.owner;
+            this.user = getOwner();
           }, 2000);
         } else {
           this.isOwner = false;
@@ -57,7 +56,7 @@ export class ProfileComponent {
               next: user => {
                 setTimeout(() => {
                   this.user = user;
-                  this.friendshipService.getFriendship(this.owner.userId, user.userId)
+                  this.friendshipService.getFriendship(getOwner().userId, user.userId)
                     .subscribe({
                       next: friendship => {
                         console.log(friendship);
@@ -81,7 +80,7 @@ export class ProfileComponent {
   }
 
   showEditProfile() {
-    this.router.navigateByUrl(`/profile/${this.owner.username}/edit`);
+    this.router.navigateByUrl(`/profile/${getOwner().username}/edit`);
   }
 
   signOut() {
@@ -90,7 +89,7 @@ export class ProfileComponent {
 
   requestFriendship() {
     this.friendshipService.requestFriendship({
-      fromId: this.owner.userId,
+      fromId: getOwner().userId,
       toId: this.user.userId
     }).subscribe({
       next: friendship => {
@@ -104,7 +103,7 @@ export class ProfileComponent {
 
   acceptFriendship() {
     this.friendshipService.acceptFriendship({
-      fromId: this.owner.userId,
+      fromId: getOwner().userId,
       toId: this.user.userId
     }).subscribe({
       next: friendship => {

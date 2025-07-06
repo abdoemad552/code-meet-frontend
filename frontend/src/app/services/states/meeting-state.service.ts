@@ -56,6 +56,16 @@ export class MeetingStateService {
     return this.participantsSubject.value;
   }
 
+  get sortedParticipants() {
+    return this.participants.sort((a, b) => {
+      return a.user.firstName < b.user.firstName ? -1 :
+        a.user.firstName > b.user.firstName ? 1 :
+          a.user.lastName < b.user.lastName ? -1 :
+            a.user.lastName > b.user.lastName ? 1 :
+              a.user.username.toLowerCase().localeCompare(b.user.username.toLowerCase());
+    });
+  }
+
   get messages() {
     return this.messagesSubject.value;
   }
@@ -133,6 +143,16 @@ export class MeetingStateService {
   }
 
   requestJoin() {
+  }
+
+  acceptEditor() {
+  }
+
+  requestEditor() {
+  }
+
+  isSpeaking(participantId: string): boolean {
+    return this.rtcService.volumeLevel[participantId] >= 50;
   }
 
   initMeetingRoom() {

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
+import {ownerExists} from '../../shared/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +11,10 @@ export class AuthGuard implements CanActivate {
   }
 
   canActivate(): boolean {
-    if (!!sessionStorage.getItem("userInfo")) {
+    if (ownerExists()) {
       return true;
     }
-    this.router.navigateByUrl("/login")
-      .catch(reason => console.log(reason));
+    this.router.navigateByUrl("/login");
     return false;
   }
 }

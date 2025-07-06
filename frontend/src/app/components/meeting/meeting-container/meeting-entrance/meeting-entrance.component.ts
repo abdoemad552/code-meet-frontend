@@ -2,12 +2,12 @@ import {AfterViewInit, Component, ElementRef, EventEmitter, Output, ViewChild} f
 import {NgClass, NgIf} from '@angular/common';
 import {AgoraRtcService} from '../../../../services/agora-rtc.service';
 import {MeetingService} from '../../../../services/meeting.service';
-import {UserInfoResponse} from '../../../../models/user/user-info-response.dto';
 import {HttpStatusCode} from '@angular/common/http';
 import {MeetingStateService} from '../../../../services/states/meeting-state.service';
 import {Router} from '@angular/router';
 import {AgoraRtmService} from '../../../../services/agora-rtm.service';
 import {MeetingView} from '../../../../models/meeting/state/meeting-view';
+import {getOwner} from '../../../../shared/environment';
 
 @Component({
   selector: 'app-meeting-entrance',
@@ -25,7 +25,6 @@ export class MeetingEntranceComponent implements AfterViewInit {
   @ViewChild('videoTrackWrapper', { static: false }) videoTrackWrapper: ElementRef;
 
   copyTimeout: any;
-  owner: UserInfoResponse;
   isParticipant: boolean = null;
   isRequesting: boolean = false;
 
@@ -36,14 +35,13 @@ export class MeetingEntranceComponent implements AfterViewInit {
     protected rtmService: AgoraRtmService,
     protected state: MeetingStateService
   ) {
-    this.owner = JSON.parse(sessionStorage.getItem("userInfo"));
   }
 
   ngOnInit() {
     this.rtcService.createMicrophoneAndVideoTracks();
 
     this.meetingService.getParticipantOfMeeting(
-      this.owner.userId,
+      getOwner().userId,
       this.state.meeting.meetingId
     ).subscribe({
       next: participant => {
@@ -84,7 +82,7 @@ export class MeetingEntranceComponent implements AfterViewInit {
   requestJoin() {
     this.isRequesting = true;
     this.meetingService.requestJoin({
-      userId: this.owner.userId,
+      userId: getOwner().userId,
       meetingId: this.state.meeting.meetingId
     }).subscribe({
       next: response => {

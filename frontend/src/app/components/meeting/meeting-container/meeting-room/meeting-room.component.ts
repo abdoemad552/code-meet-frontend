@@ -1,9 +1,7 @@
-import {Component, EventEmitter, HostListener, Output} from '@angular/core';
+import {Component, HostListener} from '@angular/core';
 import {MeetingHeaderComponent} from './header/meeting-header.component';
 import {MeetingContentComponent} from './content/meeting-content.component';
 import {MeetingStateService} from '../../../../services/states/meeting-state.service';
-import {AgoraRtcService} from '../../../../services/agora-rtc.service';
-import {AgoraRtmService} from '../../../../services/agora-rtm.service';
 import {MeetingView} from '../../../../models/meeting/state/meeting-view';
 
 @Component({
@@ -16,14 +14,8 @@ import {MeetingView} from '../../../../models/meeting/state/meeting-view';
 export class MeetingRoomComponent {
   sidebarContent: 'CHAT' | 'PARTICIPANTS' | 'HIDDEN' = 'CHAT';
   mainAreaContent: 'EDITOR' | 'SCREEN_SHARE' | 'PARTICIPANTS' = 'PARTICIPANTS';
-  volumeLevels: { [userId: number]: number } = {};
 
-
-  constructor(
-    private rtcService: AgoraRtcService,
-    private rtmService: AgoraRtmService,
-    protected state: MeetingStateService
-  ) {
+  constructor(protected state: MeetingStateService) {
   }
 
   ngOnInit() {

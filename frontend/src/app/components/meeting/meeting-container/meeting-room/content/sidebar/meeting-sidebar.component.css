@@ -1,0 +1,5 @@
+.speaking {
+  background-color: rgba(238, 212, 251, 0.68); /* light green background */
+  border-color: #8229cb; /* green border */
+  transition: background-color 0.3s ease-in-out;
+}

@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {AuthenticationService} from '../../services/authentication.service';
 import {FormsModule} from '@angular/forms';
-import {UserInfoResponse} from '../../models/user/user-info-response.dto';
 import {LoginRequest} from '../../models/authentication/login-request.dto';
 import {NgIf} from '@angular/common';
 
@@ -24,11 +23,13 @@ export class LoginComponent {
     console.log(this.loginRequest);
     this.authService.login(this.loginRequest)
       .subscribe({
-        next: (userInfo: UserInfoResponse) => {
-          console.log(userInfo);
-          this.authService.initUser(userInfo);
+        next: user => {
+          console.log(user);
+          this.authService.initUser(user);
         },
-        error: err => { console.log(err); }
+        error: err => {
+          console.error(err);
+        }
       });
   }
 

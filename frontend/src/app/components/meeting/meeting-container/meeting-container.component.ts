@@ -6,7 +6,6 @@ import {AgoraRtmService} from '../../../services/agora-rtm.service';
 import {MeetingExitComponent} from './meeting-exit/meeting-exit.component';
 import {Subscription} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UserInfoResponse} from '../../../models/user/user-info-response.dto';
 import {MeetingService} from '../../../services/meeting.service';
 import {HttpStatusCode} from '@angular/common/http';
 import {MeetingNotFoundComponent} from './meeting-not-found/meeting-not-found.component';
@@ -24,7 +23,6 @@ import {MeetingView} from '../../../models/meeting/state/meeting-view';
 })
 
 export class MeetingContainerComponent implements OnInit {
-  owner: UserInfoResponse;
   subscriptions: Subscription[] = [];
 
   constructor(
@@ -38,7 +36,6 @@ export class MeetingContainerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.owner = JSON.parse(sessionStorage.getItem("userInfo"));
     const nav = this.router.getCurrentNavigation();
     if (nav?.extras?.state['meeting']) {
       this.state.setMeeting(nav.extras.state['meeting']);
