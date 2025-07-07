@@ -17,3 +17,20 @@ export const rotate = trigger('rotateAnimation', [
     style({ transform: 'rotate(360deg)', offset: 1.0 })
   ])))
 ]);
+
+export const dropdownAnimation = trigger('dropdownAnimation', [
+  state('void', style({
+    opacity: 0,
+    transform: 'scale(0.95) translateY(-10px)'
+  })),
+  state('*', style({
+    opacity: 1,
+    transform: 'scale(1) translateY(0)'
+  })),
+  transition('void => *', [
+    animate('150ms ease-out')
+  ]),
+  transition('* => void', [
+    animate('100ms ease-in')
+  ])
+])

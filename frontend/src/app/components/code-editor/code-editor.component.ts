@@ -1,9 +1,12 @@
-import {Component, HostListener} from '@angular/core';
+import {Component} from '@angular/core';
 import {EditorComponent} from './editor/editor.component';
 import {DropDownListComponent} from '../custom-components/drop-down-list/drop-down-list.component';
 import {FormsModule} from '@angular/forms';
 import {NgClass, NgIf} from '@angular/common';
 import {fadeInOut} from '../../shared/animations';
+import {languages, themes} from '../../shared/code-editor.config';
+import {Judge0Service} from '../../services/judge0.service';
+import {catchError, of, switchMap} from 'rxjs';
 
 @Component({
   selector: 'app-code-editor',
@@ -19,67 +22,100 @@ import {fadeInOut} from '../../shared/animations';
   styleUrl: './code-editor.component.css'
 })
 export class CodeEditorComponent {
-  languages = [
-    { label: 'JavaScript', value: 'javascript' },
-    { label: 'HTML', value: 'html' },
-    { label: 'CSS', value: 'css' },
-    { label: 'Java', value: 'java' },
-    { label: 'C++', value: 'cpp' }
-  ];
-
-  themes = [
-    { label: 'One Dark', value: 'oneDark' },
-    { label: 'Github Light', value: 'githubLight' },
-  ];
-
-  theme: 'oneDark' | 'githubLight' = 'githubLight';
-  language: 'javascript' | 'html' | 'css' | 'java' = 'javascript';
-  code: string = `// Start writing code...`;
+  theme: any = themes[0];
+  language: any = languages[1];
+  code: string = languages[1].initialCode;
   input: string = '';
   output: string = '';
-  ioShown: boolean = true;
+  error: string = '';
+  compilationOutput: string = '';
+  ioShown: boolean = false;
+  isSubmitting: boolean = false;
 
-  /**
-   * Executes the current code in a sandboxed environment and captures console output.
-   * This is a basic example and should be enhanced for security and robustness
-   * in a real-world application (e.g., using Web Workers or a backend execution service).
-   */
-  runCode(): void {
+  constructor(private judge0: Judge0Service) {
   }
 
-  /**
-   * Placeholder for saving the code. In a real app, this would
-   * involve an API call to a backend.
-   */
-  saveCode(): void {
-    console.log('Saving code:', this.code);
-    alert('Code saved! (This is a placeholder action)');
-    // Implement API call to save code to a database
+  onRunCode(): void {
+    this.isSubmitting = true;
+    this.output = '';
+    this.error = '';
+
+    const code = this.code;
+    const id = this.language.id;
+    const input = this.input;
+
+    console.log('Submitting...');
+    this.judge0.submitCode(code, id, input).pipe(
+      switchMap(result => {
+        const token = result.token;
+        return this.judge0.pollResult(token);
+      }),
+      catchError(err => {
+        console.error(err);
+        this.error = 'Execution failed';
+        this.isSubmitting = false;
+        return of(null);
+      })
+    ).subscribe({
+        next: result => {
+          if (result) {
+            console.log(result);
+            this.output = this.judge0.decode(result.stdout);
+            this.error = this.judge0.decode(result.stderr);
+            this.compilationOutput = this.judge0.decode(result.compile_output);
+            this.isSubmitting = false;
+            console.log('Finished');
+          }
+        }
+      });
   }
 
-  /**
-   * Placeholder for sharing the code. In a real app, this might
-   * generate a shareable link or send the code to another user via API.
-   */
-  shareCode(): void {
-    console.log('Sharing code:', this.code);
-    alert('Code copied to clipboard for sharing! (Placeholder)');
-    // Implement API call to share code or generate a unique URL
+  onCodeChange(code: string): void {
+    this.code = code;
   }
 
-  /**
-   * Sets the language of the CodeMirror editor.
-   * @param language A string indicating the desired language ('javascript', 'html', 'css', 'java').
-   */
-  setEditorLanguage(language: 'javascript' | 'html' | 'css' | 'java'): void {
-    this.language = language;
+  onSelectedLanguageChange(value: string) {
+    this.language = this.languages.find(l => l.value === value);
+    this.code = this.language.initialCode;
   }
 
-  copyOutput() {
+  onSelectedThemeChange(value: string) {
+    this.theme = this.themes.find(t => t.value === value);
+  }
+
+  onCopyInput() {
     navigator.clipboard.writeText(this.output);
   }
 
-  toggleIO() {
+  onEraseInput() {
+    this.input = '';
+  }
+
+  onCopyOutput() {
+    navigator.clipboard.writeText(this.output);
+  }
+
+  onEraseOutput() {
+    this.output = '';
+  }
+
+  onCopyError() {
+    navigator.clipboard.writeText(this.error);
+  }
+
+  onEraseError() {
+    this.error = '';
+  }
+
+  onToggleIO() {
     this.ioShown = !this.ioShown;
+  }
+
+  get languages() {
+    return languages;
+  }
+
+  get themes() {
+    return themes;
   }
 }

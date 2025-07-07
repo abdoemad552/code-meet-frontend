@@ -1,36 +1,44 @@
-<div class="flex items-center">
-  <span class="pr-2 font-medium text-md text-gray-700">{{ label }}</span>
-  <div class="relative" #dropdownContainer>
-    <button
-      (click)="toggleDropdown()"
-      type="button"
-      class="flex items-center justify-between w-40 px-4 py-2 font-medium text-md shadow-sm text-white transition-all duration-200 rounded-full bg-purple-700 hover:bg-purple-800 active:bg-purple-900 focus:outline-none cursor-pointer"
-      id="menu-button"
-      aria-expanded="true"
-      aria-haspopup="true">
-      <span class="truncate">{{ selectedOptionLabel }}</span> <!-- Using displayButtonText here -->
-      <svg
-        class="w-5 h-5 ml-auto transition-transform duration-200"
-        [class.rotate-180]="isOpen"
-        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
-      </svg>
-    </button>
+<div class="relative" #dropdownContainer>
+  <button
+    type="button"
+    (click)="toggleDropdown()"
+    class="flex items-center justify-between w-40 px-4 py-2 transition-all duration-200 rounded-full font-medium text-md shadow-sm focus:outline-none cursor-pointer"
+    [ngClass]="{
+      'text-white bg-indigo-700 hover:bg-indigo-800 active:bg-indigo-900': dark,
+      'text-gray-800 bg-gray-200 hover:bg-gray-100 active:bg-gray-200': !dark
+    }">
+    <span class="truncate overflow-hidden max-w-[calc(100%-1.5rem)]">
+      {{ selectedOptionLabel }}
+    </span>
+    <svg
+      class="w-5 h-5 transition-transform duration-200"
+      [class.rotate-180]="isOpen"
+      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+    </svg>
+  </button>
 
-    <div
-      *ngIf="isOpen"
-      class="absolute right-0 z-10 w-40 mt-1 overflow-hidden transition-all duration-200 origin-top transform bg-gray-800 rounded-lg shadow-lg"
-      @dropdownAnimation>
-      <button
-        *ngFor="let option of options"
-        (click)="selectOption(option)"
-        class="w-full px-4 py-2 font-medium text-md text-left text-gray-200 transition-colors duration-150 hover:bg-indigo-600 hover:text-white cursor-pointer"
-        role="menuitem"
-        tabindex="-1"
-        [class.bg-indigo-700]="option.value === selectedOption"
-        [class.text-white]="option.value === selectedOption">
-        {{ option.label }}
-      </button>
-    </div>
+  <div
+    *ngIf="isOpen"
+    @dropdownAnimation
+    class="absolute right-0 z-10 w-40 mt-2 overflow-hidden transition-all duration-200 origin-top transform rounded-xl shadow-lg"
+    [ngClass]="{
+      'bg-gray-800': dark,
+      'bg-gray-200': !dark
+    }">
+    <button
+      *ngFor="let option of options"
+      (click)="selectOption(option)"
+      class="w-full px-4 py-2 font-medium text-md text-left transition-colors duration-150 cursor-pointer"
+      [ngClass]="{
+        'text-gray-200 hover:text-white': dark,
+        'text-gray-800 hover:text-purple-100': !dark
+      }"
+      role="menuitem" tabindex="-1"
+      [class.hover:bg-indigo-800]="option.value !== selectedOption"
+      [class.bg-indigo-700]="option.value === selectedOption"
+      [class.text-white]="option.value === selectedOption">
+      {{ option.label }}
+    </button>
   </div>
 </div>
