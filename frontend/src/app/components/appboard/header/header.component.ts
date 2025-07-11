@@ -1,49 +1,72 @@
-import { NgClass } from '@angular/common';
-import {Component, ElementRef, ViewChild} from '@angular/core';
-import {RouterLink} from '@angular/router';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {Component, ElementRef, HostListener, ViewChild} from '@angular/core';
+import {Router, RouterLink} from '@angular/router';
 import {AuthenticationService} from '../../../services/authentication.service';
-import {UserInfoResponse} from '../../../models/user/user-info-response.dto';
-import {UserService} from '../../../services/user.service';
+import {getOwner} from '../../../shared/environment';
+import {dropdownAnimation} from '../../../shared/animations';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [NgClass, RouterLink],
+  imports: [NgClass, NgIf],
+  animations: [dropdownAnimation],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
 export class HeaderComponent {
-  userInfo!: UserInfoResponse;
   isProfileDropdownOpen: boolean = false;
   isNotificationsDropdownOpen: boolean = false;
-  @ViewChild('overlay') dropdownOverlay!: ElementRef<HTMLDivElement>;
+  @ViewChild('profileDropdownContainer') profileDropdownContainer: ElementRef;
+  @ViewChild('notificationsDropdownContainer') notificationsDropdownContainer: ElementRef;
 
   constructor(
-    private userService: UserService,
+    private router: Router,
     private authService: AuthenticationService
   ) {
-    this.userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
   }
 
-  toggleProfileDropdown () : void {
+  @HostListener('document:click', ['$event'])
+  handleClickOutside(event: Event) {
+    if (this.isProfileDropdownOpen && !this.profileDropdownContainer.nativeElement.contains(event.target)) {
+      this.isProfileDropdownOpen = false;
+    }
+    if (this.isNotificationsDropdownOpen && !this.notificationsDropdownContainer.nativeElement.contains(event.target)) {
+      this.isNotificationsDropdownOpen = false;
+    }
+  }
+
+  @HostListener('document:keydown.escape', ['$event'])
+  handleEscape(event: KeyboardEvent) {
+    if (this.isProfileDropdownOpen || this.isNotificationsDropdownOpen) {
+      this.closeDropdown();
+      event.preventDefault();
+    }
+  }
+
+  toggleProfileDropdown () {
     this.isProfileDropdownOpen = !this.isProfileDropdownOpen;
-    this.isNotificationsDropdownOpen = false;
-    this.dropdownOverlay.nativeElement.classList.remove('hidden');
   }
 
-  toggleNotificationsDropdown () : void {
+  toggleNotificationsDropdown () {
     this.isNotificationsDropdownOpen = !this.isNotificationsDropdownOpen;
-    this.isProfileDropdownOpen = false;
-    this.dropdownOverlay.nativeElement.classList.remove('hidden');
   }
 
   closeDropdown() {
     this.isProfileDropdownOpen = false;
     this.isNotificationsDropdownOpen = false;
-    this.dropdownOverlay.nativeElement.classList.add('hidden');
+  }
+
+  toProfile() {
+    this.closeDropdown();
+    this.router.navigateByUrl('/profile');
   }
 
   signOut(): void {
+    this.closeDropdown();
     this.authService.signOut();
+  }
+
+  get owner() {
+    return getOwner();
   }
 }

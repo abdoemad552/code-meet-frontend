@@ -7,33 +7,33 @@ import AgoraRTC, {
 import {Subject} from 'rxjs';
 import {AGORA_APP_ID} from '../shared/environment';
 import {AgoraTokenService} from './agora-token.service';
-import {AgoraRtmService} from './agora-rtm.service';
-import {ParticipantInfoResponse} from '../models/meeting/participant-info-response.dto';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AgoraRtcService {
-  private uid: string;
+  private uid: string = '';
   private channelName: string;
   private client: IAgoraRTCClient;
   private localAudioTrack: ILocalAudioTrack;
   private localVideoTrack: ILocalVideoTrack;
+  private micMuted: boolean = true;
+  private camMuted: boolean = true;
   private remoteUsers = new Map<string, IAgoraRTCRemoteUser>();
 
-  isMicMuted: boolean = true;
-  isCamEnabled: boolean = false;
   volumeLevel: { [userId: string]: number } = {};
 
   ///////////////////////////////////////////
   userPublished$ = new Subject<{ user: IAgoraRTCRemoteUser, mediaType: any }>();
   userUnpublished$ = new Subject<{ user: IAgoraRTCRemoteUser, mediaType: any }>();
+  userJoined$ = new Subject<string>();
+  userLeft$ = new Subject<string>();
   ///////////////////////////////////////////
 
-  constructor(
-    private rtmService: AgoraRtmService,
-    private tokenService: AgoraTokenService
-  ) {
+  constructor(private tokenService: AgoraTokenService) {
+    setInterval(() => {
+      console.log(this.remoteUsers);
+    }, 2000);
     this.client = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp9' });
   }
 
@@ -72,22 +72,14 @@ export class AgoraRtcService {
   async createMicrophoneAndVideoTracks() {
     try {
       this.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
-      await this.localAudioTrack.setMuted(this.isMicMuted);
+      await this.localAudioTrack.setMuted(this.micMuted);
     } catch(error) {
       console.log('RTC: Failed to obtain the microphone');
     }
 
     try {
-      this.localVideoTrack = await AgoraRTC.createCameraVideoTrack({
-        encoderConfig: {
-          width: 144,
-          height: 100,
-          frameRate: 10,
-          bitrateMin: 200,
-          bitrateMax: 500,
-        }
-      });
-      await this.localVideoTrack.setEnabled(this.isCamEnabled);
+      this.localVideoTrack = await AgoraRTC.createCameraVideoTrack();
+      await this.localVideoTrack.setMuted(this.camMuted);
     } catch(error) {
       console.log('RTC: Failed to obtain the camera');
     }
@@ -95,81 +87,96 @@ export class AgoraRtcService {
 
   async toggleMicMuted() {
     if (this.localAudioTrack) {
-      this.isMicMuted = !this.isMicMuted;
-      await this.localAudioTrack.setMuted(this.isMicMuted);
-      this.rtmService.sendMessage(JSON.stringify({
-        type: 'MIC_TOGGLED',
-        info: {
-          isMicMuted: this.isMicMuted
-        }
-      }));
+      this.micMuted = !this.micMuted;
+      await this.localAudioTrack.setMuted(this.micMuted);
     }
   }
 
-  async toggleCamEnabled() {
+  async toggleCamMuted() {
     if (this.localVideoTrack) {
-      this.isCamEnabled = !this.isCamEnabled;
-      await this.localVideoTrack.setEnabled(this.isCamEnabled);
-      this.rtmService.sendMessage(JSON.stringify({
-        type: 'CAM_TOGGLED',
-        info: {
-          isCamEnabled: this.isCamEnabled
-        }
-      }));
-    }
-  }
-
-  playVideoTrack(participantId: string) {
-    if (this.isCamObtained(participantId)) {
-      const elementId = `video-wrapper-${participantId}`;
-      const element = document.getElementById(elementId) as HTMLVideoElement;
-      if (element && !element.srcObject) {
-        if (participantId === this.uid) {
-          this.localVideoTrack.play(element);
-        } else {
-          this.remoteUsers.get(participantId).videoTrack.play(element);
-        }
+      this.camMuted = !this.camMuted;
+      await this.localVideoTrack.setMuted(this.camMuted);
+      if (this.camMuted) {
+        this.stopVideoTrack();
+      } else {
+        this.playVideoTrack();
       }
     }
   }
 
-  isMicObtained(participantId: string = null) {
-    if (participantId === null || participantId === this.uid) {
+  playVideoTrack(uid: string = '') {
+    if (!uid) uid = this.uid;
+
+    if (this.isCamObtained(uid)) {
+      const videoWrapper = document.createElement('video');
+      videoWrapper.id = `video-wrapper-${uid}`;
+      videoWrapper.className = 'w-full h-full object-cover rounded-xl';
+      const container = document.getElementById(`video-container-${uid}`);
+      console.log(container);
+      if (container) {
+        container.appendChild(videoWrapper);
+        if (uid === this.uid) {
+          this.localVideoTrack.play(videoWrapper);
+        } else {
+          this.remoteUsers.get(uid).videoTrack.play(videoWrapper);
+        }
+      } else {
+        setTimeout(() => {
+          this.playVideoTrack(uid);
+        }, 200);
+      }
+    }
+  }
+
+  stopVideoTrack(uid: string = '') {
+    if (!uid) uid = this.uid;
+
+    console.log(`Stopping video track of ${uid}`);
+
+    const videoWrapper = document.getElementById(`video-wrapper-${uid}`);
+    console.log(videoWrapper);
+    if (videoWrapper) {
+      videoWrapper.remove();
+    }
+  }
+
+  isMicObtained(uid: string = '') {
+    if (!uid || uid === this.uid) {
       return !!this.localAudioTrack;
     } else {
-      if (this.remoteUsers.get(participantId)) {
-        return !!this.remoteUsers.get(participantId).audioTrack;
+      if (this.remoteUsers.get(uid)) {
+        return this.remoteUsers.get(uid).hasAudio;
       } else {
         return false;
       }
     }
   }
 
-  isCamObtained(participantId: string = null) {
-    if (participantId === null || participantId === this.uid) {
+  isCamObtained(uid: string = '') {
+    if (!uid || uid === this.uid) {
       return !!this.localVideoTrack;
     } else {
-      if (this.remoteUsers.get(participantId)) {
-        return !!this.remoteUsers.get(participantId).videoTrack;
+      if (this.remoteUsers.get(uid)) {
+        return this.remoteUsers.get(uid).hasVideo;
       } else {
         return false;
       }
     }
   }
 
-  _isMicMuted(participant: ParticipantInfoResponse) {
-    if (participant.participantId === this.uid) {
-      return this.isMicMuted;
+  isMicMuted(uid: string = '') {
+    if (!uid || uid === this.uid) {
+      return this.isMicObtained() && this.micMuted;
     } else {
-      return participant.isMicMuted;
+      return this.isMicObtained(uid);
     }
   }
 
-  _isCamEnabled(participant: ParticipantInfoResponse) {
-    if (participant.participantId === this.uid) {
-      return this.isCamEnabled;
+  isCamMuted(uid: string = '') {
+    if (!uid || uid === this.uid) {
+      return this.isCamObtained() && this.camMuted;
     } else {
-      return participant.isCamEnabled;
+      return this.isCamObtained(uid);
     }
   }
 
@@ -182,6 +189,8 @@ export class AgoraRtcService {
         if (user.audioTrack) {
           user.audioTrack.play();
         }
+      } else {
+        this.playVideoTrack(String(user.uid));
       }
     });
 
@@ -193,6 +202,8 @@ export class AgoraRtcService {
         if (user.audioTrack) {
           user.audioTrack.stop();
         }
+      } else {
+        this.stopVideoTrack(String(user.uid));
       }
 
       this.volumeLevel[user.uid] = 0;
@@ -200,10 +211,12 @@ export class AgoraRtcService {
 
     this.client.on('user-joined', user => {
       this.remoteUsers.set(String(user.uid), user);
+      this.userJoined$.next(String(user.uid));
     });
 
     this.client.on('user-left', user => {
       this.remoteUsers.delete(String(user.uid));
+      this.userLeft$.next(String(user.uid));
     });
 
     this.client.on('token-privilege-did-expire', async () => {
@@ -235,7 +248,10 @@ export class AgoraRtcService {
     await this.removeAudioTrack();
     await this.removeVideoTrack();
     await this.client.leave();
+    this.remoteUsers.clear();
     this.removeAllListeners();
+    this.uid = ''
+    this.channelName = null;
     console.log('RTC: Left the channel');
   }
 
@@ -252,7 +268,7 @@ export class AgoraRtcService {
         }
       }
       this.localAudioTrack = null;
-      this.isMicMuted = true;
+      this.micMuted = true;
       console.log('RTC: Removed audio track');
     }
   }
@@ -270,7 +286,7 @@ export class AgoraRtcService {
         }
       }
       this.localVideoTrack = null;
-      this.isCamEnabled = false;
+      this.camMuted = true;
       console.log('RTC: Removed video track');
     }
   }

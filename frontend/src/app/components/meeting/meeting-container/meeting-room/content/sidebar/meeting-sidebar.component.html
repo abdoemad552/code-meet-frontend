@@ -107,3 +107,8 @@
     }
   </div>
 </div>
+
+<div
+  class="absolute inset-0 flex flex-col bg-gray-100"
+  [ngClass]="{'z-20': sidebarContent === 'HIDDEN', 'z-10': sidebarContent !== 'HIDDEN'}">
+</div>

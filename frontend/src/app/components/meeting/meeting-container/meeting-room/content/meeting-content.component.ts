@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {AgoraRtcService} from '../../../../../services/agora-rtc.service';
 import {AgoraRtmService} from '../../../../../services/agora-rtm.service';
@@ -12,7 +12,6 @@ import {MeetingSidebarComponent} from './sidebar/meeting-sidebar.component';
   selector: 'meeting-room-content',
   imports: [
     NgForOf,
-    NgIf,
     FormsModule,
     CodeEditorComponent,
     NgClass,
@@ -35,18 +34,26 @@ export class MeetingContentComponent implements OnDestroy {
   ) {
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.state.syncCode();
+  }
 
-  ngAfterViewChecked() {
-    if (this.state.participants) {
-      for (let participant of this.state.participants) {
-        this.rtcService.playVideoTrack(participant.participantId);
-      }
+  ngAfterViewInit() {
+    if (!this.rtcService.isCamMuted()) {
+      this.rtcService.playVideoTrack();
     }
   }
 
   onHideSidebar() {
     this.hideSidebar.emit();
+  }
+
+  onCodeChange(code: string) {
+    this.rtmService.sendMessage(JSON.stringify({
+      type: 'CODE_CHANGE',
+      code: code
+    }));
+    this.state.syncCode(code);
   }
 
   ngOnDestroy() {

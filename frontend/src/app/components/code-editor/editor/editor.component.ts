@@ -40,6 +40,8 @@ export class EditorComponent implements AfterViewInit, OnChanges, OnDestroy {
   private languageCompartment = new Compartment();
   private themeCompartment = new Compartment();
 
+  private ignoreNextUpdate = false;
+
   ngAfterViewInit(): void {
     this.initializeCodeMirror();
   }
@@ -106,8 +108,9 @@ export class EditorComponent implements AfterViewInit, OnChanges, OnDestroy {
       bracketMatching(),
       EditorView.updateListener.of(update => {
         // Listen for document changes and emit the new code to the parent
-        if (update.docChanged) {
+        if (update.docChanged && !this.ignoreNextUpdate) {
           const newCode = update.state.doc.toString();
+          console.log(newCode);
           this.codeChange.emit(newCode);
         }
       }),
@@ -232,15 +235,15 @@ export class EditorComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   setCode(newCode: string) {
+    this.ignoreNextUpdate = true;
     this.view.dispatch({
       changes: {
         from: 0,
         to: this.view.state.doc.length,
         insert: newCode
-      },
-      // Ensure the cursor stays at the end or a sensible position
-      selection: { anchor: newCode.length }
+      }
     });
+    this.ignoreNextUpdate = false;
   }
 
   getLanguageExtension(language: string): any {

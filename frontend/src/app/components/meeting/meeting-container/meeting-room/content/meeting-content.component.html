@@ -1,6 +1,6 @@
 <div class="flex w-full justify-between overflow-hidden">
   <div
-    class="relative overflow-hidden"
+    class="relative transition-all duration-300 overflow-hidden"
     [ngClass]="{'w-[75%]': sidebarContent !== 'HIDDEN', 'w-full': sidebarContent === 'HIDDEN'}">
     <div
       class="absolute inset-0 scrollbar-overlay w-full h-full bg-gray-100"
@@ -12,28 +12,25 @@
             class="flex flex-col items-center justify-between rounded-xl bg-gray-200 border-3 border-gray-300 m-2 transition-all duration-300 ease-in-out overflow-hidden"
             [class.speaking]="state.isSpeaking(participant.participantId)">
             <div class="w-full flex items-center justify-center">
-              <div class="aspect-video w-full p-2 rounded-xl overflow-hidden flex items-center justify-center">
-                <ng-container *ngIf="rtcService.isCamObtained(participant.participantId) && rtcService._isCamEnabled(participant); else noCam">
-                  <video [id]="`video-wrapper-${participant.participantId}`" class="w-full h-full object-cover rounded-xl" autoplay muted playsinline></video>
-                </ng-container>
-                <ng-template #noCam>
+              <div [id]="`video-container-${participant.participantId}`" class="aspect-video w-full p-2 rounded-xl overflow-hidden flex items-center justify-center">
+                @if (!rtcService.isCamObtained(participant.participantId) || (state.participation.participantId === participant.participantId && rtcService.isCamMuted())) {
                   <!-- Avatar or SVG Fallback -->
-                  <svg class="w-2/3 h-2/3 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <svg @fadeInOut class="w-2/3 h-2/3 text-indigo-500 transition-all duration-200 ease-in-out" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
                   </svg>
-                </ng-template>
+                }
               </div>
             </div>
             <p class="text-gray-800 py-2">
               {{ participant.user.firstName + ' ' + participant.user.lastName }}
             </p>
           </div>
-        } @else {
-
         }
       </div>
     </div>
     <app-code-editor
+      [code]="state.code"
+      (codeChange)="onCodeChange($event)"
       class="absolute inset-0 w-full"
       [ngClass]="{'z-20': mainAreaContent === 'EDITOR', 'z-10': mainAreaContent !== 'EDITOR'}">>
     </app-code-editor>
@@ -41,10 +38,10 @@
 
   <!-- Sidebar -->
   <meeting-sidebar
-    *ngIf="sidebarContent !== 'HIDDEN'"
     [sidebarContent]="sidebarContent"
     [mainAreaContent]="mainAreaContent"
     (hideSidebar)="onHideSidebar()"
-    class="relative w-[25%] border-l border-gray-300 overflow-hidden">
+    class="relative border-l border-gray-300 transition-all duration-300 overflow-hidden"
+    [ngClass]="{ 'w-[25%]': sidebarContent !== 'HIDDEN', 'w-0': sidebarContent === 'HIDDEN' }">>
   </meeting-sidebar>
 </div>

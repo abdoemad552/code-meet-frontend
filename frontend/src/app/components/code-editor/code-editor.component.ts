@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {EditorComponent} from './editor/editor.component';
 import {DropDownListComponent} from '../custom-components/drop-down-list/drop-down-list.component';
 import {FormsModule} from '@angular/forms';
@@ -22,9 +22,11 @@ import {catchError, of, switchMap} from 'rxjs';
   styleUrl: './code-editor.component.css'
 })
 export class CodeEditorComponent {
+  @Input() code: string = languages[1].initialCode;
+  @Output() codeChange = new EventEmitter<string>();
+
   theme: any = themes[0];
   language: any = languages[1];
-  code: string = languages[1].initialCode;
   input: string = '';
   output: string = '';
   error: string = '';
@@ -33,6 +35,12 @@ export class CodeEditorComponent {
   isSubmitting: boolean = false;
 
   constructor(private judge0: Judge0Service) {
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.ioShown = true;
+    }, 200);
   }
 
   onRunCode(): void {
@@ -61,9 +69,9 @@ export class CodeEditorComponent {
           if (result) {
             console.log(result);
             this.output = this.judge0.decode(result.stdout);
-            this.error = this.judge0.decode(result.stderr);
-            this.compilationOutput = this.judge0.decode(result.compile_output);
+            this.error = this.judge0.decode(result.stderr ? result.stderr : result.compile_output);
             this.isSubmitting = false;
+            this.ioShown = true;
             console.log('Finished');
           }
         }
@@ -72,6 +80,7 @@ export class CodeEditorComponent {
 
   onCodeChange(code: string): void {
     this.code = code;
+    this.codeChange.emit(code);
   }
 
   onSelectedLanguageChange(value: string) {

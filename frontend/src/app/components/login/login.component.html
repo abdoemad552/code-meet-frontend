@@ -1,15 +1,17 @@
-<div class="min-h-screen flex items-center justify-center bg-white relative px-4">
-  <a
-    routerLink="/entry"
-    routerLinkActive="active"
-    ariaCurrentWhenActive="page"
-    class="group flex items-center justify-center w-12 h-12 rounded-full hover:bg-indigo-50 hover:text-indigo-700 active:bg-indigo-100 text-white transition-colors">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" class="w-6 h-6 stroke-indigo-800">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-    </svg>
-  </a>
+<div @fadeInOut class="flex flex-col min-h-screen bg-white relative p-4">
+  <div class="h-16 flex items-center">
+    <a
+      routerLink="/entry"
+      routerLinkActive="active"
+      ariaCurrentWhenActive="page"
+      class="group flex items-center justify-center w-12 h-12 rounded-full hover:bg-indigo-50 active:bg-indigo-100 hover:text-indigo-700 text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 ease-in-out">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+      </svg>
+    </a>
+  </div>
 
-  <form class="max-w-xl w-full p-6 mx-auto">
+  <form class="flex-1 flex-col items-center justify-center max-w-xl w-full p-6 mx-auto">
     <div class="flex flex-col items-center justify-center space-y-6 select-none">
       <div class="w-40 h-40 flex px-6 py-6 rounded-full bg-indigo-700 items-center justify-center">
         <svg class="w-full h-full" viewBox="0 0 1022 1261" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" overflow="hidden"><defs><filter id="fx0" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse"><feComponentTransfer color-interpolation-filters="sRGB"><feFuncR type="discrete" tableValues="0 0"/><feFuncG type="discrete" tableValues="0 0"/><feFuncB type="discrete" tableValues="0 0"/><feFuncA type="linear" slope="0.4" intercept="0"/></feComponentTransfer><feGaussianBlur stdDeviation="7.63889 7.63889"/></filter><clipPath id="clip1"><rect x="1689" y="607" width="1022" height="1261"/></clipPath></defs><g clip-path="url(#clip1)" transform="translate(-1689 -607)"><path d="M1877.06 764C1932.09 764 1976.69 810.648 1976.69 868.19 1976.69 896.962 1965.54 923.009 1947.51 941.865L1933 952.093 1950.26 970.178C1984.01 1018.37 2012.72 1098.87 2033 1200.2L2040.17 1242.32 2359.83 1242.32 2367 1200.2C2387.28 1098.87 2415.99 1018.37 2449.74 970.178L2467 952.093 2452.49 941.865C2434.46 923.009 2423.31 896.962 2423.31 868.19 2423.31 810.648 2467.91 764 2522.94 764 2577.97 764 2622.58 810.648 2622.58 868.19 2622.58 896.962 2611.42 923.009 2593.39 941.865L2578.89 952.093 2596.14 970.178C2663.64 1066.56 2711 1292.19 2711 1555.16 2711 1727.94 2571.11 1868 2398.54 1868L2001.46 1868C1828.89 1868 1689 1727.94 1689 1555.16 1689 1292.19 1736.36 1066.56 1803.86 970.178L1821.11 952.093 1806.61 941.865C1788.58 923.009 1777.43 896.962 1777.43 868.19 1777.43 810.648 1822.03 764 1877.06 764Z" fill="#8D86EE" fill-rule="evenodd"/><path d="M2196.5 607C2262.48 607 2315.97 662.895 2315.97 731.845 2315.97 766.32 2302.6 797.531 2280.98 820.124L2263.58 832.38 2284.27 854.05C2365.21 969.535 2422 1239.89 2422 1555L1971 1555C1971 1239.89 2027.79 969.535 2108.73 854.05L2129.42 832.38 2112.02 820.124C2090.4 797.531 2077.03 766.32 2077.03 731.845 2077.03 662.895 2130.52 607 2196.5 607Z" fill="#EEF3FF" fill-rule="evenodd"/><g filter="url(#fx0)" transform="translate(1740 1268)"><g><path d="M24.4601 287C24.4601 141.661 142.281 23.84 287.62 23.84L632.38 23.84C777.719 23.84 895.54 141.661 895.54 287L895.54 287C895.54 432.339 777.719 550.16 632.38 550.16L287.62 550.16C142.281 550.16 24.4601 432.339 24.4601 287Z" fill="#302C81" fill-rule="evenodd"/></g></g><path d="M1773 1555C1773 1412.51 1888.51 1297 2031 1297L2369 1297C2511.49 1297 2627 1412.51 2627 1555L2627 1555C2627 1697.49 2511.49 1813 2369 1813L2031 1813C1888.51 1813 1773 1697.49 1773 1555Z" fill="#302C81" fill-rule="evenodd"/><path d="M2228.04 1442.37C2232.73 1432.3 2244.7 1427.94 2254.77 1432.64L2476.2 1535.89C2486.27 1540.59 2490.63 1552.56 2485.93 1562.63L2485.93 1562.63C2481.24 1572.7 2469.27 1577.05 2459.2 1572.36L2237.77 1469.1C2227.7 1464.41 2223.34 1452.44 2228.04 1442.37Z" fill="#EEF3FF" fill-rule="evenodd"/><path d="M2305.05 1632.92C2300.35 1622.85 2304.71 1610.88 2314.78 1606.19L2459.2 1538.84C2469.27 1534.15 2481.24 1538.5 2485.93 1548.57L2485.93 1548.57C2490.63 1558.64 2486.27 1570.61 2476.2 1575.31L2331.78 1642.65C2321.71 1647.35 2309.74 1642.99 2305.05 1632.92Z" fill="#EEF3FF" fill-rule="evenodd"/><path d="M2170.28 1650.91C2165.58 1660.98 2153.61 1665.34 2143.54 1660.64L1923.71 1558.13C1913.65 1553.44 1909.29 1541.47 1913.98 1531.4L1913.98 1531.4C1918.68 1521.33 1930.65 1516.97 1940.72 1521.67L2160.55 1624.18C2170.61 1628.87 2174.97 1640.84 2170.28 1650.91Z" fill="#EEF3FF" fill-rule="evenodd"/><path d="M2094.87 1459.92C2099.57 1469.99 2095.21 1481.95 2085.14 1486.65L1940.72 1554C1930.65 1558.69 1918.68 1554.33 1913.98 1544.27L1913.98 1544.27C1909.29 1534.2 1913.65 1522.23 1923.72 1517.53L2068.14 1450.19C2078.21 1445.49 2090.18 1449.85 2094.87 1459.92Z" fill="#EEF3FF" fill-rule="evenodd"/><path d="M2266.42 1372.33C2277.33 1376.3 2282.96 1388.36 2278.99 1399.27L2160.43 1724.99C2156.46 1735.9 2144.4 1741.52 2133.49 1737.55L2133.49 1737.55C2122.59 1733.58 2116.96 1721.52 2120.93 1710.61L2239.49 1384.89C2243.46 1373.99 2255.52 1368.36 2266.42 1372.33Z" fill="#EEF3FF" fill-rule="evenodd"/></g></svg>

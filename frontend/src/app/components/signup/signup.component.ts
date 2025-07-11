@@ -5,11 +5,13 @@ import { UserInfoResponse } from '../../models/user/user-info-response.dto';
 import {FormsModule} from '@angular/forms';
 import {SignupRequest} from '../../models/authentication/signup-request.dto';
 import {NgIf} from '@angular/common';
+import {fadeInOut} from '../../shared/animations';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
   imports: [RouterLink, RouterLinkActive, FormsModule, NgIf],
+  animations: [fadeInOut],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
 })

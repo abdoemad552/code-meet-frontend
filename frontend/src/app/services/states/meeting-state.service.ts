@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, filter, Subject, take, takeUntil} from 'rxjs';
+import {BehaviorSubject, filter, Subject, Subscription, takeUntil} from 'rxjs';
 import {MeetingView} from '../../models/meeting/state/meeting-view';
 import {MeetingInfoResponse} from '../../models/meeting/meeting-info-response.dto';
 import {ParticipantInfoResponse} from '../../models/meeting/participant-info-response.dto';
@@ -7,29 +7,29 @@ import {MeetingService} from '../meeting.service';
 import {AgoraRtcService} from '../agora-rtc.service';
 import {AgoraRtmService} from '../agora-rtm.service';
 import {formatDateTime} from '../../shared/utils';
-import {UserInfoResponse} from '../../models/user/user-info-response.dto';
 import {ChatMessage} from '../../models/meeting/state/meeting-message';
 import {WebSocketService} from '../websocket.service';
+import {getOwner} from '../../shared/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MeetingStateService {
+  participation: ParticipantInfoResponse = null;
+  participants: ParticipantInfoResponse[] = [];
+  messages: ChatMessage[] = [];
 
-  owner: UserInfoResponse;
   private meetingSubject = new BehaviorSubject<MeetingInfoResponse>(null);
   private currentViewSubject = new BehaviorSubject<MeetingView>(null);
-  private participationSubject = new BehaviorSubject<ParticipantInfoResponse>(null);
-  private participantsSubject = new BehaviorSubject<ParticipantInfoResponse[]>(null);
-  private messagesSubject = new BehaviorSubject<ChatMessage[]>([]);
   private requestJoinSubject = new Subject<number>();
+  private codeSubject = new BehaviorSubject<string>('');
+
+  private subs: Subscription[] = [];
 
   meeting$ = this.meetingSubject.asObservable();
   currentView$ = this.currentViewSubject.asObservable();
-  participation$ = this.participationSubject.asObservable();
-  participants$ = this.participantsSubject.asObservable();
-  messages$ = this.messagesSubject.asObservable();
   requestJoin$ = this.requestJoinSubject.asObservable();
+  code$ = this.codeSubject.asObservable();
 
   constructor(
     private meetingService: MeetingService,
@@ -37,7 +37,6 @@ export class MeetingStateService {
     private rtmService: AgoraRtmService,
     private wsService: WebSocketService
   ) {
-    this.owner = JSON.parse(sessionStorage.getItem("userInfo"));
   }
 
   get meeting() {
@@ -46,14 +45,6 @@ export class MeetingStateService {
 
   get currentView() {
     return this.currentViewSubject.value;
-  }
-
-  get participation() {
-    return this.participationSubject.value;
-  }
-
-  get participants() {
-    return this.participantsSubject.value;
   }
 
   get sortedParticipants() {
@@ -66,8 +57,8 @@ export class MeetingStateService {
     });
   }
 
-  get messages() {
-    return this.messagesSubject.value;
+  get code() {
+    return this.codeSubject.value;
   }
 
   setMeeting(meeting: MeetingInfoResponse) {
@@ -79,42 +70,50 @@ export class MeetingStateService {
   }
 
   setParticipation(participation: ParticipantInfoResponse) {
-    this.participationSubject.next(participation);
+    this.participation = participation;
   }
 
   setParticipants(participants: ParticipantInfoResponse[]) {
-    this.participantsSubject.next(participants);
+    this.participants = participants;
   }
 
   addParticipant(participant: ParticipantInfoResponse) {
-    this.setParticipants([
-      ...this.participants,
-      participant
-    ]);
+    this.participants.push(participant);
   }
 
   removeParticipant(participant: ParticipantInfoResponse) {
-    this.setParticipants(this.participantsSubject.value.filter(
+    this.participants.filter(
       p => p.participantId !== participant.participantId
-    ));
+    );
   }
 
   setMessages(messages: ChatMessage[]) {
-    this.messagesSubject.next(messages);
+    this.messages = messages;
   }
 
   saveMessage(message: ChatMessage) {
-    this.setMessages([
-      ...this.messages,
-      message
-    ]);
+    this.messages.push(message);
+  }
+
+  setCode(code: string) {
+    this.codeSubject.next(code);
+  }
+
+  async syncCode(code: string = null) {
+    if (code) {
+      this.rtmService.setAttributes({
+        code: code
+      });
+    } else {
+      const syncedCode = await this.rtmService.getAttribute("code");
+      this.codeSubject.next(syncedCode.value || '');
+    }
   }
 
   acceptJoin() {
     const acceptJoinSubject = new Subject<ParticipantInfoResponse>();
     this.wsService.connection$
       .pipe(
-        take(1),
         filter(isConnected => {
           if (!isConnected) {
             acceptJoinSubject.error('WS is disconnected');
@@ -125,7 +124,7 @@ export class MeetingStateService {
       .subscribe({
         next: isConnected => {
           console.log('WS is connected:', isConnected);
-          const topic = `/accept-join/${this.owner.userId}/${this.meeting.meetingId}`;
+          const topic = `/accept-join/${getOwner().userId}/${this.meeting.meetingId}`;
           this.wsService.subscribe(topic)
             .pipe(takeUntil(acceptJoinSubject))
             .subscribe({
@@ -156,7 +155,7 @@ export class MeetingStateService {
   }
 
   initMeetingRoom() {
-    this.getAllParticipants();
+    this.initEventListeners();
   }
 
   leaveMeetingRoom() {
@@ -164,47 +163,32 @@ export class MeetingStateService {
     this.rtmService.leave();
     this.setParticipation(null);
     this.setMessages([]);
-    this.setParticipants(null);
-  }
-
-  private getAllParticipants() {
-    this.rtmService.getChannelMembers()
-      .then(membersIds => {
-        this.meetingService.getAllParticipants(membersIds)
-          .subscribe({
-            next: participants => {
-              setTimeout(() => {
-                console.log(participants);
-                this.participantsSubject.next(participants);
-                this.initEventListeners();
-              }, 2000);
-            },
-            error: err => console.error(err)
-          });
-      })
-      .catch(err => console.error(err));
+    this.setParticipants([]);
+    this.subs.forEach(sub => sub.unsubscribe());
+    this.subs = [];
   }
 
   private initEventListeners() {
-    this.rtmService.memberJoined$
+    this.subs.push(this.rtcService.userJoined$
       .subscribe({
-        next: memberId => {
-          console.log(`RTM: ${memberId} joined the channel`);
-          this.meetingService.getParticipant(memberId)
+        next: participantId => {
+          console.log(`RTM: ${participantId} joined the channel`);
+          this.meetingService.getParticipant(participantId)
             .subscribe({
               next: participant => {
                 console.log(participant);
                 this.addParticipant(participant);
+                console.log(`User joined: ${participant}`);
               },
               error: err => console.error(err)
             });
         }
-      });
-    this.rtmService.memberLeft$
+      }));
+    this.subs.push(this.rtcService.userLeft$
       .subscribe({
-        next: memberId => {
-          console.log(`RTM: ${memberId} left the channel`);
-          this.meetingService.getParticipant(memberId)
+        next: participantId => {
+          console.log(`RTM: ${participantId} left the channel`);
+          this.meetingService.getParticipant(participantId)
             .subscribe({
               next: participant => {
                 console.log(participant);
@@ -213,20 +197,14 @@ export class MeetingStateService {
               error: err => console.error(err)
             });
         }
-      });
-    this.rtmService.channelMessage$
+      }));
+    this.subs.push(this.rtmService.channelMessage$
       .subscribe({
         next: rtmMessage => {
           console.log(`RTM: A new message ${rtmMessage.content} from ${rtmMessage.memberId} at ${rtmMessage.ts}`);
           const index = this.participants.findIndex(p => p.participantId === rtmMessage.memberId);
           const content = rtmMessage.content;
           switch (content.type) {
-            case 'MIC_TOGGLED':
-              this.participants[index].isMicMuted = content.info.isMicMuted;
-              break;
-            case 'CAM_TOGGLED':
-              this.participants[index].isCamEnabled = content.info.isCamEnabled;
-              break;
             case 'CHAT_MESSAGE':
               const message = {
                 sender: {
@@ -235,15 +213,18 @@ export class MeetingStateService {
                   lastName: this.participants[index].user.lastName,
                   username: this.participants[index].user.username
                 },
-                content: content.info.text,
+                content: content.text,
                 sentAt: formatDateTime(new Date(rtmMessage.ts).toISOString())
               }
               this.saveMessage(message);
+              break;
+            case 'CODE_CHANGE':
+              this.setCode(content.code);
               break;
             default:
               throw new Error('Illegal message type');
           }
         }
-      });
+      }));
   }
 }

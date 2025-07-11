@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
 import {NgClass, NgIf} from '@angular/common';
 import {AgoraRtcService} from '../../../../services/agora-rtc.service';
 import {MeetingService} from '../../../../services/meeting.service';
@@ -19,10 +19,9 @@ import {getOwner} from '../../../../shared/environment';
   ],
   styleUrl: './meeting-entrance.component.css'
 })
-export class MeetingEntranceComponent implements AfterViewInit {
+export class MeetingEntranceComponent {
   @Output() join = new EventEmitter<void>();
   @ViewChild('copyButton', { static: false }) copyButton: ElementRef;
-  @ViewChild('videoTrackWrapper', { static: false }) videoTrackWrapper: ElementRef;
 
   copyTimeout: any;
   isParticipant: boolean = null;
@@ -65,6 +64,8 @@ export class MeetingEntranceComponent implements AfterViewInit {
 
   async onJoin() {
     if (this.isParticipant) {
+      this.state.setParticipants([this.state.participation]);
+      this.state.initMeetingRoom();
       await this.rtcService.join(
         this.state.meeting.meetingId,
         this.state.participation.participantId
@@ -110,8 +111,6 @@ export class MeetingEntranceComponent implements AfterViewInit {
         error: err => {
           // TODO: Handle the error (mostly ws is not working), so try again...
           console.log(err);
-          this.isRequesting = false;
-          this.listenToAcceptJoin();
         }
       });
   }
@@ -120,12 +119,12 @@ export class MeetingEntranceComponent implements AfterViewInit {
     this.router.navigateByUrl('/home');
   }
 
-  onToggleMicEnabled() {
+  onToggleMicMuted() {
     this.rtcService.toggleMicMuted();
   }
 
-  onToggleCamEnabled() {
-    this.rtcService.toggleCamEnabled();
+  onToggleCamMuted() {
+    this.rtcService.toggleCamMuted();
   }
 
   onCopyUUID() {
@@ -137,20 +136,6 @@ export class MeetingEntranceComponent implements AfterViewInit {
     this.copyTimeout = setTimeout(() => {
       this.copyButton.nativeElement.innerHTML = 'Copy'
     }, 500);
-  }
-
-  ngAfterViewInit() {
-    if (this.rtcService.isCamObtained() && this.rtcService.isCamEnabled) {
-      this.rtcService.toggleCamEnabled();
-    }
-  }
-
-  ngAfterViewChecked() {
-    if (this.rtcService.isCamObtained()) {
-      if (!this.videoTrackWrapper.nativeElement.srcObject) {
-        this.rtcService.videoTrack.play(this.videoTrackWrapper.nativeElement);
-      }
-    }
   }
 
   ngOnDestroy() {
@@ -171,7 +156,7 @@ export class MeetingEntranceComponent implements AfterViewInit {
     if (!this.rtcService.isCamObtained()) {
       return 'bg-gray-300 text-gray-400 cursor-not-allowed opacity-60';
     }
-    return this.rtcService.isCamEnabled
+    return !this.rtcService.isCamMuted()
       ? 'bg-white text-gray-700 hover:bg-indigo-100 active:bg-indigo-200 cursor-pointer'
       : 'bg-red-500 text-white hover:bg-red-700 active:bg-red-800 cursor-pointer';
   }
@@ -180,18 +165,18 @@ export class MeetingEntranceComponent implements AfterViewInit {
     if (!this.rtcService.isMicObtained()) {
       return 'bg-gray-300 text-gray-400 cursor-not-allowed opacity-60';
     }
-    return this.rtcService.isMicMuted
+    return this.rtcService.isMicMuted()
       ? 'bg-red-500 text-white hover:bg-red-700 active:bg-red-800 cursor-pointer'
       : 'bg-white text-gray-700 hover:bg-indigo-100 active:bg-indigo-200 cursor-pointer';
   }
 
   get camIconClass(): string {
     if (!this.rtcService.isCamObtained()) return 'text-gray-400';
-    return this.rtcService.isCamEnabled ? 'text-indigo-600' : 'text-white';
+    return !this.rtcService.isCamMuted() ? 'text-indigo-600' : 'text-white';
   }
 
   get micIconClass(): string {
     if (!this.rtcService.isMicObtained()) return 'text-gray-400';
-    return this.rtcService.isMicMuted ? 'text-white' : 'text-indigo-600';
+    return this.rtcService.isMicMuted() ? 'text-white' : 'text-indigo-600';
   }
 }

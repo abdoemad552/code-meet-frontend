@@ -36,6 +36,10 @@ body {
   font-family: "Inter", sans-serif;
 }
 
+html, body {
+  height: 100%;
+}
+
 .scrollbar-overlay {
   scrollbar-gutter: stable both-edges; /* Prevent shift in supporting browsers */
   overflow-y: auto;

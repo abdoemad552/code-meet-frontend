@@ -45,4 +45,29 @@ export class MeetingHeaderComponent {
   onToggleScreenShare() {
     this.mainAreaContentChange.emit('SCREEN_SHARE');
   }
+
+  onToggleMicMuted() {
+
+  }
+
+  onToggleCamEnabled() {
+
+  }
+
+  get timer() {
+    const startedAt = new Date(this.state.meeting.startsAt);
+    const now = new Date();
+
+    const diffInMs = now.getTime() - startedAt.getTime();
+    if (diffInMs < 0) {
+      throw new Error("The given date is in the future.");
+    }
+
+    const totalSeconds = Math.floor(diffInMs / 1000);
+    const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
+    const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, "0");
+    const seconds = String(totalSeconds % 60).padStart(2, "0");
+
+    return `${(hours)}:${minutes}:${seconds}`;
+  }
 }

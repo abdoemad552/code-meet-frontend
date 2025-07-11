@@ -1,11 +1,13 @@
 import {NgIf} from '@angular/common';
 import { Component } from '@angular/core';
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
+import {fadeInOut} from '../../shared/animations';
 
 @Component({
   standalone: true,
   selector: 'app-entry',
   imports: [RouterLink, RouterLinkActive, NgIf],
+  animations: [fadeInOut],
   templateUrl: './entry.component.html',
   styleUrl: './entry.component.css'
 })

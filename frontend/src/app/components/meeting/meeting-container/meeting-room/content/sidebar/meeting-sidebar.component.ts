@@ -50,9 +50,7 @@ export class MeetingSidebarComponent {
       this.state.saveMessage(message);
       this.rtmService.sendMessage(JSON.stringify({
         type: 'CHAT_MESSAGE',
-        info: {
-          text: content
-        }
+        text: content
       }));
       this.scrollToBottom();
       this.inputMessage = '';

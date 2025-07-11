@@ -4,11 +4,13 @@ import {AuthenticationService} from '../../services/authentication.service';
 import {FormsModule} from '@angular/forms';
 import {LoginRequest} from '../../models/authentication/login-request.dto';
 import {NgIf} from '@angular/common';
+import {fadeInOut} from '../../shared/animations';
 
 @Component({
   selector: 'app-authentication',
   standalone: true,
   imports: [RouterLink, RouterLinkActive, FormsModule, NgIf],
+  animations: [fadeInOut],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })

@@ -1,8 +1,9 @@
-import {Component, HostListener} from '@angular/core';
+import {AfterViewChecked, Component, HostListener, ViewChild} from '@angular/core';
 import {MeetingHeaderComponent} from './header/meeting-header.component';
 import {MeetingContentComponent} from './content/meeting-content.component';
 import {MeetingStateService} from '../../../../services/states/meeting-state.service';
 import {MeetingView} from '../../../../models/meeting/state/meeting-view';
+import {AgoraRtcService} from '../../../../services/agora-rtc.service';
 
 @Component({
   selector: 'app-meeting-room',
@@ -16,10 +17,6 @@ export class MeetingRoomComponent {
   mainAreaContent: 'EDITOR' | 'SCREEN_SHARE' | 'PARTICIPANTS' = 'PARTICIPANTS';
 
   constructor(protected state: MeetingStateService) {
-  }
-
-  ngOnInit() {
-    this.state.initMeetingRoom();
   }
 
   @HostListener('document:keydown.escape', ['$event'])

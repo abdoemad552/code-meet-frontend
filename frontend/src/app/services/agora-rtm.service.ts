@@ -53,6 +53,15 @@ export class AgoraRtmService {
     return await this.channel.getMembers();
   }
 
+  async getAttribute(key: string) {
+    const attr = await this.client.getChannelAttributesByKeys(this.channelName, [key]);
+    return attr[key];
+  }
+
+  setAttributes(attrs: { [key: string]: string }) {
+    this.client.setChannelAttributes(this.channelName, attrs);
+  }
+
   sendMessage(message: string) {
     if (this.channel) {
       this.channel.sendMessage({ text: message });
