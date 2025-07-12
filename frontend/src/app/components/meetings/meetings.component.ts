@@ -7,6 +7,7 @@ import {NgClass, NgForOf, NgStyle} from '@angular/common';
 import {MeetingCardComponent} from './meeting-card/meeting-card.component';
 import {MeetingBoxComponent} from './meeting-box/meeting-box.component';
 import {UserInfoResponse} from '../../models/user/user-info-response.dto';
+import {fadeInOut} from '../../shared/animations';
 
 @Component({
   selector: 'app-meetings',
@@ -19,6 +20,7 @@ import {UserInfoResponse} from '../../models/user/user-info-response.dto';
     MeetingCardComponent,
     MeetingBoxComponent
   ],
+  animations: [fadeInOut],
   templateUrl: './meetings.component.html',
   styleUrl: './meetings.component.css'
 })

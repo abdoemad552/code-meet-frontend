@@ -19,6 +19,8 @@ export function getOwner(): UserInfoResponse {
   return null;
 }
 
+
+
 export function clearOwner(): void {
   _owner = null;
   sessionStorage.removeItem("userInfo");

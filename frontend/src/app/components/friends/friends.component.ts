@@ -5,6 +5,7 @@ import { FriendshipInfoResponse } from '../../models/friendship/friendship-info-
 import {Router, RouterOutlet} from '@angular/router';
 import {NgForOf, NgIf} from '@angular/common';
 import {UserInfoResponse} from '../../models/user/user-info-response.dto';
+import {fadeInOut} from '../../shared/animations';
 
 @Component({
   selector: 'app-friends',
@@ -15,6 +16,7 @@ import {UserInfoResponse} from '../../models/user/user-info-response.dto';
     NgForOf,
     RouterOutlet
   ],
+  animations: [fadeInOut],
   templateUrl: './friends.component.html',
   styleUrl: './friends.component.css'
 })

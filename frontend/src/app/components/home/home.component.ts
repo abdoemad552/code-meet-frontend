@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {DateTimeComponent} from "../general/date-time/date-time.component";
 import {MeetingBoxComponent} from '../meetings/meeting-box/meeting-box.component';
+import {fadeInOut} from '../../shared/animations';
 
 @Component({
   selector: 'app-home',
@@ -9,6 +10,7 @@ import {MeetingBoxComponent} from '../meetings/meeting-box/meeting-box.component
     DateTimeComponent,
     MeetingBoxComponent
   ],
+  animations: [fadeInOut],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

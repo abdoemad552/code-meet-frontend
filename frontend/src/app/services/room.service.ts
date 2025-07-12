@@ -38,4 +38,10 @@ export class RoomService{
     return this.http.put<RoomInfoResponse>(
       `${this.url}/update`, roomUpdateRequest);
   }
+
+  updateRoomPicture(roomId: number, formData: FormData): Observable<RoomInfoResponse> {
+    return this.http.post<RoomInfoResponse>(`${this.url}/update/${roomId}/roomPicture`, formData);
+  }
+
+  //TODO: Add the ability to delete an existing image...
 }

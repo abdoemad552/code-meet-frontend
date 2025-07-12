@@ -1,4 +1,4 @@
-<div class="w-full h-full overflow-hidden flex flex-col gap-6 p-10">
+<div @fadeInOut class="bg-gray-50 w-full h-full overflow-hidden flex flex-col gap-6 p-10">
   <app-meeting-box>
   </app-meeting-box>
 
@@ -25,7 +25,7 @@
     </div>
   </div>
 
-  <div class="scrollbar-overlay h-full w-full p-6 bg-gray-100 border border-gray-200 rounded-lg shadow-md">
+  <div class="scrollbar-overlay h-full w-full p-6 bg-gray-50 border border-gray-200 rounded-lg shadow-md">
     <div class="grid grid-cols-8 gap-4 lg:grid-cols-4 lg:gap-8">
       @if (shownMeetings) {
         <div *ngFor="let meeting of shownMeetings">

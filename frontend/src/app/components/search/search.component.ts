@@ -7,6 +7,7 @@ import {UserInfoResponse} from '../../models/user/user-info-response.dto';
 import {RoomInfoResponse} from '../../models/room/room-info-response.dto';
 import {RoomCardComponent} from './room-card/room-card.component';
 import {UserCardComponent} from './user-card/user-card.component';
+import {fadeInOut} from '../../shared/animations';
 
 @Component({
   selector: 'app-search',
@@ -18,6 +19,7 @@ import {UserCardComponent} from './user-card/user-card.component';
     UserCardComponent,
     NgStyle
   ],
+  animations: [fadeInOut],
   templateUrl: './search.component.html',
   styleUrl: './search.component.css'
 })

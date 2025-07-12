@@ -1,6 +1,7 @@
 <div
+  @fadeInOut
   *ngIf="rooms; else loading"
-  class="h-full w-full flex flex-col p-10">
+  class="bg-gray-50 h-full w-full flex flex-col p-10">
   <div class="flex justify-between items-center pb-6 mb-6 border-b border-gray-200">
     <h3 class="text-2xl font-bold text-gray-700 flex items-center gap-3 select-none">
       <svg
@@ -40,7 +41,7 @@
       </button>
     </div>
   </div>
-  <div class="overflow-y-auto h-full w-full">
+  <div class="overflow-y-auto h-full w-full shadow-md">
     <div class="border overflow-y-auto rounded-lg h-full w-full border-gray-200 px-6 py-6">
       <div *ngIf="rooms.length > 0; else noRooms">
         <div class="grid grid-cols-1 gap-4 lg:grid-cols-4 lg:gap-8">
@@ -65,7 +66,7 @@
 </div>
 
 <ng-template #loading>
-  <div class="h-full w-full flex flex-col animate-pulse p-10">
+  <div @fadeInOut class="bg-gray-50 h-full w-full flex flex-col animate-pulse p-10">
     <!-- Header Section Skeleton -->
     <div class="flex justify-between items-center pb-6 mb-6 border-b border-gray-200">
       <div class="flex items-center gap-3">
@@ -108,11 +109,13 @@
 </ng-template>
 
 <app-create-room
+  @fadeInOut
   *ngIf="showCreateRoomModal"
   (hideModal)="onHideCreateRoomModal()">
 </app-create-room>
 
 <app-join-room
+  @fadeInOut
   *ngIf="showJoinRoomModal"
   (hideModal)="onHideJoinRoomModal()">
 </app-join-room>

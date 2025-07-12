@@ -10,6 +10,7 @@ import {PeerMessageRequest} from '../../../models/chats/peer-message-request';
 import {RoomMessageRequest} from '../../../models/chats/room-message-request';
 import {FormsModule} from '@angular/forms';
 import {MessagesContainerComponent} from './messages-container/messages-container.component';
+import {fadeInOut} from '../../../shared/animations';
 
 @Component({
   selector: 'app-chatbox',
@@ -20,6 +21,7 @@ import {MessagesContainerComponent} from './messages-container/messages-containe
     FormsModule,
     MessagesContainerComponent
   ],
+  animations: [fadeInOut],
   templateUrl: './chatbox.component.html',
   styleUrl: './chatbox.component.css'
 })

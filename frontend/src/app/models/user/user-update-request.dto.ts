@@ -3,7 +3,6 @@ export interface UserUpdateRequest {
   firstName: string,
   lastName: string,
   username: string,
-  email: string,
-  password: string,
-  profilePicture: string
+  gender: string,
+  bio: string,
 }

@@ -3,10 +3,10 @@ import {animate, keyframes, state, style, transition, trigger} from '@angular/an
 export const fadeInOut = trigger('fadeInOut', [
   transition(':enter', [   // when element appears
     style({ opacity: 0 }),
-    animate('300ms ease-in', style({ opacity: 1 }))
+    animate('250ms ease-in', style({ opacity: 1 }))
   ]),
   transition(':leave', [   // when element disappears
-    animate('300ms ease-out', style({ opacity: 0 }))
+    animate('250ms ease-out', style({ opacity: 0 }))
   ])
 ]);
 

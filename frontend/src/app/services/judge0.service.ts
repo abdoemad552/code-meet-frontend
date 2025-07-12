@@ -8,7 +8,7 @@ import {catchError, filter, Observable, of, switchMap, take, timer} from 'rxjs';
 export class Judge0Service {
   private url = 'https://judge0-ce.p.rapidapi.com';
   private headers = new HttpHeaders({
-    'X-RapidAPI-Key': 'YOUR_RAPIDAPI_KEY_HERE',
+    'X-RapidAPI-Key': 'bc10b06375msh10696d6812c8f96p186bcejsn91775a5444f0',
     'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com',
     'Content-Type': 'application/json'
   });

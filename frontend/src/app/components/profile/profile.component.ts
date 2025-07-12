@@ -6,7 +6,7 @@ import {UserService} from '../../services/user.service';
 import {AuthenticationService} from '../../services/authentication.service';
 import {FriendshipService} from '../../services/friendship.service';
 import {FriendshipInfoResponse, noFriendship} from '../../models/friendship/friendship-info-response.dto';
-import {getOwner} from '../../shared/environment';
+import {getOwner, setOwner} from '../../shared/environment';
 
 @Component({
   selector: 'app-profile',
@@ -77,6 +77,29 @@ export class ProfileComponent {
       },
       error: err => console.error(err)
     });
+  }
+
+  onProfilePictureChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const image = input.files?.[0];
+    if (image) {
+      const formData = new FormData();
+      formData.append('image', image);
+
+      this.userService.updateProfilePicture(formData)
+        .subscribe({
+          next: user => {
+            console.log(user);
+            setOwner(user);
+            this.user = user;
+          },
+          error: err => console.error(err)
+        });
+    }
+  }
+
+  onBioChange(event: Event) {
+
   }
 
   showEditProfile() {

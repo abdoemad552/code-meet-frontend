@@ -98,4 +98,22 @@ export class RoomViewComponent implements OnInit {
   onRemove(membershipId: number) {
     this.membershipService.cancelMembershipById(membershipId);
   }
+
+  onRoomPictureChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const image = input.files?.[0];
+    if (image) {
+      const formData = new FormData();
+      formData.append('image', image);
+
+      this.roomService.updateRoomPicture(this.room.roomId, formData)
+        .subscribe({
+          next: room => {
+            console.log(room);
+            this.room = room;
+          },
+          error: err => console.error(err)
+        });
+    }
+  }
 }

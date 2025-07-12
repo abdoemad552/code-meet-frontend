@@ -10,6 +10,9 @@
 } @else if (state.currentView === "NOT_FOUND") {
   <app-meeting-not-found [@fadeInOut]>
   </app-meeting-not-found>
+} @else if (state.currentView === "NOT_STARTED") {
+  <app-meeting-not-started [@fadeInOut]>
+  </app-meeting-not-started>
 } @else {
   <div [@fadeInOut] class="waiting-container">
     <div class="loading-content">

@@ -6,6 +6,7 @@ import {CreateRoomComponent} from './create-room/create-room.component';
 import {MembershipService} from '../../services/membership.service';
 import {JoinRoomComponent} from './join-room/join-room.component';
 import {UserInfoResponse} from '../../models/user/user-info-response.dto';
+import {fadeInOut} from '../../shared/animations';
 
 @Component({
   selector: 'app-rooms',
@@ -17,6 +18,7 @@ import {UserInfoResponse} from '../../models/user/user-info-response.dto';
     NgForOf,
     JoinRoomComponent
   ],
+  animations: [fadeInOut],
   templateUrl: './rooms.component.html',
   styleUrl: './rooms.component.css'
 })

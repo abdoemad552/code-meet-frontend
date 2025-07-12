@@ -5,6 +5,7 @@ import {MemberCardComponent} from '../member-card/member-card.component';
 import {MembershipService} from '../../../../services/membership.service';
 import {HttpStatusCode} from '@angular/common/http';
 import {ActivatedRoute, Router} from '@angular/router';
+import {fadeInOut} from '../../../../shared/animations';
 
 @Component({
   selector: 'app-membership-requests',
@@ -13,6 +14,7 @@ import {ActivatedRoute, Router} from '@angular/router';
     NgIf,
     MemberCardComponent
   ],
+  animations: [fadeInOut],
   templateUrl: './membership-requests.component.html',
   styleUrl: './membership-requests.component.css'
 })

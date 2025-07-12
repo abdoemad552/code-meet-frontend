@@ -4,7 +4,7 @@ import {NotificationInfo} from '../../models/notification/notification-info.dto'
 import {NgClass, NgForOf} from '@angular/common';
 import {formatDateTime} from '../../shared/utils';
 import {SafeHtml} from '@angular/platform-browser';
-import {NotificationType} from '../../models/notification/notification-type.enum';
+import {fadeInOut} from '../../shared/animations';
 
 @Component({
   selector: 'app-notifications',
@@ -13,6 +13,7 @@ import {NotificationType} from '../../models/notification/notification-type.enum
     NgForOf,
     NgClass
   ],
+  animations: [fadeInOut],
   templateUrl: './notifications.component.html',
   styleUrl: './notifications.component.css'
 })

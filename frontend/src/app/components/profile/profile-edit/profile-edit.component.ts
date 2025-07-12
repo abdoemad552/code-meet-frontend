@@ -2,7 +2,10 @@ import {Component, HostListener, OnInit} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {NgIf} from '@angular/common';
 import {Router} from '@angular/router';
-import {getOwner} from '../../../shared/environment';
+import {getOwner, setOwner} from '../../../shared/environment';
+import {fadeInOut} from '../../../shared/animations';
+import {UserUpdateRequest} from '../../../models/user/user-update-request.dto';
+import {UserService} from '../../../services/user.service';
 
 @Component({
   selector: 'app-profile-edit',
@@ -11,15 +14,27 @@ import {getOwner} from '../../../shared/environment';
     FormsModule,
     NgIf,
   ],
+  animations: [fadeInOut],
   templateUrl: './profile-edit.component.html',
   styleUrl: './profile-edit.component.css'
 })
 export class ProfileEditComponent implements OnInit {
+  updateRequest: UserUpdateRequest = {
+    userId: getOwner().userId,
+    firstName: getOwner().firstName,
+    lastName: getOwner().lastName,
+    username: getOwner().username,
+    gender: getOwner().gender,
+    bio: getOwner().bio
+  };
   isSubmitting: boolean = false;
   submitError: string = '';
   requestSent: boolean = false;
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private userService: UserService
+  ) {
   }
 
   ngOnInit() {
@@ -36,16 +51,27 @@ export class ProfileEditComponent implements OnInit {
   }
 
   onSubmit() {
+    this.validate();
+    this.isSubmitting = true;
+    this.requestSent = false;
+    this.userService.update(this.updateRequest)
+      .subscribe({
+        next: user => {
+          setTimeout(() => {
+            setOwner(user);
+            this.isSubmitting = false;
+            this.requestSent = true;
+          }, 2000);
+        },
+        error: err => {
+          this.isSubmitting = false;
+          this.submitError = err.error.error;
+        }
+      });
     try {
-      this.isSubmitting = true;
-      this.validate();
-      setTimeout(() => {
-        this.isSubmitting = false;
-        this.requestSent = true;
-      }, 1000);
+
     } catch (error) {
-      this.isSubmitting = false;
-      this.submitError = error;
+
     }
   }
 

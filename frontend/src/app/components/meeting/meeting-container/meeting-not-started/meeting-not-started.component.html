@@ -1,0 +1,57 @@
+<div class="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4 text-center">
+  <!-- Clock Icon -->
+  <div class="animate-bounce mb-6 p-4 rounded-full bg-yellow-100">
+    <svg class="size-20 text-yellow-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m5-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+    </svg>
+  </div>
+
+  <!-- Heading -->
+  <h2 class="text-3xl font-bold text-gray-800 mb-2 select-none">Meeting hasn't started yet</h2>
+  <p class="text-gray-500 mb-6 select-none">The host hasn't started this meeting yet.</p>
+
+  <!-- Meeting Info -->
+  <div class="bg-white px-6 py-4 rounded-2xl shadow-md border border-gray-100 mb-6 text-sm w-full max-w-md text-left">
+    <div class="flex flex-col items-center mb-2">
+      <!-- Title & Description -->
+      <h2 class="text-3xl font-bold text-gray-800 mb-2 select-none">{{ state.meeting.title }}</h2>
+      <p class="text-gray-500 mb-1 text-sm select-none">{{ state.meeting.description }}</p>
+    </div>
+    <div class="flex justify-between py-1">
+      <span class="text-gray-500 font-medium">Meeting ID:</span>
+      <span class="font-semibold text-gray-800">{{ state.meeting.meetingId }}</span>
+    </div>
+    <div class="flex justify-between py-1">
+      <span class="text-gray-500 font-medium">Start Time:</span>
+      <span class="font-semibold text-gray-800">{{ formatDateTime(state.meeting.startsAt) }}</span>
+    </div>
+    <div class="flex justify-between py-1">
+      <span class="text-gray-500 font-medium">Time Remaining:</span>
+      <span class="font-semibold text-indigo-600">{{ remainingTime }}</span>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="flex flex-col sm:flex-row sm:flex-wrap gap-4 justify-center">
+    <!-- Join Button: Only visible when meeting starts -->
+    <button
+      *ngIf="meetingStarted"
+      (click)="onJoinMeeting()"
+      class="bg-indigo-600 text-white px-6 py-3 rounded-full hover:bg-indigo-700 active:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 ease-in-out font-medium cursor-pointer shadow flex items-center justify-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25" />
+      </svg>
+      <span class="text-base">Join Now</span>
+    </button>
+
+    <!-- Return to Home -->
+    <button
+      (click)="onReturnHome()"
+      class="bg-white border border-gray-300 text-gray-700 px-6 py-3 rounded-full hover:bg-gray-100 active:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-300 ease-in-out font-medium cursor-pointer shadow flex items-center gap-2">
+      <svg class="size-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l9-9 9 9M4.5 9.75v10.125a1.125 1.125 0 001.125 1.125H9.75v-4.875A1.125 1.125 0 0110.875 15h2.25A1.125 1.125 0 0114.25 16.125V21h4.125A1.125 1.125 0 0019.5 19.875V9.75"/>
+      </svg>
+      Return to Home
+    </button>
+  </div>
+</div>

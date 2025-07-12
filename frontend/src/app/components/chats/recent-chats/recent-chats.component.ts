@@ -1,5 +1,5 @@
 import {Component, EventEmitter, HostListener, Input, Output} from '@angular/core';
-import {NgClass, NgForOf} from '@angular/common';
+import {NgClass, NgForOf, NgStyle} from '@angular/common';
 import {ChatCardComponent} from './chat-card/chat-card.component';
 import {PeerChatInfoResponse} from '../../../models/chats/peer-chat-info-response';
 import {RoomChatInfoResponse} from '../../../models/chats/room-chat-info-response';
@@ -10,7 +10,8 @@ import {RoomChatInfoResponse} from '../../../models/chats/room-chat-info-respons
   imports: [
     NgClass,
     ChatCardComponent,
-    NgForOf
+    NgForOf,
+    NgStyle
   ],
   templateUrl: './recent-chats.component.html',
   styleUrl: './recent-chats.component.css'

@@ -1,4 +1,5 @@
 <div
+  @fadeInOut
   *ngIf="friendships; else loadingFriendships"
   class="h-full w-full flex flex-col p-10">
   <!-- Header section -->
@@ -25,37 +26,35 @@
   </div>
 
   <!-- Scrollable content area -->
-  <div class="overflow-y-auto h-full w-full">
-    <div class="border overflow-y-auto rounded-lg h-full w-full border-gray-200 px-6 py-6">
-      <div *ngIf="friendships.length > 0; else noRequests">
-        <div
-          *ngFor="let friendship of friendships; let i = index"
-          [class]="'border-b border-gray-200 ' + (i === 0 ? 'border-t' : '')">
-          <app-friend-card
-            [friendship]="friendship"
-            [isFriendRequest]="false"
-            (friendshipCanceled)="onUnfriend($event)">
-          </app-friend-card>
-        </div>
+  <div class="border border-gray-200 rounded-lg h-full overflow-y-auto m-2">
+    <div *ngIf="friendships.length > 0; else noRequests">
+      <div
+        *ngFor="let friendship of friendships; let i = index"
+        [class]="i !== friendships.length ? 'border-b border-gray-200' : ''">
+        <app-friend-card
+          [friendship]="friendship"
+          [isFriendRequest]="false"
+          (friendshipCanceled)="onUnfriend($event)">
+        </app-friend-card>
       </div>
-
-      <ng-template #noRequests>
-        <div class="flex flex-col items-center justify-center text-gray-500 py-12 h-full">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-card-list mb-4" viewBox="0 0 16 16">
-            <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z"/>
-            <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8m0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0M4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/>
-          </svg>
-          <p class="text-lg font-medium">No friends</p>
-        </div>
-      </ng-template>
     </div>
+
+    <ng-template #noRequests>
+      <div class="flex flex-col items-center justify-center text-gray-500 py-12 h-full">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-card-list mb-4" viewBox="0 0 16 16">
+          <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z"/>
+          <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8m0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0M4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/>
+        </svg>
+        <p class="text-lg font-medium">No friends</p>
+      </div>
+    </ng-template>
   </div>
 </div>
 
 <router-outlet></router-outlet>
 
 <ng-template #loadingFriendships>
-  <div class="rounded-lg border-gray-200 h-full w-full flex flex-col p-10">
+  <div @fadeInOut class="rounded-lg border-gray-200 h-full w-full flex flex-col p-10">
     <!-- Header section - Skeleton -->
     <div class="flex justify-between items-center pb-6 mb-6 border-b border-gray-200">
       <div class="flex items-center gap-3">
@@ -66,27 +65,25 @@
     </div>
 
     <!-- Scrollable content area - Skeleton -->
-    <div class="overflow-y-auto h-full w-full">
-      <div class="border overflow-y-auto rounded-lg h-full w-full border-gray-200 px-6 py-6">
-        <!-- Skeleton for friend cards with proper borders -->
-        <div>
-          <div *ngFor="let item of [1, 2, 3, 4]; let i = index"
-               [class]="'border-b border-gray-200 ' + (i === 0 ? 'border-t' : '')">
-            <div class="bg-white flex justify-between items-center gap-4 lg:gap-8 p-4 animate-pulse">
-              <div class="flex items-center gap-4 w-full">
-                <!-- Avatar skeleton -->
-                <div class="h-10 w-10 rounded-full bg-gray-200"></div>
+    <div class="border border-gray-200 rounded-lg h-full overflow-y-auto m-2">
+      <!-- Skeleton for friend cards with proper borders -->
+      <div>
+        <div *ngFor="let item of [1, 2, 3, 4]; let i = index"
+             [class]="i !== 3 ? 'border-b border-gray-200' : ''">
+          <div class="flex justify-between items-center gap-4 lg:gap-8 p-4 animate-pulse">
+            <div class="flex items-center gap-4 w-full">
+              <!-- Avatar skeleton -->
+              <div class="h-10 w-10 rounded-full bg-gray-200"></div>
 
-                <!-- Name and username skeleton -->
-                <div class="space-y-2">
-                  <div class="h-4 w-32 bg-gray-200 rounded"></div>
-                  <div class="h-3 w-24 bg-gray-200 rounded"></div>
-                </div>
+              <!-- Name and username skeleton -->
+              <div class="space-y-2">
+                <div class="h-4 w-32 bg-gray-200 rounded"></div>
+                <div class="h-3 w-24 bg-gray-200 rounded"></div>
               </div>
-
-              <!-- Empty space where buttons would be (maintains layout) -->
-              <div class="h-8 w-0"></div>
             </div>
+
+            <!-- Empty space where buttons would be (maintains layout) -->
+            <div class="h-8 w-0"></div>
           </div>
         </div>
       </div>

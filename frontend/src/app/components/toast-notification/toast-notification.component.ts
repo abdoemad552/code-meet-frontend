@@ -54,11 +54,11 @@ export class ToastNotificationComponent {
           state: {}
         }); break;
       case NotificationType.MEMBERSHIP_REQUEST:
-        this.router.navigateByUrl(`/rooms/${notification.info['roomId']}/requests`, {
+        this.router.navigateByUrl(`/room/${notification.info['roomId']}/requests`, {
           state: {}
         }); break;
       case NotificationType.MEMBERSHIP_ACCEPTED:
-        this.router.navigateByUrl(`/rooms/${notification.info['roomId']}`, {
+        this.router.navigateByUrl(`/room/${notification.info['roomId']}`, {
           state: {}
         }); break;
       case NotificationType.MEETING_SCHEDULED:

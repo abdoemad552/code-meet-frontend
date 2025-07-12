@@ -9,6 +9,7 @@ import {RoomChatInfoResponse} from '../../models/chats/room-chat-info-response';
 import {PeerMessageResponse} from '../../models/chats/peer-message-response';
 import {RoomMessageResponse} from '../../models/chats/room-message-response';
 import {RoomMessageRequest} from '../../models/chats/room-message-request';
+import {fadeInOut} from '../../shared/animations';
 
 @Component({
   selector: 'app-chats',
@@ -17,6 +18,7 @@ import {RoomMessageRequest} from '../../models/chats/room-message-request';
     RecentChatsComponent,
     ChatboxComponent,
   ],
+  animations: [fadeInOut],
   templateUrl: './chats.component.html',
   styleUrl: './chats.component.css'
 })

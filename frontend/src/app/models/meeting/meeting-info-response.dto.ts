@@ -1,4 +1,5 @@
 import {UserInfoResponse} from '../user/user-info-response.dto';
+import {MeetingStatus} from '../enums/meeting-status.enum';
 
 export interface MeetingInfoResponse {
   meetingId: string;
@@ -6,4 +7,5 @@ export interface MeetingInfoResponse {
   description: string;
   creator: UserInfoResponse;
   startsAt: string;
+  status: MeetingStatus;
 }
