@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
-import {NgClass, NgForOf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {AgoraRtcService} from '../../../../../services/agora-rtc.service';
 import {AgoraRtmService} from '../../../../../services/agora-rtm.service';
@@ -15,7 +15,8 @@ import {MeetingSidebarComponent} from './sidebar/meeting-sidebar.component';
     FormsModule,
     CodeEditorComponent,
     NgClass,
-    MeetingSidebarComponent
+    MeetingSidebarComponent,
+    NgIf
   ],
   animations: [fadeInOut],
   templateUrl: './meeting-content.component.html',

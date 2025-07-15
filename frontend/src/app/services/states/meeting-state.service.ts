@@ -1,12 +1,11 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, filter, Subject, Subscription, takeUntil} from 'rxjs';
+import {BehaviorSubject, filter, Observable, Subject, Subscription, takeUntil} from 'rxjs';
 import {MeetingView} from '../../models/meeting/state/meeting-view';
 import {MeetingInfoResponse} from '../../models/meeting/meeting-info-response.dto';
 import {ParticipantInfoResponse} from '../../models/meeting/participant-info-response.dto';
 import {MeetingService} from '../meeting.service';
 import {AgoraRtcService} from '../agora-rtc.service';
 import {AgoraRtmService} from '../agora-rtm.service';
-import {formatDateTime} from '../../shared/utils';
 import {ChatMessage} from '../../models/meeting/state/meeting-message';
 import {WebSocketService} from '../websocket.service';
 import {getOwner} from '../../shared/environment';
@@ -82,7 +81,7 @@ export class MeetingStateService {
   }
 
   removeParticipant(participant: ParticipantInfoResponse) {
-    this.participants.filter(
+    this.participants = this.participants.filter(
       p => p.participantId !== participant.participantId
     );
   }
@@ -141,7 +140,38 @@ export class MeetingStateService {
     return acceptJoinSubject.asObservable();
   }
 
-  requestJoin() {
+  requestJoin(): Observable<number> {
+    const requestJoinSubject = new Subject<number>();
+    this.wsService.connection$
+      .subscribe({
+        next: isConnected => {
+          if (isConnected) {
+            const topic = `/request-join/${this.meeting.meetingId}`;
+            this.wsService.subscribe(topic)
+              .subscribe({
+                next: message => {
+                  requestJoinSubject.next(JSON.parse(message.body));
+                },
+                error: err => console.error(err)
+              });
+          } else {
+
+          }
+        },
+        error: err => console.error(err)
+      });
+    return requestJoinSubject;
+  }
+
+  isHost(id: number = null) {
+    if (this.meeting) {
+      if (id) {
+        return id === this.meeting.creator.userId;
+      } else {
+        return getOwner().userId === this.meeting.creator.userId;
+      }
+    }
+    return false;
   }
 
   acceptEditor() {
@@ -211,10 +241,11 @@ export class MeetingStateService {
                   id: this.participants[index].participantId,
                   firstName: this.participants[index].user.firstName,
                   lastName: this.participants[index].user.lastName,
-                  username: this.participants[index].user.username
+                  username: this.participants[index].user.username,
+                  profilePictureUrl: this.participants[index].user.profilePictureUrl
                 },
                 content: content.text,
-                sentAt: formatDateTime(new Date(rtmMessage.ts).toISOString())
+                sentAt: new Date(rtmMessage.ts).toISOString()
               }
               this.saveMessage(message);
               break;

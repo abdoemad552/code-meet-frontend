@@ -47,13 +47,17 @@ export class ProfileEditComponent implements OnInit {
   }
 
   onHideEditProfile() {
-    this.router.navigateByUrl(`/profile/${this.owner.username}`);
+    this.router.navigateByUrl(`/profile/${this.owner.username}`, { skipLocationChange: true })
+      .then(() => {
+        this.router.navigate([this.router.url]);
+      });
   }
 
   onSubmit() {
     this.validate();
     this.isSubmitting = true;
     this.requestSent = false;
+    console.log(this.updateRequest);
     this.userService.update(this.updateRequest)
       .subscribe({
         next: user => {

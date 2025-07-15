@@ -3,7 +3,8 @@ export interface ChatMessage {
     id: string,
     firstName?: string,
     lastName?: string,
-    username?: string
+    username?: string,
+    profilePictureUrl?: string
   },
   content: string,
   sentAt: string

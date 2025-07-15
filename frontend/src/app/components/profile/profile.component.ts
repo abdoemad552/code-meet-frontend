@@ -148,4 +148,8 @@ export class ProfileComponent {
         error: err => console.error(err)
       });
   }
+
+  openChat() {
+    this.router.navigateByUrl('/chats');
+  }
 }

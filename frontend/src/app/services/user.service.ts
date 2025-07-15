@@ -32,7 +32,7 @@ export class UserService {
   }
 
   update(updateRequest: UserUpdateRequest): Observable<UserInfoResponse> {
-    return this.http.put<UserInfoResponse>(`${this.url}/update`, { updateRequest });
+    return this.http.put<UserInfoResponse>(`${this.url}/update`, updateRequest);
   }
 
   updateProfilePicture(formData: FormData): Observable<UserInfoResponse> {

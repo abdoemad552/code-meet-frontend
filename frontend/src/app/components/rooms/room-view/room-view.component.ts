@@ -91,6 +91,10 @@ export class RoomViewComponent implements OnInit {
       });
   }
 
+  openChat() {
+    this.router.navigateByUrl('/chats');
+  }
+
   showRequests() {
     this.router.navigateByUrl(`/room/${this.roomId}/requests`);
   }
@@ -115,5 +119,9 @@ export class RoomViewComponent implements OnInit {
           error: err => console.error(err)
         });
     }
+  }
+
+  copyRoomId() {
+    navigator.clipboard.writeText(String(this.roomId));
   }
 }

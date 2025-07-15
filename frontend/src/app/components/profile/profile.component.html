@@ -168,7 +168,7 @@
             <img
               [src]="user.profilePictureUrl"
               alt="Room Image"
-              class="w-[150px] h-[150px] p-2 bg-indigo-50 rounded-full">
+              class="w-[150px] h-[150px] p-2 rounded-full">
           </div>
           <ng-template #svgIcon>
             <svg
@@ -201,6 +201,7 @@
           *ngIf="friendship; else loadingButtons"
           class="mt-8 flex justify-center space-x-4">
           <button
+            (click)="openChat()"
             type="button"
             class="cursor-pointer bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-700 text-white px-4 py-2 rounded-full flex items-center justify-center min-w-[200px] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 ease-in-out gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-chat-left-text-fill w-5 h-5" viewBox="0 0 16 16">

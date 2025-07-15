@@ -2,6 +2,7 @@ import { Component, Input, OnChanges } from '@angular/core';
 import { MeetingInfoResponse } from '../../../models/meeting/meeting-info-response.dto';
 import {formatDateTime} from '../../../shared/utils';
 import {NgClass, NgIf} from '@angular/common';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-meeting-card',
@@ -17,12 +18,15 @@ export class MeetingCardComponent {
   @Input() meeting: MeetingInfoResponse;
   @Input() isScheduled: boolean;
 
+  constructor(private router: Router) {
+  }
+
   ngOnInit() {
     this.meeting.startsAt = formatDateTime(this.meeting.startsAt);
   }
 
   onCardClick() {
-
+    this.router.navigateByUrl(`/meeting/${this.meeting.meetingId}`);
   }
 
   onActionButtonClick($event: MouseEvent) {

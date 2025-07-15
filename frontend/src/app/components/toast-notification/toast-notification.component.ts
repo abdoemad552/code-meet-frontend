@@ -63,8 +63,17 @@ export class ToastNotificationComponent {
         }); break;
       case NotificationType.MEETING_SCHEDULED:
       case NotificationType.MEETING_STARTED:
+        this.router.navigateByUrl(`/meeting/${notification.info['meetingId']}`, {
+          state: {}
+        }); break;
       case NotificationType.PEER_MESSAGE:
+        this.router.navigateByUrl('/chats', {
+          state: {}
+        }); break;
       case NotificationType.ROOM_MESSAGE:
+        this.router.navigateByUrl('/chats', {
+          state: {}
+        }); break;
       case NotificationType.WARNING:
       case NotificationType.ERROR:
       case NotificationType.TEST:

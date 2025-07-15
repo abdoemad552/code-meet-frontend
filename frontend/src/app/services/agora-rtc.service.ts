@@ -250,7 +250,7 @@ export class AgoraRtcService {
     await this.client.leave();
     this.remoteUsers.clear();
     this.removeAllListeners();
-    this.uid = ''
+    this.uid = '';
     this.channelName = null;
     console.log('RTC: Left the channel');
   }

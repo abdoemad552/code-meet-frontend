@@ -4,7 +4,7 @@ import {NotificationInfo} from '../models/notification/notification-info.dto';
 import {Observable, Subject} from 'rxjs';
 import {NotificationType} from '../models/notification/notification-type.enum';
 import {HttpClient, HttpResponse} from '@angular/common/http';
-import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Injectable({
   providedIn:'root'
@@ -93,11 +93,11 @@ export class NotificationService {
       case NotificationType.MEETING_SCHEDULED:
         text = 'Meeting Scheduled'; break;
       case NotificationType.MEETING_STARTED:
-        text = 'Meeting Started'; break;
+        text = `"<span class="font-semibold">${notification.info['meetingTitle']}</span>" meeting started now!`; break;
       case NotificationType.PEER_MESSAGE:
-        text = 'Message Received'; break;
+        text = `You have a new message from ${notification.info['senderFirstName']} ${notification.info['senderLastName']}.`; break;
       case NotificationType.ROOM_MESSAGE:
-        text = 'Message Received'; break;
+        text = `${notification.info['roomName']}: You have a new message from ${notification.info['senderFirstName']} ${notification.info['senderLastName']}.`; break;
       case NotificationType.WARNING:
         text = 'Warning'; break;
       case NotificationType.ERROR:

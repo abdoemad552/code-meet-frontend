@@ -2,9 +2,11 @@ import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@an
 import {FormsModule} from "@angular/forms";
 import {MeetingMessagesContainerComponent} from "../meeting-messages-container/meeting-messages-container.component";
 import {NgClass, NgForOf, NgIf} from "@angular/common";
-import {formatDateTime} from '../../../../../../shared/utils';
 import {AgoraRtmService} from '../../../../../../services/agora-rtm.service';
 import {MeetingStateService} from '../../../../../../services/states/meeting-state.service';
+import {MeetingService} from '../../../../../../services/meeting.service';
+import {UserInfoResponse} from '../../../../../../models/user/user-info-response.dto';
+import {UserService} from '../../../../../../services/user.service';
 
 @Component({
   selector: 'meeting-sidebar',
@@ -28,11 +30,30 @@ export class MeetingSidebarComponent {
 
   hideTimeout: any;
   inputMessage: string = '';
+  joinRequests: UserInfoResponse[] = [];
 
   constructor(
+    private meetingService: MeetingService,
+    private userService: UserService,
     protected rtmService: AgoraRtmService,
     protected state: MeetingStateService,
   ) {
+  }
+
+  ngOnInit() {
+    this.state.requestJoin()
+      .subscribe({
+        next: userId => {
+          this.userService.getUserById(userId)
+            .subscribe({
+              next: user => {
+                this.joinRequests.push(user);
+              },
+              error: err => console.error(err)
+            });
+        },
+        error: err => console.error(err)
+      });
   }
 
   sendMessage() {
@@ -42,10 +63,11 @@ export class MeetingSidebarComponent {
         sender: {
           id: this.state.participation.participantId,
           firstName: this.state.participation.user.firstName,
-          lastName: this.state.participation.user.lastName
+          lastName: this.state.participation.user.lastName,
+          profilePictureUrl: this.state.participation.user.profilePictureUrl
         },
         content: content,
-        sentAt: formatDateTime(new Date().toISOString())
+        sentAt: new Date().toISOString()
       };
       this.state.saveMessage(message);
       this.rtmService.sendMessage(JSON.stringify({
@@ -83,5 +105,28 @@ export class MeetingSidebarComponent {
     if (this.scrollButton?.nativeElement) {
       this.scrollButton.nativeElement.style.opacity = '1';
     }
+  }
+
+  acceptJoin(i: number) {
+    this.meetingService.acceptJoin({
+      meetingId: this.state.meeting.meetingId,
+      userId: this.joinRequests[i].userId
+    }).subscribe({
+      next: participant => {
+        console.log('Accepted');
+        console.log(participant);
+        this.removeRequest(i);
+      },
+      error: err => console.error(err)
+    });
+  }
+
+  rejectJoin(i: number) {
+    console.log('Rejected');
+    this.removeRequest(i);
+  }
+
+  removeRequest(i: number) {
+    this.joinRequests.splice(i, 1);
   }
 }
